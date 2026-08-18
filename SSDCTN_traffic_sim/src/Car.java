@@ -1,6 +1,6 @@
 public class Car extends Vehicle {
     
-        Car() {
+    Car() {
             
-        }
+    }
 }
