@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 public class Frame{
 
     public static void main(String[] args){
-        JFrame frame = new Frame("World Frame");
+        JFrame frame = new JFrame("World Frame");
         frame.setSize(800,800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
