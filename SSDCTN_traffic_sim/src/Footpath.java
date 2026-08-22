@@ -1,0 +1,8 @@
+public class Footpath extends Path {
+    // only accepts pedestrians in its bounds
+
+    Footpath() {
+
+    }
+
+}

@@ -1,20 +1,20 @@
 public abstract class Vehicle {
+    // Movement
+    float x, y;
     int topSpeed;
     int accelerationRate;
+    int velocity; 
+
+    // Aesthetics
     int pollutionRate;
-    boolean hasSunroof;
     boolean headLightsOn;
     boolean brakeLightsOn;
 
-    Vehicle() {
-
+    void accelerate() {
+        
     }
 
     void decelerate() {
-
-    }
-
-    void accelerate() {
 
     }
 
@@ -22,3 +22,4 @@ public abstract class Vehicle {
         // turn blinker on depending on degrees
     }
 }
+
