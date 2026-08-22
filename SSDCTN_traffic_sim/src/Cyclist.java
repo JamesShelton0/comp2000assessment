@@ -3,6 +3,7 @@ public class Cyclist {
     private float length;
     private float width;
     private float x, y;
+    private float direction;
     private float acceleration;
     private float decceleration;
 
