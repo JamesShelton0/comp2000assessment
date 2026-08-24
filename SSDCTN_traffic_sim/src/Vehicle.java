@@ -5,12 +5,12 @@ public abstract class Vehicle {
     private double x, y;
     private Point position;
     private float direction;
-    int topSpeed;
-    int accelerationRate;
+    private int topSpeed;
+    private int accelerationRate;
     private float deceleration;
-    int pollutionRate;
-    boolean headLightsOn;
-    boolean brakeLightsOn;
+    private int pollutionRate;
+    private boolean headLightsOn;
+    private boolean brakeLightsOn;
 
     void accelerate() {
         
