@@ -9,19 +9,14 @@ public abstract class Vehicle {
     int accelerationRate;
     private float deceleration;
     int pollutionRate;
-    boolean hasSunroof;
     boolean headLightsOn;
     boolean brakeLightsOn;
 
-    Vehicle() {
-
+    void accelerate() {
+        
     }
 
     void decelerate() {
-
-    }
-
-    void accelerate() {
 
     }
 
@@ -29,3 +24,4 @@ public abstract class Vehicle {
         // turn blinker on depending on degrees
     }
 }
+
