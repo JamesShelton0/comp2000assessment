@@ -1,4 +1,6 @@
-public abstract class Vehicle {
+import javax.swing.*;
+
+public abstract class Vehicle extends JComponent{
      float velocity;
     private int length;
     private int width;
