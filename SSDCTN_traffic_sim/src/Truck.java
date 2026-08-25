@@ -14,9 +14,9 @@ public class Truck extends Vehicle {
     // int width;           [declared in Vehicle]
     // int height;          [declared in Vehicle (length)]
 
-    public Truck(int w, int l){
+    public Truck(int w, int h){
         super.width = w;
-        super.length = l;
+        super.height = h;
         // super.accelerationRate =
         // super.decelerationRate =
     }

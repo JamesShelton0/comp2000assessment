@@ -6,9 +6,9 @@ public class HitBox {
     double radius;
 
     ArrayList<Point> arr = new ArrayList<>();
-    HitBox(Point p, int Direction, float width, float length){
+    HitBox(Point p, int Direction, float width, float height){
         xAddon = width/2;
-        yAddon = length/2;
+        yAddon = height/2;
         Point p1 = new Point(p.getX() - xAddon, p.getY() + yAddon);
         Point p2 = new Point(p.getX() + xAddon, p.getY() + yAddon);
         Point p3 = new Point(p.getX() + xAddon, p.getY() - yAddon);

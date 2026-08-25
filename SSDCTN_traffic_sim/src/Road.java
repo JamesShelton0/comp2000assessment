@@ -4,8 +4,9 @@ public class Road extends Path {
     int laneCount;
     int laneMarkings;
 
-    Road() {
-
+    Road(int width, int height) {
+        super.width = width;
+        super.height = height;
     }
 
 }

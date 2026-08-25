@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 public abstract class Vehicle extends JComponent {
     // size and position
-    protected int length, width;
+    protected int width, height;
     protected double x, y;
     protected Point position;
 
