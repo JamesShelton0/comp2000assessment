@@ -18,8 +18,9 @@ public class Velocity {
         return new Point(x, y);
     }
 
-    static public Point calPosiitonWithRadius(Point p, double x, double y, float direction, double radius){
-        double newX;          
-        return null;
+    static public Point calPosiitonWithRadius(Point p, float direction, float xAddon, float yAddon){
+        double newX = p.getX() + xAddon * Math.cos(direction);
+        double newY = p.getY() + yAddon * Math.sin(direction);
+        return new Point(newX, newY);
     }
 }
