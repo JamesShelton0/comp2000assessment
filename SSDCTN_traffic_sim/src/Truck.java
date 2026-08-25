@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 
-public class Truck extends Vehicle{
+public class Truck extends Vehicle {
     int colour;
     int size;
     int shape;

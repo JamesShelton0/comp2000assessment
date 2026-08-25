@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class Frame{ 
+public class Frame { 
     public static void main(String[] args){
         JFrame frame = new JFrame("World Frame"); 
         frame.setSize(800,800); 
 
         JPanel bground = new JPanel();
-        bground.setBackground(Color.GREEN);
+        bground.setBackground(new Color(63, 155, 11));
         bground.setLayout(null);
 
         Pothole pothole = new Pothole(800, 800);
@@ -31,5 +31,3 @@ public class Frame{
 
 
 }
-
-

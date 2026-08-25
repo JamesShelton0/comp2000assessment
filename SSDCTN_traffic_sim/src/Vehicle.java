@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 
-public abstract class Vehicle extends JComponent{
+public abstract class Vehicle extends JComponent {
      float velocity;
     private int length;
     private int width;
