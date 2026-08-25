@@ -7,14 +7,16 @@ public class Frame{
         JFrame frame = new JFrame("World Frame"); 
         frame.setSize(800,800); 
 
-        JPanel p = new JPanel(); 
-        p.setBackground(Color.green); 
+        JPanel bground = new JPanel(); 
+        bground.setBackground(Color.green); 
 
-        p.setLayout(new BorderLayout());
+        bground.setLayout(new BorderLayout());
 
         Pothole pothole = new Pothole(800, 800);
 
-        p.add(pothole,BorderLayout.CENTER);
+        bground.add(pothole,BorderLayout.CENTER);
+
+        frame.add(bground);
        
         
     }
