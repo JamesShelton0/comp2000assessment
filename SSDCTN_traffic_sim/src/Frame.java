@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.JComponent;
 
 
 public class Frame{ // This creates the frame and colours it green 
@@ -12,6 +11,7 @@ public class Frame{ // This creates the frame and colours it green
         frame.add(p); // connects the frame to the panel
         p.setBackground(Color.green); // sets background colour - lowercase and american
         frame.show(); // without this the green does not initalise, idk why the show is crossed out 
+       
     }
 
 
