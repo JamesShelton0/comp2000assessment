@@ -1,11 +1,11 @@
 public abstract class Vehicle {
-    private float velocity;
+     float velocity;
     private int length;
     private int width;
     private double x, y;
     private Point position;
     private float direction;
-    private int topSpeed;
+     int topSpeed;
     private int accelerationRate;
     private float deceleration;
     private int pollutionRate;
