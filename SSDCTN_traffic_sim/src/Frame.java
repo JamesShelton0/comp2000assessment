@@ -17,8 +17,10 @@ public class Frame{
         bground.add(pothole,BorderLayout.CENTER);
 
         frame.add(bground);
-       
-        
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setVisible(true);    
     }
 
 
