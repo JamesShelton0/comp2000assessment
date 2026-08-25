@@ -6,35 +6,37 @@ import java.awt.geom.Rectangle2D;
 public class Truck extends Vehicle {
     int colour;
     int size;
-    int shape;
-    int topSpeed;
-    int pollutionRate;
+    int shape;              
+    // int topSpeed;        [declared in Vehicle]   
+    // int pollutionRate;   [declared in Vehicle]
     boolean hasSunroof;
-    boolean lightsOn;
-    int width;
-    int height;
+    // boolean lightsOn;    [Vehicle contains attributes headLightsOn and tailLightsOn]
+    // int width;           [declared in Vehicle]
+    // int height;          [declared in Vehicle (length)]
 
-    public Truck(int w, int h){
-        w = width;
-        h = height;
+    public Truck(int w, int l){
+        super.width = w;
+        super.length = l;
+        // super.accelerationRate =
+        // super.decelerationRate =
     }
 
     protected void paintComponent(Graphics g){
 
-    Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
-    Rectangle2D.Double truckCabin =
-    new Rectangle2D.Double(100, 105, 20, 20);
+        Rectangle2D.Double truckCabin =
+        new Rectangle2D.Double(100, 105, 20, 20);
 
-    g2d.setColor(Color.RED);
-    g2d.fill(truckCabin);
+        g2d.setColor(Color.RED);
+        g2d.fill(truckCabin);
 
-    Rectangle2D.Double truckLoad =
-    new Rectangle2D.Double(120, 100, 50, 30);
+        Rectangle2D.Double truckLoad =
+        new Rectangle2D.Double(120, 100, 50, 30);
 
-    g2d.setColor(Color.BLUE);
-    g2d.fill(truckLoad);
-}
+        g2d.setColor(Color.BLUE);
+        g2d.fill(truckLoad);
+    }
 
 }
 

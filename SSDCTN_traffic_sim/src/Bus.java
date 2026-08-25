@@ -1,61 +1,56 @@
-public class Bus extends Vehicle{
+public class Bus extends Vehicle {
 
-    private int x;
-    private int y;
+    // private int x;       [declared in Vehicle]
+    // private int y;       [declared in Vehicle]
 
-    private float velocity = 60; 
-    private float decelerationRate = 5;
+    // private float velocity = 60;         [declared in vehicle, initialise in constructor]
+    // private float decelerationRate = -5; [declared in vehicle, initialise in constructor]
+    // private int accelerationRate = 5;    [declared in vehicle, initialise in constructor]
 
-    private boolean stoppedAtBusStop = false;  //if the bus is sotop atm
+    private boolean stoppedAtBusStop = false;  //if the bus is stopped atm
     private boolean leavingBusStop = false;
     
-    private int waitTime = 0; //how long has it waitted
-    private int maxWaitTtime = 100; //low long it will wait
+    private int waitTime = 0; //how long has it waited
+    private int maxWaitTime = 100; //how long it will wait
 
+    Bus() {
+        super.velocity = 60;
+        super.decelerationRate = -5;
+        super.accelerationRate = 5;   // just set a random value so that your leaveBusStop() didn't break. Change if u want of course!
+    }
 
     //check if the bus is close to a bus stop
     void checkBusStop(BusStop stop) { 
         if(x >= stop.x - 10 && x <= stop.x){
-           decelerate();
+           accelerate(decelerationRate);
            
            if(velocity == 0){
             stoppedAtBusStop = true;
            }
         }
     }
-     @Override
-    void decelerate(){
-        velocity -= decelerationRate;
 
-        if(velocity < 0){
-            velocity = 0;
-        }
-
-    }
     void waitAtBusStop() {
         if(stoppedAtBusStop){
             waitTime++;
-            if(waitTime >= maxWaitTtime){
+            if(waitTime >= maxWaitTime){
                 stoppedAtBusStop = false;
                 leavingBusStop = true;
                 waitTime = 0;
+            }
+        }
+    }
+
+    void leaveBusStop(){
+        if(leavingBusStop){
+            accelerate(accelerationRate);
+        
+            if(velocity >= topSpeed){
+                velocity = topSpeed;
+                leavingBusStop = false;
+            }
         }
     }
 }
-
-void leavBusStop(){
-    if(leavingBusStop){
-        accelerate();
-        
-         if(velocity >= topSpeed){
-        velocity = topSpeed;
-        leavingBusStop = false;
-    }
-   
-    }
-}
-         
-          
- }
       
     

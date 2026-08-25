@@ -2,27 +2,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-
 public abstract class Vehicle extends JComponent {
-     float velocity;
-    private int length;
-    private int width;
-    private double x, y;
-    private Point position;
-    private float direction;
-     int topSpeed;
-    private int accelerationRate;
-    private float deceleration;
-    private int pollutionRate;
-    private boolean headLightsOn;
-    private boolean brakeLightsOn;
+    // size and position
+    protected int length, width;
+    protected double x, y;
+    protected Point position;
 
-    void accelerate() {
-        
-    }
+    // movement
+    protected int topSpeed;
+    protected float velocity;
+    protected float accelerationRate, decelerationRate;
+    protected float direction;
 
-    void decelerate() {
+    // aesthetics
+    protected int pollutionRate;
+    protected boolean headLightsOn;
+    protected boolean brakeLightsOn;
 
+    // For acceleration pass positive number, for deceleration pass negative number
+    void accelerate(float change) {
+        velocity += change;
+        if (velocity < 0) velocity = 0;
     }
 
     void turn(int degrees, int radius) {
