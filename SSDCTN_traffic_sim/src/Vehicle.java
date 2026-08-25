@@ -1,14 +1,16 @@
 public abstract class Vehicle {
-    // Movement
-    float x, y;
-    int topSpeed;
-    int accelerationRate;
-    int velocity; 
-
-    // Aesthetics
-    int pollutionRate;
-    boolean headLightsOn;
-    boolean brakeLightsOn;
+     float velocity;
+    private int length;
+    private int width;
+    private double x, y;
+    private Point position;
+    private float direction;
+     int topSpeed;
+    private int accelerationRate;
+    private float deceleration;
+    private int pollutionRate;
+    private boolean headLightsOn;
+    private boolean brakeLightsOn;
 
     void accelerate() {
         
