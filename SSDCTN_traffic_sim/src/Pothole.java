@@ -14,7 +14,7 @@ public class Pothole extends JComponent{
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         Ellipse2D.Double c = new Ellipse2D.Double(100,100,5,5);
-        g2d.setColor(new Color(255,255,255));
+        g2d.setColor(new Color(0,0,0));
         g2d.fill(c);
 
     }
