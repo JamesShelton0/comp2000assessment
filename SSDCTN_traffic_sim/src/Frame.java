@@ -22,6 +22,9 @@ public class Frame {
         bground.add(pothole);
         bground.add(truck);
 
+        Explosion explosion = new Explosion(300, 300);
+        bground.add(explosion); // test explosion !!!!! remove this to not show explosion :(
+
         frame.add(bground);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
