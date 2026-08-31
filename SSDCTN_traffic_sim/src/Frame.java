@@ -43,7 +43,7 @@ class Panel extends JPanel {
         pothole = new Pothole(5, 5);
 
         // explosion (pass panel for callbacks/repaint)
-        explosion = new Explosion(300, 300, this);
+        //explosion = new Explosion(300, 300, this);
 
         // motorbike
         motorbike = new Motorbike(80, 120);
