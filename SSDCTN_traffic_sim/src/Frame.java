@@ -34,14 +34,11 @@ class Panel extends JPanel {
         explosion = new Explosion(300, 300, this);
         motorbike = new Motorbike(80, 120);
         trafficLight = new TrafficLight();
-    }
-    
-        // change traffic light every X seconds
-        // Timer timer = new Timer(4000, e -> {
-        //     trafficLight.changeLight();
-        // });
 
-        // timer.start();
+        Timer timer = new Timer(4000, e -> {trafficLight.changeLight();});
+        timer.start();
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
