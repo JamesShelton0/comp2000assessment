@@ -12,7 +12,7 @@ public abstract class Vehicle extends JComponent {
     protected int topSpeed;
     protected float velocity;
     protected float accelerationRate, decelerationRate;
-    protected float direction;
+    protected double direction;
 
     // aesthetics
     protected int pollutionRate;
