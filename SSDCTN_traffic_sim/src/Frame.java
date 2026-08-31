@@ -29,6 +29,10 @@ class Panel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
+        // change traffic light every 4s
+        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
+        lightTimer.start();
+
         // truck
         truck = new Truck(70, 50);
         truck.setPosition(835, 400); // starts off the screen on the right
@@ -46,18 +50,9 @@ class Panel extends JPanel {
         motorbike.setPosition(375, 540);
         motorbike.setVelocity(3);
         motorbike.setDirection((float)(3 * Math.PI / 2));
-        motorbike.setOpaque(false);
+        //motorbike.setOpaque(false);
 
-        // traffic light
-        //trafficLight = new TrafficLight();
-       // trafficLight.setBounds(600,100,50,50);
-
-        // adding components to panel
-        this.add(pothole);
-        this.add(truck);
-        this.add(motorbike);
-       // this.add(trafficLight);
-       // this.add(explosion);
+        trafficLight = new TrafficLight();
 
         // movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
@@ -66,10 +61,6 @@ class Panel extends JPanel {
             this.repaint();
         });
         moveTimer.start();
-
-        // change traffic light every 4s
-        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
-        lightTimer.start();
     }
 
     @Override
