@@ -29,16 +29,48 @@ class Panel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
+        // truck
         truck = new Truck(70, 50);
+        truck.setPosition(835, 400); // starts off the screen on the right
+        truck.setVelocity(1);
+        truck.setDirection((float)Math.PI); // right to left
+
+        // pothole
         pothole = new Pothole(5, 5);
+
+        // explosion (pass panel for callbacks/repaint)
         explosion = new Explosion(300, 300, this);
+
+        // motorbike
         motorbike = new Motorbike(80, 120);
-        trafficLight = new TrafficLight();
+        motorbike.setPosition(375, 540);
+        motorbike.setVelocity(3);
+        motorbike.setDirection((float)(3 * Math.PI / 2));
+        motorbike.setOpaque(false);
 
-        Timer timer = new Timer(4000, e -> {trafficLight.changeLight();});
-        timer.start();
+        // traffic light
+        //trafficLight = new TrafficLight();
+       // trafficLight.setBounds(600,100,50,50);
+
+        // adding components to panel
+        this.add(pothole);
+        this.add(truck);
+        this.add(motorbike);
+       // this.add(trafficLight);
+       // this.add(explosion);
+
+        // movement & repaint timer (~60fps)
+        Timer moveTimer = new Timer(16, e -> {
+            truck.move();
+            motorbike.move();
+            this.repaint();
+        });
+        moveTimer.start();
+
+        // change traffic light every 4s
+        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
+        lightTimer.start();
     }
-
 
     @Override
     public void paintComponent(Graphics g) {
@@ -49,8 +81,9 @@ class Panel extends JPanel {
         // draw components
         truck.draw(g2d);
         pothole.draw(g2d);
-        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        explosion.draw(g2d);    
         motorbike.draw(g2d);
         trafficLight.draw(g2d);
     }
 }
+
