@@ -22,6 +22,8 @@ class Panel extends JPanel {
     Truck truck;
     Pothole pothole;
     Explosion explosion;
+    Motorbike motorbike;
+    TrafficLight trafficLight;
 
     Panel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -30,7 +32,16 @@ class Panel extends JPanel {
         truck = new Truck(70, 50);
         pothole = new Pothole(5, 5);
         explosion = new Explosion(300, 300, this);
+        motorbike = new Motorbike(80, 120);
+        trafficLight = new TrafficLight();
     }
+    
+        // change traffic light every X seconds
+        // Timer timer = new Timer(4000, e -> {
+        //     trafficLight.changeLight();
+        // });
+
+        // timer.start();
 
     @Override
     public void paintComponent(Graphics g) {
@@ -42,5 +53,7 @@ class Panel extends JPanel {
         truck.draw(g2d);
         pothole.draw(g2d);
         explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        motorbike.draw(g2d);
+        trafficLight.draw(g2d);
     }
 }

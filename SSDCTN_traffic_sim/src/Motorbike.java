@@ -1,18 +1,38 @@
+import javax.swing.*;
+import java.awt.*;
 public class Motorbike extends Vehicle {
 
     Motorbike() {
         super.accelerationRate = 8;
         super.decelerationRate = -5;
+
+        super.width = 80;
+        super.height = 120;
     }
 
-    // hi good idea. added accelerate(float) to Vehicle and set up constructor to initialise super attributes :)
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-    // @Override    // overrides vehicle class allowing individual deceleration rate if we arent putting this in vehicle
-    // void decelerate() {
-    //     velocity -= decelerationRate;
+        Graphics2D g2d = (Graphics2D) g;
 
-    //     if (velocity < 0) { // prevents negative
-    //         velocity =0;
-    //     }
-    // }
+        // wheels
+        g2d.setColor(Color.BLACK);
+        g2d.fillOval(15,5,20,20);
+        g2d.fillOval(15,55,20,20);
+
+        // body
+        g2d.setColor(Color.RED);
+        g2d.fillRoundRect(12,22,26,40,8,8);
+
+        // seat
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(16,35,18, 15,5,5);
+
+        // handlebar
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRect(10,20,30,3);
+    }
 }
+
+    // hi good idea. added accelerate(float) to Vehicle and set up constructor to initialise super attributes :)

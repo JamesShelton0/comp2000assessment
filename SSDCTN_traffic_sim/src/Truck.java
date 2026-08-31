@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-
 public class Truck extends Vehicle {
     int colour;
     int size;
@@ -10,11 +9,14 @@ public class Truck extends Vehicle {
 
     boolean hasSunroof;
 
-    public Truck(int w, int h){
+    public Truck(int w, int h) {
         super.width = w;
         super.height = h;
-        // super.accelerationRate =
-        // super.decelerationRate =
+        super.velocity = 0;
+        super.direction = 0;
+        super.accelerationRate = 0;
+        super.decelerationRate = 0;
+       
     }
 
     public void draw(Graphics2D g2d) {
