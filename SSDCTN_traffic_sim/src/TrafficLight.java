@@ -1,20 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class TrafficLight extends JComponent {
+public class TrafficLight {
     // 0 = green, 1 = orange, 2 = red
     private int currentLight = 0;
 
     public TrafficLight() {
-        setOpaque(false);
+        //setOpaque(false);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
 
-        Graphics2D g2d = (Graphics2D) g;
-
+    public void draw(Graphics2D g2d) {
         // shadow 
         g2d.setColor(new Color(80,80,80,80));
         g2d.fillOval(10,75,30,7);
@@ -59,6 +55,6 @@ public class TrafficLight extends JComponent {
             currentLight = 0;
         }
 
-        repaint();
+        //repaint();
     }
 }

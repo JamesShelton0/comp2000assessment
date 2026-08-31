@@ -2,20 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 public class Motorbike extends Vehicle {
 
-    Motorbike() {
+    Motorbike(int width, int height) {
         super.accelerationRate = 8;
         super.decelerationRate = -5;
 
-        super.width = 80;
-        super.height = 120;
+        super.width = width;
+        super.height = height;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        Graphics2D g2d = (Graphics2D) g;
-
+    public void draw(Graphics2D g2d) {
         // wheels
         g2d.setColor(Color.BLACK);
         g2d.fillOval(15,5,20,20);
