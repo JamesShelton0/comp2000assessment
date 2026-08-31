@@ -1,36 +1,46 @@
 import javax.swing.*;
 import java.awt.*;
 
+public class Frame extends JFrame { 
+    Panel panel;
 
-public class Frame { 
-    public static void main(String[] args){
-        JFrame frame = new JFrame("World Frame"); 
-        frame.setSize(800,800); 
+    Frame(int width, int height, String logoPath) {
+        panel = new Panel(width, height);
+        this.setTitle("Traffic Sim");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.setResizable(false);
+        ImageIcon logo = new ImageIcon(logoPath);
+        this.setIconImage(logo.getImage());
+        this.add(panel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+}
 
-        JPanel bground = new JPanel();
-        bground.setBackground(new Color(63, 155, 11));
-        bground.setLayout(null);
+class Panel extends JPanel {
+    Truck truck;
+    Pothole pothole;
+    Explosion explosion;
 
-        Pothole pothole = new Pothole(800, 800);
-        pothole.setBounds(0, 0, 800, 800);
-        pothole.setOpaque(false);
+    Panel(int width, int height) {
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(63, 155, 11));
 
-        Truck truck = new Truck(800, 50);
-        truck.setBounds(100, 100, 800, 800);
-        truck.setOpaque(false);
-
-        bground.add(pothole);
-        bground.add(truck);
-
-        Explosion explosion = new Explosion(300, 300);
-        bground.add(explosion); // test explosion !!!!! remove this to not show explosion :(
-
-        frame.add(bground);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        truck = new Truck(70, 50);
+        pothole = new Pothole(5, 5);
+        explosion = new Explosion(300, 300, this);
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);            // paints JPanel stuff like the background
 
+        Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
+        // draw components
+        truck.draw(g2d);
+        pothole.draw(g2d);
+        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+    }
 }

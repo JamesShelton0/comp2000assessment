@@ -19,6 +19,9 @@ public abstract class Vehicle extends JComponent {
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
 
+    // 
+    public void draw(Graphics g2d) {}
+
     // For acceleration pass positive number, for deceleration pass negative number
     void accelerate(float change) {
         velocity += change;
