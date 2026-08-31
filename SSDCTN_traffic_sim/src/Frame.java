@@ -81,7 +81,7 @@ class Panel extends JPanel {
         // draw components
         truck.draw(g2d);
         pothole.draw(g2d);
-        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        explosion.draw(g2d);    
         motorbike.draw(g2d);
         trafficLight.draw(g2d);
     }
