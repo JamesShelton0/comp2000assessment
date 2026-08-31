@@ -36,10 +36,10 @@ public class HitBox {
 
     public void updateHitbox(Point p, double direction){
         this.direction = direction;
-        pointArr.set(0, Velocity.calPosiitonWithRadius(p, direction, radius, -1, 1));
-        pointArr.set(1, Velocity.calPosiitonWithRadius(p, direction, radius, 1, 1));
-        pointArr.set(2, Velocity.calPosiitonWithRadius(p, direction, radius, 1, -1));
-        pointArr.set(3, Velocity.calPosiitonWithRadius(p, direction, radius, -1, -1));
+        pointArr.set(0, Velocity.calPositionWithRadius(p, direction, radius, -1, 1));
+        pointArr.set(1, Velocity.calPositionWithRadius(p, direction, radius, 1, 1));
+        pointArr.set(2, Velocity.calPositionWithRadius(p, direction, radius, 1, -1));
+        pointArr.set(3, Velocity.calPositionWithRadius(p, direction, radius, -1, -1));
     }
 
     public boolean detectHitboxOverlap(HitBox other){

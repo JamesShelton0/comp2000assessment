@@ -18,6 +18,7 @@ public class Frame {
         Truck truck = new Truck(800, 50);
         truck.setBounds(100, 100, 800, 800);
         truck.setOpaque(false);
+        
 
         // motorbike
         Motorbike motorbike = new Motorbike();
