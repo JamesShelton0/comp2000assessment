@@ -17,22 +17,27 @@ public class Truck extends Vehicle {
     public Truck(int w, int h){
         super.width = w;
         super.height = h;
-        // super.accelerationRate =
-        // super.decelerationRate =
+        super.velocity = 0;
+        super.direction = 0;
+        super.accelerationRate = 0;
+        super.decelerationRate = 0;
+       
     }
 
     protected void paintComponent(Graphics g){
 
+        super.paintComponent(g);
+
         Graphics2D g2d = (Graphics2D) g;
 
         Rectangle2D.Double truckCabin =
-        new Rectangle2D.Double(100, 105, 20, 20);
+        new Rectangle2D.Double(0, 5, 20, 20);
 
         g2d.setColor(Color.RED);
         g2d.fill(truckCabin);
 
         Rectangle2D.Double truckLoad =
-        new Rectangle2D.Double(120, 100, 50, 30);
+        new Rectangle2D.Double(20, 0, 50, 30);
 
         g2d.setColor(Color.BLUE);
         g2d.fill(truckLoad);
