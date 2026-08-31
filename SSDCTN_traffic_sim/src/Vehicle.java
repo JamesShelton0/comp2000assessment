@@ -19,6 +19,40 @@ public abstract class Vehicle extends JComponent {
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
 
+    void setPosition(double x, double y){
+
+        this.x = x;
+        this.y = y;
+
+        position = new Point(x, y);
+
+    }
+
+    void move(){
+        
+        position = Velocity.calPosition(x, y, direction, velocity);
+
+        x = position.getX();
+        y = position.getY();
+
+
+
+
+
+    }
+
+
+
+    void updatePosition(){
+
+        setBounds(
+            (int)(x-width/2),
+            (int)(y- height/2),
+            width,
+            height
+        );
+    }
+
     // For acceleration pass positive number, for deceleration pass negative number
     void accelerate(float change) {
         velocity += change;
@@ -27,6 +61,17 @@ public abstract class Vehicle extends JComponent {
 
     void turn(int degrees, int radius) {
         // turn blinker on depending on degrees
+    }
+
+
+
+    void setVelocity(float velocity){
+        this.velocity = velocity;
+    }
+
+
+    void setDirection(float direction){
+        this.direction = direction;
     }
 }
 
