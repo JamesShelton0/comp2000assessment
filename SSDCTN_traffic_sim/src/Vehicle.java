@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 public abstract class Vehicle extends JComponent {
     // size and position
-    protected int width, height;
+    protected double width, height;
     protected double x, y;
     protected Point position;
 
@@ -48,8 +48,8 @@ public abstract class Vehicle extends JComponent {
         setBounds(
             (int)(x-width/2),
             (int)(y- height/2),
-            width,
-            height
+            (int) width,
+            (int) height
         );
     }
 

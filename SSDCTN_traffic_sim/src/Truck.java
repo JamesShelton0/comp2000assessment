@@ -8,7 +8,7 @@ public class Truck extends Vehicle {
 
     boolean hasSunroof;
 
-    public Truck(int w, int h) {
+    public Truck(double w, double h) {
         super.width = w;
         super.height = h;
         super.velocity = 0;

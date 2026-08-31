@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Motorbike extends Vehicle {
 
-    Motorbike(int width, int height) {
+    Motorbike(double width, double height) {
         super.accelerationRate = 8;
         super.decelerationRate = -5;
 

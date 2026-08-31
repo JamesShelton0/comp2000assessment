@@ -53,7 +53,5 @@ public class TrafficLight {
         if (currentLight > 2) {
             currentLight = 0;
         }
-
-        //repaint();
     }
 }

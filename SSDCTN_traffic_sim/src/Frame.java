@@ -4,13 +4,13 @@ import java.awt.*;
 public class Frame extends JFrame { 
     Panel panel;
 
-    Frame(int width, int height, String logoPath) {
+    Frame(int width, int height) {
         panel = new Panel(width, height);
         this.setTitle("Traffic Sim");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // this.setResizable(false);
-        ImageIcon logo = new ImageIcon(logoPath);
-        this.setIconImage(logo.getImage());
+        // ImageIcon logo = new ImageIcon(logoPath);
+        // this.setIconImage(logo.getImage());
         this.add(panel);
         this.pack();
         this.setLocationRelativeTo(null);
@@ -34,7 +34,7 @@ class Panel extends JPanel {
         lightTimer.start();
 
         // truck
-        truck = new Truck(70, 50);
+        truck = new Truck(width/100*8.75, height/100*6.25);
         truck.setPosition(835, 400); // starts off the screen on the right
         truck.setVelocity(1);
         truck.setDirection((float)Math.PI); // right to left
