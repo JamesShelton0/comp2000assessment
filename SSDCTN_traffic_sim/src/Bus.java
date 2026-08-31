@@ -1,12 +1,5 @@
 public class Bus extends Vehicle {
 
-    // private int x;       [declared in Vehicle]
-    // private int y;       [declared in Vehicle]
-
-    // private float velocity = 60;         [declared in vehicle, initialise in constructor]
-    // private float decelerationRate = -5; [declared in vehicle, initialise in constructor]
-    // private int accelerationRate = 5;    [declared in vehicle, initialise in constructor]
-
     private boolean stoppedAtBusStop = false;  //if the bus is stopped atm
     private boolean leavingBusStop = false;
     
@@ -14,9 +7,10 @@ public class Bus extends Vehicle {
     private int maxWaitTime = 100; //how long it will wait
 
     Bus() {
-        super.velocity = 60;
-        super.decelerationRate = -5;
-        super.accelerationRate = 5;   // just set a random value so that your leaveBusStop() didn't break. Change if u want of course!
+        velocity = 60;
+        topSpeed = 60;
+        decelerationRate = -5;
+        accelerationRate = 5;   
     }
 
     //check if the bus is close to a bus stop
