@@ -20,13 +20,13 @@ public class Truck extends Vehicle {
 
     public void draw(Graphics2D g2d) {
         Rectangle2D.Double truckCabin =
-        new Rectangle2D.Double(100, 105, width/7*2, height/5*2);   // (the maths keeps proportions while allowing width and height to be set through constructor)
+        new Rectangle2D.Double(x, y, width/7*2, height/5*2); // 20, 20
 
         g2d.setColor(Color.RED);
         g2d.fill(truckCabin);
 
         Rectangle2D.Double truckLoad =
-        new Rectangle2D.Double(120, 100, width/7*5, height/5*3);
+        new Rectangle2D.Double(x+20, y-5, width/7*5, height/5*3); // 50, 30 
 
         g2d.setColor(Color.BLUE);
         g2d.fill(truckLoad);
