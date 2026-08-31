@@ -44,7 +44,6 @@ public abstract class Vehicle extends JComponent {
 
 
     void updatePosition(){ // centring method
-
         setBounds(
             (int)(x-width/2),
             (int)(y- height/2),

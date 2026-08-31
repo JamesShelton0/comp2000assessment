@@ -13,20 +13,21 @@ public class Motorbike extends Vehicle {
     public void draw(Graphics2D g2d) {
         // wheels
         g2d.setColor(Color.BLACK);
-        g2d.fillOval(15,5,20,20);
-        g2d.fillOval(15,55,20,20);
+        g2d.fillOval((int) x+15, (int) y+5,20,20);
+        g2d.fillOval((int) x+15, (int) y+55,20,20);
 
         // body
         g2d.setColor(Color.RED);
-        g2d.fillRoundRect(12,22,26,40,8,8);
+        g2d.fillRoundRect((int) x+12, (int) y+22,26,40,8,8);
 
         // seat
         g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(16,35,18, 15,5,5);
+        g2d.fillRoundRect((int) x+16, (int) y+35,18, 15,5,5);
 
         // handlebar
         g2d.setColor(Color.DARK_GRAY);
-        g2d.fillRect(10,20,30,3);
+        g2d.fillRect((int) x+10, (int) y+20,30,3);
+
     }
 }
 

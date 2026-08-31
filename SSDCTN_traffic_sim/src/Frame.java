@@ -24,34 +24,15 @@ class Panel extends JPanel {
     Explosion explosion;
     Motorbike motorbike;
     TrafficLight trafficLight;
+    Road roadN, roadE, roadS, roadW, intersection;
 
     Panel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
-        // change traffic light every 4s
-        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
+        // ---------------------- Timers ----------------------
+        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });   // light changes every 4s
         lightTimer.start();
-
-        // truck
-        truck = new Truck(width/100*8.75, height/100*6.25);
-        truck.setPosition(835, 400); // starts off the screen on the right
-        truck.setVelocity(1);
-        truck.setDirection((float)Math.PI); // right to left
-
-        // pothole
-        pothole = new Pothole(5, 5);
-
-        // explosion (pass panel for callbacks/repaint)
-        //explosion = new Explosion(300, 300, this);
-
-        // motorbike
-        motorbike = new Motorbike(80, 120);
-        motorbike.setPosition(375, 540);
-        motorbike.setVelocity(3);
-        motorbike.setDirection((float)(3 * Math.PI / 2));
-
-        trafficLight = new TrafficLight();
 
         // movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
@@ -60,6 +41,32 @@ class Panel extends JPanel {
             this.repaint();
         });
         moveTimer.start();
+
+
+        // ---------------------- Vehicles ----------------------
+        // truck
+        truck = new Truck((width/100) * 8.75, (height/100) * 6.25); // 8.75% of frame width, 6.25% of frame height
+        truck.setPosition(835, 400); // starts off the screen on the right
+        truck.setVelocity(1);
+        truck.setDirection((float)Math.PI); // right to left
+
+        // motorbike
+        motorbike = new Motorbike((width/100) * 10, (height/100) * 6.6667); // 10% of frame width, 6.6667% of frame height
+        motorbike.setPosition(375, 540);
+        motorbike.setVelocity(3);
+        motorbike.setDirection((float)(3 * Math.PI / 2));
+
+
+        // ---------------------- Static objects ----------------------
+        roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
+        roadE = new Road(width*0.82, height*0.5, width*0.4, height*0.25, 2);
+        roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
+        roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
+        intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
+
+        trafficLight = new TrafficLight(150, 100);
+        pothole = new Pothole(5, 5);
+        explosion = new Explosion(300, 300, this);  // pass panel for callbacks/repaint
     }
 
     @Override
@@ -69,6 +76,11 @@ class Panel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
         // draw components
+        roadN.draw(g2d);
+        roadE.draw(g2d);
+        roadS.draw(g2d);
+        roadW.draw(g2d);
+        intersection.draw(g2d);
         truck.draw(g2d);
         pothole.draw(g2d);
         explosion.draw(g2d);    
