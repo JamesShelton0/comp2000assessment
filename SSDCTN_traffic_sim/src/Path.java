@@ -2,7 +2,7 @@ import java.awt.geom.Area;
 import java.awt.Color;
 
 public class Path {
-    protected Area;
+    //protected Area;
 
     protected float x, y;
     protected int width, height; 
