@@ -15,19 +15,21 @@ public class Frame {
         pothole.setOpaque(false);
 
         // truck
-        Truck truck = new Truck(800, 50);
-        truck.setBounds(100, 100, 800, 800);
-        truck.setOpaque(false);
-        
+        Truck truck = new Truck(70, 30);
+        truck.setPosition(835, 400); // starts off the screen on the right
+        truck.setVelocity(1);
+        truck.setDirection((float)Math.PI); // right to left
 
         // motorbike
-        Motorbike motorbike = new Motorbike();
-        motorbike.setBounds(350,500,50,80);
+        Motorbike motorbike = new Motorbike(50, 80);
+        motorbike.setPosition(375, 540);
+        motorbike.setVelocity(3);
+        motorbike.setDirection((float)(3 * Math.PI / 2));        
         motorbike.setOpaque(false);
 
         // traffic light
         TrafficLight trafficLight = new TrafficLight();
-        trafficLight.setBounds(600,100,50,);
+        trafficLight.setBounds(600,100,50,50);
         
         // adding components 
         bground.add(pothole);
@@ -45,13 +47,29 @@ public class Frame {
         frame.setVisible(true);
 
         // change traffic light every X seconds
-        Timer timer = new Timer(4000, e -> {
-            trafficLight.changeLight();
+    //    Timer timer = new Timer(4000, e -> {
+         //   trafficLight.changeLight();           I want to borrow this one sec
+     //   });
+
+    //    timer.start();
+  //  }
+
+        Timer timer = new Timer(16, e-> {
+
+            truck.move();
+            motorbike.move();
+            bground.repaint();
+
         });
 
         timer.start();
-    }
 
+
+
+        }
+
+
+        
 
 
 }

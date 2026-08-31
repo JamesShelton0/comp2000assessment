@@ -26,6 +26,8 @@ public abstract class Vehicle extends JComponent {
 
         position = new Point(x, y);
 
+        updatePosition();
+
     }
 
     void move(){
@@ -36,14 +38,14 @@ public abstract class Vehicle extends JComponent {
         y = position.getY();
 
 
-
+        updatePosition();
 
 
     }
 
 
 
-    void updatePosition(){
+    void updatePosition(){ // centring method
 
         setBounds(
             (int)(x-width/2),

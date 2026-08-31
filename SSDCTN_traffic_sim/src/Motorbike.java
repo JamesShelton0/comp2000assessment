@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 public class Motorbike extends Vehicle {
 
-    Motorbike() {
+    Motorbike(int w, int h) {
         super.accelerationRate = 8;
         super.decelerationRate = -5;
 
