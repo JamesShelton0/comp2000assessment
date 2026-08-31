@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Road extends Path { 
     // only accepts vehicles in its bounds
     int speedLimit;
@@ -9,4 +11,8 @@ public class Road extends Path {
         super.height = height;
     }
 
+
+    public void draw(Graphics2D g2d) {
+        
+    }
 }
