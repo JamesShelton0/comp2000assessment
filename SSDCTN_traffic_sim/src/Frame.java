@@ -49,15 +49,15 @@ class Panel extends JPanel {
         motorbike.setOpaque(false);
 
         // traffic light
-        trafficLight = new TrafficLight();
-        trafficLight.setBounds(600,100,50,50);
+        //trafficLight = new TrafficLight();
+       // trafficLight.setBounds(600,100,50,50);
 
         // adding components to panel
         this.add(pothole);
         this.add(truck);
         this.add(motorbike);
-        this.add(trafficLight);
-        this.add(explosion);
+       // this.add(trafficLight);
+       // this.add(explosion);
 
         // movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
@@ -71,11 +71,6 @@ class Panel extends JPanel {
         Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
         lightTimer.start();
     }
-
-
-        Timer timer = new Timer(4000, e -> {trafficLight.changeLight();});
-        timer.start();
-
 
     @Override
     public void paintComponent(Graphics g) {
