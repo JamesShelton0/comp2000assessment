@@ -1,9 +1,7 @@
-import java.awt.geom.Area;
-import java.awt.Color;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class Path {
-    //protected Area;
-
     protected float x, y;
     protected int width, height; 
     protected Color primary, accent; 
@@ -11,12 +9,13 @@ public class Path {
     Path(){}
 
     Path(int width, int height) {
+        // Rectangle2D.Double 
         this.width = width;
         this.height = height;
     }
 
-    void draw() {
-
+    void draw(Graphics g) {
+        // Rectangle2D.Double = new
     }
 
     void setPosition(int x, int y) {

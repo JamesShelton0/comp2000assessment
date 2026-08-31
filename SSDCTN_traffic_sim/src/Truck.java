@@ -1,20 +1,14 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-
 
 public class Truck extends Vehicle {
     int colour;
     int size;
     int shape;              
-    // int topSpeed;        [declared in Vehicle]   
-    // int pollutionRate;   [declared in Vehicle]
-    boolean hasSunroof;
-    // boolean lightsOn;    [Vehicle contains attributes headLightsOn and tailLightsOn]
-    // int width;           [declared in Vehicle]
-    // int height;          [declared in Vehicle (length)]
 
-    public Truck(int w, int h){
+    boolean hasSunroof;
+
+    public Truck(int w, int h) {
         super.width = w;
         super.height = h;
         super.velocity = 0;
@@ -24,27 +18,18 @@ public class Truck extends Vehicle {
        
     }
 
-    protected void paintComponent(Graphics g){
-
-        super.paintComponent(g);
-
-        Graphics2D g2d = (Graphics2D) g;
-
+    public void draw(Graphics2D g2d) {
         Rectangle2D.Double truckCabin =
-        new Rectangle2D.Double(0, 5, 20, 20);
+        new Rectangle2D.Double(100, 105, width/7*2, height/5*2);   // (the maths keeps proportions while allowing width and height to be set through constructor)
 
         g2d.setColor(Color.RED);
         g2d.fill(truckCabin);
 
         Rectangle2D.Double truckLoad =
-        new Rectangle2D.Double(20, 0, 50, 30);
+        new Rectangle2D.Double(120, 100, width/7*5, height/5*3);
 
         g2d.setColor(Color.BLUE);
         g2d.fill(truckLoad);
     }
 
 }
-
-
-
-

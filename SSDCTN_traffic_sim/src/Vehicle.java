@@ -19,6 +19,9 @@ public abstract class Vehicle extends JComponent {
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
 
+
+    public void draw(Graphics g2d) {}
+
     void setPosition(double x, double y){
 
         this.x = x;
@@ -31,16 +34,12 @@ public abstract class Vehicle extends JComponent {
     }
 
     void move(){
-        
         position = Velocity.calPosition(x, y, direction, velocity);
 
         x = position.getX();
         y = position.getY();
 
-
         updatePosition();
-
-
     }
 
 

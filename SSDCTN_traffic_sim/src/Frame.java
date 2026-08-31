@@ -1,75 +1,94 @@
 import javax.swing.*;
 import java.awt.*;
-public class Frame { 
-    public static void main(String[] args){
-        JFrame frame = new JFrame("World Frame"); 
-        frame.setSize(800,800); 
 
-        JPanel bground = new JPanel();
-        bground.setBackground(new Color(63, 155, 11));
-        bground.setLayout(null);
+public class Frame extends JFrame { 
+    Panel panel;
 
-        // pothole
-        Pothole pothole = new Pothole(800, 800);
-        pothole.setBounds(0, 0, 800, 800);
-        pothole.setOpaque(false);
+    Frame(int width, int height, String logoPath) {
+        panel = new Panel(width, height);
+        this.setTitle("Traffic Sim");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.setResizable(false);
+        ImageIcon logo = new ImageIcon(logoPath);
+        this.setIconImage(logo.getImage());
+        this.add(panel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+}
+
+class Panel extends JPanel {
+    Truck truck;
+    Pothole pothole;
+    Explosion explosion;
+    Motorbike motorbike;
+    TrafficLight trafficLight;
+
+    Panel(int width, int height) {
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(63, 155, 11));
 
         // truck
-        Truck truck = new Truck(70, 30);
+        truck = new Truck(70, 50);
         truck.setPosition(835, 400); // starts off the screen on the right
         truck.setVelocity(1);
         truck.setDirection((float)Math.PI); // right to left
 
+        // pothole
+        pothole = new Pothole(5, 5);
+
+        // explosion (pass panel for callbacks/repaint)
+        explosion = new Explosion(300, 300, this);
+
         // motorbike
-        Motorbike motorbike = new Motorbike(50, 80);
+        motorbike = new Motorbike(80, 120);
         motorbike.setPosition(375, 540);
         motorbike.setVelocity(3);
-        motorbike.setDirection((float)(3 * Math.PI / 2));        
+        motorbike.setDirection((float)(3 * Math.PI / 2));
         motorbike.setOpaque(false);
 
         // traffic light
-        TrafficLight trafficLight = new TrafficLight();
+        trafficLight = new TrafficLight();
         trafficLight.setBounds(600,100,50,50);
-        
-        // adding components 
-        bground.add(pothole);
-        bground.add(truck);
-        bground.add(motorbike);
-        bground.add(trafficLight);
 
-        // explosion
-        Explosion explosion = new Explosion(300, 300);
-        bground.add(explosion);
+        // adding components to panel
+        this.add(pothole);
+        this.add(truck);
+        this.add(motorbike);
+        this.add(trafficLight);
+        this.add(explosion);
 
-        frame.add(bground);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        // change traffic light every X seconds
-    //    Timer timer = new Timer(4000, e -> {
-         //   trafficLight.changeLight();           I want to borrow this one sec
-     //   });
-
-    //    timer.start();
-  //  }
-
-        Timer timer = new Timer(16, e-> {
-
+        // movement & repaint timer (~60fps)
+        Timer moveTimer = new Timer(16, e -> {
             truck.move();
             motorbike.move();
-            bground.repaint();
-
+            this.repaint();
         });
+        moveTimer.start();
 
+        // change traffic light every 4s
+        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
+        lightTimer.start();
+    }
+
+
+        Timer timer = new Timer(4000, e -> {trafficLight.changeLight();});
         timer.start();
 
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);            // paints JPanel stuff like the background
 
-        }
+        Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
-
-        
-
-
+        // draw components
+        truck.draw(g2d);
+        pothole.draw(g2d);
+        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        motorbike.draw(g2d);
+        trafficLight.draw(g2d);
+    }
 }
+
