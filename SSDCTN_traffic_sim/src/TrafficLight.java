@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 
 public class TrafficLight {
@@ -6,7 +5,7 @@ public class TrafficLight {
     private int currentLight = 0;
 
     public TrafficLight() {
-        //setOpaque(false);
+
     }
 
 

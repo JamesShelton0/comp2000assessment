@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
+
 public class Motorbike extends Vehicle {
 
     Motorbike(int width, int height) {
