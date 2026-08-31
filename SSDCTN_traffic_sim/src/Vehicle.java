@@ -30,7 +30,6 @@ public abstract class Vehicle extends JComponent {
         position = new Point(x, y);
 
         updatePosition();
-
     }
 
     void move(){

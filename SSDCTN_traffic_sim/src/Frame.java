@@ -50,7 +50,6 @@ class Panel extends JPanel {
         motorbike.setPosition(375, 540);
         motorbike.setVelocity(3);
         motorbike.setDirection((float)(3 * Math.PI / 2));
-        //motorbike.setOpaque(false);
 
         trafficLight = new TrafficLight();
 
