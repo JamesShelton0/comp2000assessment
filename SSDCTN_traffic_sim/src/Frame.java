@@ -25,6 +25,7 @@ class Panel extends JPanel {
     Motorbike motorbike;
     TrafficLight trafficLight;
     Road roadN, roadE, roadS, roadW, intersection;
+    Car car;
 
     Panel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -34,19 +35,26 @@ class Panel extends JPanel {
         Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });   // light changes every 4s
         lightTimer.start();
 
-        // movement & repaint timer (~60fps)
+        // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
             truck.move();
             motorbike.move();
+            car.move();
             this.repaint();
         });
         moveTimer.start();
 
 
         // ---------------------- Vehicles ----------------------
+        // car
+        car = new Car(30, 50);
+        car.setPosition(340, height);
+        car.setVelocity(2);
+        car.setDirection((float)(3 * Math.PI / 2));
+
         // truck
-        truck = new Truck((width/100) * 8.75, (height/100) * 6.25); // 8.75% of frame width, 6.25% of frame height
-        truck.setPosition(835, 400); // starts off the screen on the right
+        truck = new Truck(width/100*10, height/100*8);
+        truck.setPosition(width, 435); // starts off the screen on the right
         truck.setVelocity(1);
         truck.setDirection((float)Math.PI); // right to left
 
@@ -64,9 +72,9 @@ class Panel extends JPanel {
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
 
-        trafficLight = new TrafficLight(150, 100);
+        trafficLight = new TrafficLight(200, 150);
         pothole = new Pothole(5, 5);
-        explosion = new Explosion(300, 300, this);  // pass panel for callbacks/repaint
+        explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
 
     @Override
@@ -83,9 +91,10 @@ class Panel extends JPanel {
         intersection.draw(g2d);
         truck.draw(g2d);
         pothole.draw(g2d);
-        explosion.draw(g2d);    
+        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         motorbike.draw(g2d);
         trafficLight.draw(g2d);
+        car.draw(g2d);
     }
 }
 
