@@ -24,6 +24,7 @@ class Panel extends JPanel {
     Explosion explosion;
     Motorbike motorbike;
     TrafficLight trafficLight;
+    Car car;
 
     Panel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -33,8 +34,13 @@ class Panel extends JPanel {
         Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });
         lightTimer.start();
 
+        car = new Car(30, 50);
+        car.setPosition(300, 400);
+        car.setVelocity(2);
+        car.setDirection((float)(3 * Math.PI / 2));
+
         // truck
-        truck = new Truck(width/100*8.75, height/100*6.25);
+        truck = new Truck(width/100*10, height/100*8);
         truck.setPosition(835, 400); // starts off the screen on the right
         truck.setVelocity(1);
         truck.setDirection((float)Math.PI); // right to left
@@ -43,7 +49,7 @@ class Panel extends JPanel {
         pothole = new Pothole(5, 5);
 
        // explosion (pass panel for callbacks/repaint)
-        explosion = new Explosion(300, 300, this);
+        //explosion = new Explosion(300, 300, this);
 
         // motorbike
         motorbike = new Motorbike(80, 120);
@@ -57,6 +63,7 @@ class Panel extends JPanel {
         Timer moveTimer = new Timer(16, e -> {
             truck.move();
             motorbike.move();
+            car.move();
             this.repaint();
         });
         moveTimer.start();
@@ -71,9 +78,10 @@ class Panel extends JPanel {
         // draw components
         truck.draw(g2d);
         pothole.draw(g2d);
-        explosion.draw(g2d);    
+        //explosion.draw(g2d);    
         motorbike.draw(g2d);
         trafficLight.draw(g2d);
+        car.draw(g2d);
     }
 }
 
