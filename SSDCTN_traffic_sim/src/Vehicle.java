@@ -7,6 +7,7 @@ public abstract class Vehicle extends JComponent {
     protected double width, height;
     protected double x, y;
     protected Point position;
+    protected HitBox hitBox;
 
     // movement
     protected int topSpeed;

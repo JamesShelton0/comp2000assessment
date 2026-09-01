@@ -4,6 +4,7 @@ public class HitBox {
     double xAddon;
     double yAddon;
     double radius;
+    Point pointAhead;
     double direction;
     ArrayList<Point> pointArr = new ArrayList<>();
     ArrayList<Edge> edgeArr = new ArrayList<>();
@@ -76,6 +77,10 @@ public class HitBox {
         return false;
     }
 
+
+    public Point getPointAhead(){
+        return pointAhead;
+    }
     //public 
 
     public ArrayList<Point> getPointArr(){

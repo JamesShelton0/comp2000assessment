@@ -77,12 +77,10 @@ class Panel extends JPanel {
 
 
         /* test code */
-        //Vehicle c = car;
-        //Vehicle t = truck;
-        //Vehicle m = motorbike;
         vehicleArr.add(car);
         vehicleArr.add(truck);
         vehicleArr.add(motorbike);
+        /* end test code */
 
 
         // ---------------------- Static objects ----------------------
