@@ -5,12 +5,31 @@ public class Truck extends Vehicle {
     int colour;
     int size;
     int shape;              
-
+    // int topSpeed;        [declared in Vehicle]   
+    // int pollutionRate;   [declared in Vehicle]
     boolean hasSunroof;
+    // boolean lightsOn;    [Vehicle contains attributes headLightsOn and tailLightsOn]
+    // int width;           [declared in Vehicle]
+    // int height;          [declared in Vehicle (length)]
+    Point p;
 
     public Truck(double w, double h) {
         super.width = w;
         super.height = h;
+        p = new Point(500, 500);
+        
+        // super.accelerationRate =
+        // super.decelerationRate =
+    }
+
+    public void moveTruck(){
+        p = Velocity.calPosition(p.getX(), p.getY(),0, 10);
+    }
+
+    protected void paintComponent(Graphics g){
+
+        Graphics2D g2d = (Graphics2D) g;
+
         super.velocity = 0;
         super.direction = 0;
         super.accelerationRate = 0;
