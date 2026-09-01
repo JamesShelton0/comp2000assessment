@@ -12,11 +12,13 @@ public class Truck extends Vehicle {
     // int width;           [declared in Vehicle]
     // int height;          [declared in Vehicle (length)]
     Point p;
+    HitBox h;
 
     public Truck(double w, double h) {
         super.width = w;
         super.height = h;
         p = new Point(500, 500);
+        this.h = new HitBox(p, 0, w, h);
         
         // super.accelerationRate =
         // super.decelerationRate =

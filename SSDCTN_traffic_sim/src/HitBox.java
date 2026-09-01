@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
 public class HitBox {
-    float xAddon;
-    float yAddon;
+    double xAddon;
+    double yAddon;
     double radius;
     double direction;
     ArrayList<Point> pointArr = new ArrayList<>();
     ArrayList<Edge> edgeArr = new ArrayList<>();
     Point centrePoint;
 
-    HitBox(Point p, int Direction, float width, float height){
+    HitBox(Point p, int Direction, double width, double height){
         xAddon = width/2;
         yAddon = height/2;
         getRadius();

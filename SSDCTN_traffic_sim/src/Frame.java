@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Frame extends JFrame { 
     Panel panel;
@@ -26,6 +27,7 @@ class Panel extends JPanel {
     TrafficLight trafficLight;
     Road roadN, roadE, roadS, roadW, intersection;
     Car car;
+    ArrayList<Vehicle> vehicleArr = new ArrayList<>();
 
     Panel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -63,6 +65,15 @@ class Panel extends JPanel {
         motorbike.setPosition(375, 540);
         motorbike.setVelocity(3);
         motorbike.setDirection((float)(3 * Math.PI / 2));
+
+
+        /* test code */
+        //Vehicle c = car;
+        //Vehicle t = truck;
+        //Vehicle m = motorbike;
+        vehicleArr.add(car);
+        vehicleArr.add(truck);
+        vehicleArr.add(motorbike);
 
 
         // ---------------------- Static objects ----------------------
