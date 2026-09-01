@@ -34,7 +34,7 @@ class Panel extends JPanel {
         this.setBackground(new Color(63, 155, 11));
 
         // ---------------------- Timers ----------------------
-        Timer lightTimer = new Timer(4000, e -> { trafficLight.changeLight(); });   // light changes every 4s
+        Timer lightTimer = new Timer(2800, e -> { trafficLight.changeLight(); });   // light changes every 4s
         lightTimer.start();
 
         // Vehicle movement & repaint timer (~60fps)
@@ -43,6 +43,15 @@ class Panel extends JPanel {
             motorbike.move();
             car.move();
             this.repaint();
+            if(trafficLight.getLightState() == 2){
+                car.setVelocity(0);
+                truck.setVelocity(0);
+            } else {
+                car.setVelocity(1);
+                truck.setVelocity(1
+
+                );
+            }
         });
         moveTimer.start();
 
@@ -51,8 +60,8 @@ class Panel extends JPanel {
         // car
         car = new Car(30, 50);
         car.setPosition(340, height);
-        car.setVelocity(2);
         car.setDirection((float)(3 * Math.PI / 2));
+        
 
         // truck
         truck = new Truck(width/100*10, height/100*8);
@@ -83,7 +92,7 @@ class Panel extends JPanel {
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
 
-        trafficLight = new TrafficLight(200, 150);
+        trafficLight = new TrafficLight(350, 200);
         pothole = new Pothole(5, 5);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }

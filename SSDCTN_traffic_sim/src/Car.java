@@ -96,7 +96,6 @@ public class Car extends Vehicle {
         g2d.fill(frontLeftWheel);
         g2d.fill(frontRightWheel);
         g2d.fill(rearLeftWheel);
-        g2d.fill(rearRightWheel);
-            }
-
+        g2d.fill(rearRightWheel);   
+    }
 }
