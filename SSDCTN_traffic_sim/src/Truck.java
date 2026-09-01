@@ -13,12 +13,19 @@ public class Truck extends Vehicle {
     // boolean lightsOn;    [Vehicle contains attributes headLightsOn and tailLightsOn]
     // int width;           [declared in Vehicle]
     // int height;          [declared in Vehicle (length)]
+    Point p;
 
     public Truck(int w, int h){
         super.width = w;
         super.height = h;
+        p = new Point(500, 500);
+        
         // super.accelerationRate =
         // super.decelerationRate =
+    }
+
+    public void moveTruck(){
+        p = Velocity.calPosition(p.getX(), p.getY(),0, 10);
     }
 
     protected void paintComponent(Graphics g){
