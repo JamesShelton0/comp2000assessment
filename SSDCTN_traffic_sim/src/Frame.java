@@ -72,7 +72,7 @@ class Panel extends JPanel {
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
 
-        trafficLight = new TrafficLight(200, 150);
+        trafficLight = new TrafficLight(350, 200);
         pothole = new Pothole(5, 5);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }

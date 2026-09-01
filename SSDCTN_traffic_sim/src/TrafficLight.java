@@ -10,6 +10,10 @@ public class TrafficLight {
         this.y = y;
     }
 
+    public int getLightState() {
+        return currentLight;
+    }
+
         // traffic light position is relative but scaling is still hard coded for now
     public void draw(Graphics2D g2d) {
         // shadow 
