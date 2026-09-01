@@ -11,11 +11,10 @@ public class Pothole extends JComponent{
         width = w;
         height = h;
     }
-    protected void paintComponent(Graphics g){
-        Graphics2D g2d = (Graphics2D) g;
-        Ellipse2D.Double c = new Ellipse2D.Double(100,100,5,5);
+
+    protected void draw(Graphics2D g2d){
+        Ellipse2D.Double c = new Ellipse2D.Double(100,80, width, height);
         g2d.setColor(new Color(0,0,0));
         g2d.fill(c);
-
     }
 }
