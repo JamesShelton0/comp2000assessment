@@ -1,6 +1,5 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.awt.Graphics2D;
 
 public abstract class Vehicle extends JComponent {
     // size and position
@@ -21,30 +20,32 @@ public abstract class Vehicle extends JComponent {
     protected boolean brakeLightsOn;
 
 
-    public void draw(Graphics g2d) {}
+    public void draw(Graphics2D g2d) {
 
-    void setPosition(double x, double y){
+    }
 
+    public void setPosition(double x, double y){
         this.x = x;
         this.y = y;
-
-        position = new Point(x, y);
-
+        this.position = new Point(x, y);
         updatePosition();
     }
 
-    void move(){
-        position = Velocity.calPosition(x, y, direction, 1);
+    public void setPosition(Point point) {
+        this.x = point.getX();
+        this.y = point.getY();
+        this.position = point;
+        updatePosition();
+    }
 
+    public void move(){
+        position = Velocity.calPosition(x, y, direction, 1);
         x = position.getX();
         y = position.getY();
-
         updatePosition();
     }
 
-
-
-    void updatePosition(){ // centring method
+    private void updatePosition() { // centring method
         setBounds(
             (int)(x-width/2),
             (int)(y- height/2),

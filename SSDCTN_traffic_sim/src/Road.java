@@ -46,7 +46,7 @@ public class Road extends Path {
 
 
     private void drawIntersection(Graphics2D g2d) {
-
+        // if there's anything we want in the actual intersection
     }
 
     private void drawVertical(Graphics2D g2d) {
