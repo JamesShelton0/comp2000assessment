@@ -24,10 +24,10 @@ public class VehicleSpawner {
         this.width = w;
         this.height = h;
         this.spawnChance = spawnChance;
-        NORTH_SP = new Point(width*0.53, 0);
-        EAST_SP = new Point(width, height*0.52);
-        SOUTH_SP = new Point(width*0.45, height);
-        WEST_SP = new Point(0, height*0.45);
+        NORTH_SP = new Point(width*0.54, 0);
+        EAST_SP = new Point(width, height*0.53);
+        SOUTH_SP = new Point(width*0.42, height);
+        WEST_SP = new Point(0, height*0.42);
         activeVehicles = new ArrayList<Vehicle>();
         rand = new Random();
     }

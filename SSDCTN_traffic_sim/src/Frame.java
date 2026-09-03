@@ -32,7 +32,7 @@ class Panel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
-        // ---------------------- Vehicle Spawning Timer ----------------------
+        // ---------------------- Vehicle Spawn Timer ----------------------
         vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
         Timer vehicleSpawnTimer = new Timer(2000, e -> {              // attempt freq
             vehicleSpawner.spawn();
@@ -77,14 +77,13 @@ class Panel extends JPanel {
         this.trafficLight3 = new TrafficLight(250, 500); // bottom left
         this.trafficLight4 = new TrafficLight(500, 500); // bottom right
 
-        pothole = new Pothole(5, 5);
+        pothole = new Pothole(8, 8);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);            // paints JPanel stuff like the background
-
         Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
         // draw components
