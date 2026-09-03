@@ -24,7 +24,7 @@ class Panel extends JPanel {
     Pothole pothole;
     Explosion explosion;
     Motorbike motorbike;
-    TrafficLight trafficLight;
+    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
     Road roadN, roadE, roadS, roadW, intersection;
     Car car;
     ArrayList<Vehicle> vehicleArr = new ArrayList<>();
@@ -34,8 +34,21 @@ class Panel extends JPanel {
         this.setBackground(new Color(63, 155, 11));
 
         // ---------------------- Timers ----------------------
-        Timer lightTimer = new Timer(2800, e -> { trafficLight.changeLight(); });   // light changes every 4s
+        // Traffic1 light timer
+        Timer lightTimer = new Timer(2800, e -> { trafficLight1.changeLight(); });   // light changes every 4s
         lightTimer.start();
+
+        // Traffic2 light timer
+        Timer lightTimer2 = new Timer(4800, e -> { trafficLight2.changeLight(); });   // light changes every 4s
+        lightTimer2.start();
+
+        //traffic3 light timer
+        Timer lightTimer3 = new Timer(6800, e -> { trafficLight3.changeLight(); });   // light changes every 4s
+        lightTimer3.start();
+
+        //traffic4 light timer
+        Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });   // light changes every 4s
+        lightTimer4.start();
 
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
@@ -43,7 +56,7 @@ class Panel extends JPanel {
             motorbike.move();
             car.move();
             this.repaint();
-            if(trafficLight.getLightState() == 2){
+            if(trafficLight1.getLightState() == 2 || trafficLight2.getLightState() == 2 || trafficLight3.getLightState() == 2 || trafficLight4.getLightState() == 2){
                 car.setVelocity(0);
                 truck.setVelocity(0);
             } else {
@@ -90,7 +103,11 @@ class Panel extends JPanel {
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
 
-        trafficLight = new TrafficLight(350, 200);
+        this.trafficLight1 = new TrafficLight(250, 210); // top left
+        this.trafficLight2 = new TrafficLight(500, 210); // top right
+        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
+        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
+
         pothole = new Pothole(5, 5);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
@@ -111,7 +128,10 @@ class Panel extends JPanel {
         pothole.draw(g2d);
         explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         motorbike.draw(g2d);
-        trafficLight.draw(g2d);
+        trafficLight1.draw(g2d);
+        trafficLight2.draw(g2d);
+        trafficLight3.draw(g2d);
+        trafficLight4.draw(g2d);
         car.draw(g2d);
     }
 }

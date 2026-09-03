@@ -34,7 +34,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     void move(){
-        position = Velocity.calPosition(x, y, direction, 1);
+        position = Velocity.calPosition(x, y, direction, velocity);
 
         x = position.getX();
         y = position.getY();
