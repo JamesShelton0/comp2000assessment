@@ -15,12 +15,13 @@ public class Bus extends Vehicle {
 
     //check if the bus is close to a bus stop
     void checkBusStop(BusStop stop) { 
-        if(x >= stop.x - 10 && x <= stop.x){
-           accelerate(decelerationRate);
-           
-           if(velocity == 0){
+    
+    if(!stoppedAtBusStop && !leavingBusStop &&
+        x >= stop.getx() - 10 &&x <=stop.getx());
+        accelerate(decelerationRate);
+
+        if(velocity==0){
             stoppedAtBusStop = true;
-           }
         }
     }
 
