@@ -5,12 +5,7 @@ public class Truck extends Vehicle {
     int colour;
     int size;
     int shape;              
-    // int topSpeed;        [declared in Vehicle]   
-    // int pollutionRate;   [declared in Vehicle]
     boolean hasSunroof;
-    // boolean lightsOn;    [Vehicle contains attributes headLightsOn and tailLightsOn]
-    // int width;           [declared in Vehicle]
-    // int height;          [declared in Vehicle (length)]
     Point p;
     HitBox h;
 
@@ -35,81 +30,66 @@ public class Truck extends Vehicle {
        
     }
 
+    @Override
     public void draw(Graphics2D g2d) {
-
-    // Truck cabin
-    Rectangle2D.Double truckCabin =
-        new Rectangle2D.Double(
+        // Truck cabin
+        Rectangle2D.Double truckCabin = new Rectangle2D.Double(
             x,
             y,
             width / 7 * 2,
             height / 5 * 2
         );
+        g2d.setColor(Color.RED);
+        g2d.fill(truckCabin);
 
-    g2d.setColor(Color.RED);
-    g2d.fill(truckCabin);
-
-
-    // Truck load
-    Rectangle2D.Double truckLoad =
-        new Rectangle2D.Double(
+        // Truck load
+        Rectangle2D.Double truckLoad = new Rectangle2D.Double(
             x + 20,
             y - 5,
             width / 7 * 5,
             height / 5 * 3
         );
+        g2d.setColor(Color.BLUE);
+        g2d.fill(truckLoad);
 
-    g2d.setColor(Color.BLUE);
-    g2d.fill(truckLoad);
-
-
-    // Front left wheel
-    Rectangle2D.Double frontLeftWheel =
-        new Rectangle2D.Double(
+        // Front left wheel
+        Rectangle2D.Double frontLeftWheel = new Rectangle2D.Double(
             x + 5,
             y - 2,
             10,
             4
         );
 
-
-    // Front right wheel
-    Rectangle2D.Double frontRightWheel =
-        new Rectangle2D.Double(
+        // Front right wheel
+        Rectangle2D.Double frontRightWheel = new Rectangle2D.Double(
             x + 5,
             y + height / 5 * 2 - 2,
             10,
             4
         );
 
-
-    // Rear left wheel
-    Rectangle2D.Double rearLeftWheel =
-        new Rectangle2D.Double(
+        // Rear left wheel
+        Rectangle2D.Double rearLeftWheel = new Rectangle2D.Double(
             x + width - 15,
             y - 7,
             10,
             4
         );
 
-
-    // Rear right wheel
-    Rectangle2D.Double rearRightWheel =
-        new Rectangle2D.Double(
+        // Rear right wheel
+        Rectangle2D.Double rearRightWheel = new Rectangle2D.Double(
             x + width - 15,
             y + height / 5 * 3 - 7,
             10,
             4
         );
 
-
-    // Draw wheels
-    g2d.setColor(Color.BLACK);
-
-    g2d.fill(frontLeftWheel);
-    g2d.fill(frontRightWheel);
-    g2d.fill(rearLeftWheel);
-    g2d.fill(rearRightWheel);
-}
+        // Fill wheels
+        g2d.setColor(Color.BLACK);
+        g2d.fill(frontLeftWheel);
+        g2d.fill(frontRightWheel);
+        g2d.fill(rearLeftWheel);
+        g2d.fill(rearRightWheel);
+    }
 
 }

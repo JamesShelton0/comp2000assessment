@@ -10,6 +10,7 @@ public class Motorbike extends Vehicle {
         super.height = height;
     }
 
+    @Override
     public void draw(Graphics2D g2d) {
         // wheels
         g2d.setColor(Color.BLACK);
