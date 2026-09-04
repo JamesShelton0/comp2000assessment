@@ -60,20 +60,20 @@ class Panel extends JPanel {
         // car
         car = new Car(30, 50);
         car.setPosition(340, height);
-        car.setDirection((float)(3 * Math.PI / 2));
+        car.setDirection((float)270);
         
 
         // truck
         truck = new Truck(width/100*10, height/100*8);
-        truck.setPosition(width, 435); // starts off the screen on the right
+        truck.setPosition(0, 435); // starts off the screen on the right
         truck.setVelocity(1);
-        truck.setDirection((float)Math.PI); // right to left
+        truck.setDirection((float)0); // right to left
 
         // motorbike
         motorbike = new Motorbike((width/100) * 10, (height/100) * 6.6667); // 10% of frame width, 6.6667% of frame height
         motorbike.setPosition(375, 540);
-        motorbike.setVelocity(3);
-        motorbike.setDirection((float)(3 * Math.PI / 2));
+        motorbike.setVelocity(1);
+        motorbike.setDirection((float)315);
 
 
         /* test code */

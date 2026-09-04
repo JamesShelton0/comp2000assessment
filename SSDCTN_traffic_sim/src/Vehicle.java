@@ -11,8 +11,8 @@ public abstract class Vehicle extends JComponent {
 
     // movement
     protected int topSpeed;
-    protected float velocity;
-    protected float accelerationRate, decelerationRate;
+    protected double velocity;
+    protected double accelerationRate, decelerationRate;
     protected double direction;
 
     // aesthetics
@@ -34,7 +34,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     void move(){
-        position = Velocity.calPosition(x, y, direction, 1);
+        position = Velocity.calPosition(x, y, direction, velocity);
 
         x = position.getX();
         y = position.getY();
@@ -54,7 +54,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     // For acceleration pass positive number, for deceleration pass negative number
-    void accelerate(float change) {
+    void accelerate(double change) {
         velocity += change;
         if (velocity < 0) velocity = 0;
     }
@@ -65,7 +65,7 @@ public abstract class Vehicle extends JComponent {
 
 
 
-    void setVelocity(float velocity){
+    void setVelocity(double velocity){
         this.velocity = velocity;
     }
 

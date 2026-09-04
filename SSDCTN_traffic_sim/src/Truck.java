@@ -24,10 +24,6 @@ public class Truck extends Vehicle {
         // super.decelerationRate =
     }
 
-    public void moveTruck(){
-        p = Velocity.calPosition(p.getX(), p.getY(),0, 10);
-    }
-
     protected void paintComponent(Graphics g){
 
         Graphics2D g2d = (Graphics2D) g;
