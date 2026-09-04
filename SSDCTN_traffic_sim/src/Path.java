@@ -1,25 +1,18 @@
-import java.awt.geom.Area;
-import java.awt.Color;
+import java.awt.*;
 
 public class Path {
-    protected Area;
-
-    protected float x, y;
-    protected int width, height; 
+    protected double x, y;
+    protected double width, height; 
     protected Color primary, accent; 
 
     Path(){}
 
-    Path(int width, int height) {
+    Path(double width, double height) {
         this.width = width;
         this.height = height;
     }
 
-    void draw() {
-
-    }
-
-    void setPosition(int x, int y) {
+    void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
     }

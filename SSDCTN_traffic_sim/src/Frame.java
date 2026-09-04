@@ -1,36 +1,108 @@
 import javax.swing.*;
 import java.awt.*;
 
+public class Frame extends JFrame { 
+    Panel panel;
 
-public class Frame { 
-    public static void main(String[] args){
-        JFrame frame = new JFrame("World Frame"); 
-        frame.setSize(800,800); 
+    Frame(int width, int height) {
+        panel = new Panel(width, height);
+        this.setTitle("Traffic Sim");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.setResizable(false);
+        // ImageIcon logo = new ImageIcon(logoPath);
+        // this.setIconImage(logo.getImage());
+        this.add(panel);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+}
 
-        JPanel bground = new JPanel();
-        bground.setBackground(new Color(63, 155, 11));
-        bground.setLayout(null);
+class Panel extends JPanel {
+    private int width, height;
+    VehicleSpawner vehicleSpawner;
+    Road roadN, roadE, roadS, roadW, intersection;
+    Pothole pothole;
+    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    Explosion explosion;
 
-        Pothole pothole = new Pothole(800, 800);
-        pothole.setBounds(0, 0, 800, 800);
-        pothole.setOpaque(false);
+    Panel(int w, int h) {
+        this.width = w;
+        this.height = h;
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(63, 155, 11));
 
-        Truck truck = new Truck(800, 50);
-        truck.setBounds(100, 100, 800, 800);
-        truck.setOpaque(false);
+        // ---------------------- Vehicle Spawn Timer ----------------------
+        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
+        Timer vehicleSpawnTimer = new Timer(2000, e -> {              // attempt freq
+            vehicleSpawner.spawn();
+        });
+        vehicleSpawnTimer.start();
 
-        bground.add(pothole);
-        bground.add(truck);
+        // ---------------------- Traffic Light Timers ----------------------
+        Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
+        lightTimer1.start();
+        Timer lightTimer2 = new Timer(4800, e -> { trafficLight2.changeLight(); });
+        lightTimer2.start();
+        Timer lightTimer3 = new Timer(6800, e -> { trafficLight3.changeLight(); });
+        lightTimer3.start();
+        Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });
+        lightTimer4.start();
 
-        Explosion explosion = new Explosion(300, 300);
-        bground.add(explosion); // test explosion !!!!! remove this to not show explosion :(
+        // ---------------------- Movement Timer ----------------------
+        // Vehicle movement & repaint timer (~60fps)
+        Timer moveTimer = new Timer(16, e -> {
+            if(trafficLight1.getLightState() == 2) {
+                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                    vehicle.setVelocity(0);
+                }
+            } else {
+                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                    vehicle.move();
+                }
+            }
+            this.repaint();
+        });
+        moveTimer.start();
 
-        frame.add(bground);
+        // ---------------------- Static objects ----------------------
+        roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
+        roadE = new Road(width*0.82, height*0.5, width*0.4, height*0.25, 2);
+        roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
+        roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
+        intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        this.trafficLight1 = new TrafficLight(250, 210); // top left
+        this.trafficLight2 = new TrafficLight(500, 210); // top right
+        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
+        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
+
+        pothole = new Pothole(8, 8);
+        explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);            // paints JPanel stuff like the background
+        Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
+        // draw components
+        roadN.draw(g2d);
+        roadE.draw(g2d);
+        roadS.draw(g2d);
+        roadW.draw(g2d);
+        intersection.draw(g2d);
+        pothole.draw(g2d);
+        trafficLight1.draw(g2d);
+        trafficLight2.draw(g2d);
+        trafficLight3.draw(g2d);
+        trafficLight4.draw(g2d);
+        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+
+        for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+            vehicle.draw(g2d);
+        }
+    }
 
 }
+
