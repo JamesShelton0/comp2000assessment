@@ -1,5 +1,5 @@
 import java.util.Random;
-import java.util.ArrayList;
+import java.util.List;
 
 public class VehicleSpawner {
     private final Point NORTH_SP;
@@ -17,9 +17,16 @@ public class VehicleSpawner {
     private int width, height; // Frame dimensions
     private int spawnChance;
     private Random rand;
-    private ArrayList<Vehicle> activeVehicles;
+    private final EntityStore<Vehicle> activeVehicles; // now uses EntityStore to reject unrelated object types at compile time (generics yay!) 
 
-    VehicleSpawner(int w, int h, int spawnChance) {
+    VehicleSpawner(int w, int h, int spawnChance) throws SimulationConfigurationException {
+        // validate at startup so bad settings create error
+        if (w <= 0 || h <= 0) {
+            throw new SimulationConfigurationException("Simulation dimensions must be positive.");
+        }
+        if (spawnChance < 0 || spawnChance > 100) {
+            throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
+        }
         this.width = w;
         this.height = h;
         this.spawnChance = spawnChance;
@@ -27,7 +34,7 @@ public class VehicleSpawner {
         EAST_SP = new Point(width, height*0.53);
         SOUTH_SP = new Point(width*0.42, height);
         WEST_SP = new Point(0, height*0.42);
-        activeVehicles = new ArrayList<Vehicle>();
+        activeVehicles = new EntityStore<>(); // infers Vehicle from dec above
         rand = new Random();
     }
 
@@ -205,7 +212,8 @@ public class VehicleSpawner {
         }
     }
 
-    public ArrayList<Vehicle> getVehicles() {
-        return activeVehicles;
+    public List<Vehicle> getVehicles() {
+        // return store's read-only typed view for Panel's movement and drawing loops
+        return activeVehicles.getEntities();
     }
 }

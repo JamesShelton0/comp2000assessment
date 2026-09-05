@@ -4,7 +4,8 @@ import java.awt.*;
 public class Frame extends JFrame { 
     Panel panel;
 
-    Frame(int width, int height) {
+    // propagate invalid setup info to app, where user can then see
+    Frame(int width, int height) throws SimulationConfigurationException {
         panel = new Panel(width, height);
         this.setTitle("Traffic Sim");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +27,8 @@ class Panel extends JPanel {
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
     Explosion explosion;
 
-    Panel(int w, int h) {
+    // panel creates VehicleSpawner, so also passes any invalid config up
+    Panel(int w, int h) throws SimulationConfigurationException {
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));

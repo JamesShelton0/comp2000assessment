@@ -22,8 +22,9 @@ public class Bus extends Vehicle {
     void checkBusStop(BusStop stop) { 
     
     if(!stoppedAtBusStop && !leavingBusStop &&
-        x >= stop.getx() - 10 &&x <=stop.getx());
+        x >= stop.getX() - 10 &&x <=stop.getX()) { // getX case-sensitive, rvm semicolon and add {} because otherwise accelerate will run all the time 
         accelerate(decelerationRate);
+        }
 
         if(velocity==0){
             stoppedAtBusStop = true;
