@@ -105,4 +105,3 @@ class Panel extends JPanel {
     }
 
 }
-

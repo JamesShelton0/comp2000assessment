@@ -19,10 +19,9 @@ public abstract class Vehicle extends JComponent {
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
 
-
-    public void draw(Graphics2D g2d) {
-
-    }
+    // draw() is implemented in specific vehicle subclasses.
+    // it contains the actual shapes and fills used to draw the object
+    public void draw(Graphics2D g2d) {}
 
     public void setPosition(double x, double y){
         this.x = x;

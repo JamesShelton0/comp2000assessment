@@ -1,6 +1,5 @@
 import java.util.Random;
 import java.util.ArrayList;
-import java.lang.Math;
 
 public class VehicleSpawner {
     private final Point NORTH_SP;
@@ -8,10 +7,10 @@ public class VehicleSpawner {
     private final Point SOUTH_SP;
     private final Point WEST_SP;
 
-    private final double NORTH = 3 * Math.PI / 2;
+    private final double NORTH = 270;
     private final double EAST = 0;
-    private final double SOUTH = Math.PI / 2;
-    private final double WEST = Math.PI;
+    private final double SOUTH = 90;
+    private final double WEST = 180;
 
     private final int VCL_TYPE_AMOUNT = 5;
 
