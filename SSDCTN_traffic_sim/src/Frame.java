@@ -50,6 +50,8 @@ class Panel extends JPanel {
         Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });   // light changes every 4s
         lightTimer4.start();
 
+
+
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
             truck.move();
