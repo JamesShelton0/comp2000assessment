@@ -6,6 +6,7 @@ public class HitBox {
     double radius;
     Point pointAhead;
     double direction;
+    boolean isActive;
     ArrayList<Point> pointArr = new ArrayList<>();
     ArrayList<Edge> edgeArr = new ArrayList<>();
     Point centrePoint;
@@ -89,5 +90,13 @@ public class HitBox {
 
     private void getRadius(){
         radius = Math.sqrt(xAddon*xAddon + yAddon*yAddon);
+    }
+
+    public void setActive(boolean isActive){
+        this.isActive = isActive;
+    }
+
+    public boolean getActive(){
+        return isActive;
     }
 }

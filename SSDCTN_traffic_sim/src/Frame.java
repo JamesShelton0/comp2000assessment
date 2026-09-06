@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Frame extends JFrame { 
     Panel panel;
 
-    Frame(int width, int height) {
+    // propagate invalid setup info to app, where user can then see
+    Frame(int width, int height) throws SimulationConfigurationException {
         panel = new Panel(width, height);
         this.setTitle("Traffic Sim");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,83 +20,53 @@ public class Frame extends JFrame {
 }
 
 class Panel extends JPanel {
-    Truck truck;
-    Pothole pothole;
-    Explosion explosion;
-    Motorbike motorbike;
-    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    private int width, height;
+    VehicleSpawner vehicleSpawner;
     Road roadN, roadE, roadS, roadW, intersection;
-    Car car;
-    ArrayList<Vehicle> vehicleArr = new ArrayList<>();
+    Pothole pothole;
+    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    Explosion explosion;
 
-    Panel(int width, int height) {
+    // panel creates VehicleSpawner, so also passes any invalid config up
+    Panel(int w, int h) throws SimulationConfigurationException {
+        this.width = w;
+        this.height = h;
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
-        // ---------------------- Timers ----------------------
-        // Traffic1 light timer
-        Timer lightTimer = new Timer(2800, e -> { trafficLight1.changeLight(); });   // light changes every 4s
-        lightTimer.start();
+        // ---------------------- Vehicle Spawn Timer ----------------------
+        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
+        Timer vehicleSpawnTimer = new Timer(2000, e -> {              // attempt freq
+            vehicleSpawner.spawn();
+        });
+        vehicleSpawnTimer.start();
 
-        // Traffic2 light timer
-        Timer lightTimer2 = new Timer(4800, e -> { trafficLight2.changeLight(); });   // light changes every 4s
+        // ---------------------- Traffic Light Timers ----------------------
+        Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
+        lightTimer1.start();
+        Timer lightTimer2 = new Timer(4800, e -> { trafficLight2.changeLight(); });
         lightTimer2.start();
-
-        //traffic3 light timer
-        Timer lightTimer3 = new Timer(6800, e -> { trafficLight3.changeLight(); });   // light changes every 4s
+        Timer lightTimer3 = new Timer(6800, e -> { trafficLight3.changeLight(); });
         lightTimer3.start();
-
-        //traffic4 light timer
-        Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });   // light changes every 4s
+        Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });
         lightTimer4.start();
 
-
+        // ---------------------- Movement Timer ----------------------
 
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
-            truck.move();
-            motorbike.move();
-            car.move();
-            this.repaint();
-            if(trafficLight1.getLightState() == 2 || trafficLight2.getLightState() == 2 || trafficLight3.getLightState() == 2 || trafficLight4.getLightState() == 2){
-                car.setVelocity(0);
-                truck.setVelocity(0);
+            if(trafficLight1.getLightState() == 2) {
+                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                    vehicle.setVelocity(0);
+                }
             } else {
-                car.setVelocity(1);
-                truck.setVelocity(1
-
-                );
+                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                    vehicle.move();
+                }
             }
+            this.repaint();
         });
         moveTimer.start();
-
-
-        // ---------------------- Vehicles ----------------------
-        // car
-        car = new Car(30, 50);
-        car.setPosition(340, height);
-        car.setDirection((float)(3 * Math.PI / 2));
-        
-
-        // truck
-        truck = new Truck(width/100*10, height/100*8);
-        truck.setPosition(width, 435); // starts off the screen on the right
-        truck.setVelocity(1);
-        truck.setDirection((float)Math.PI); // right to left
-
-        // motorbike
-        motorbike = new Motorbike((width/100) * 10, (height/100) * 6.6667); // 10% of frame width, 6.6667% of frame height
-        motorbike.setPosition(375, 540);
-        motorbike.setVelocity(3);
-        motorbike.setDirection((float)(3 * Math.PI / 2));
-
-
-        /* test code */
-        vehicleArr.add(car);
-        vehicleArr.add(truck);
-        vehicleArr.add(motorbike);
-        /* end test code */
-
 
         // ---------------------- Static objects ----------------------
         roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
@@ -110,14 +80,13 @@ class Panel extends JPanel {
         this.trafficLight3 = new TrafficLight(250, 500); // bottom left
         this.trafficLight4 = new TrafficLight(500, 500); // bottom right
 
-        pothole = new Pothole(5, 5);
+        pothole = new Pothole(8, 8);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);            // paints JPanel stuff like the background
-
         Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
         // draw components
@@ -126,15 +95,16 @@ class Panel extends JPanel {
         roadS.draw(g2d);
         roadW.draw(g2d);
         intersection.draw(g2d);
-        truck.draw(g2d);
         pothole.draw(g2d);
-        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
-        motorbike.draw(g2d);
         trafficLight1.draw(g2d);
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
         trafficLight4.draw(g2d);
-        car.draw(g2d);
-    }
-}
+        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
 
+        for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+            vehicle.draw(g2d);
+        }
+    }
+
+}

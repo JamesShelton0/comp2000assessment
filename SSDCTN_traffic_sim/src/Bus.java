@@ -6,7 +6,9 @@ public class Bus extends Vehicle {
     private int waitTime = 0; //how long has it waited
     private int maxWaitTime = 100; //how long it will wait
 
-    Bus(double x, double y) {
+    Bus(double width, double height) {
+        super.width = width;
+        super.height = height;
         velocity = 60;
         topSpeed = 60;
         decelerationRate = -5;
@@ -18,12 +20,14 @@ public class Bus extends Vehicle {
 
     //check if the bus is close to a bus stop
     void checkBusStop(BusStop stop) { 
-        if(x >= stop.x - 10 && x <= stop.x){
-           accelerate(decelerationRate);
-           
-           if(velocity == 0){
+    
+    if(!stoppedAtBusStop && !leavingBusStop &&
+        x >= stop.getX() - 10 &&x <=stop.getX()) { // getX case-sensitive, rvm semicolon and add {} because otherwise accelerate will run all the time 
+        accelerate(decelerationRate);
+        }
+
+        if(velocity==0){
             stoppedAtBusStop = true;
-           }
         }
     }
 

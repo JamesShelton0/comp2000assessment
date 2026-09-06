@@ -1,5 +1,8 @@
 public class BusStop{
-    float x;
-    float y;
+    private double  x, y;
+    double getX(){
+        return x;
+    
+    }
 
 }

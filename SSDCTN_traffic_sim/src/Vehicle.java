@@ -1,6 +1,5 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.awt.Graphics2D;
 
 public abstract class Vehicle extends JComponent {
     // size and position
@@ -11,8 +10,8 @@ public abstract class Vehicle extends JComponent {
 
     // movement
     protected int topSpeed;
-    protected float velocity;
-    protected float accelerationRate, decelerationRate;
+    protected double velocity;
+    protected double accelerationRate, decelerationRate;
     protected double direction;
 
     // aesthetics
@@ -20,31 +19,32 @@ public abstract class Vehicle extends JComponent {
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
 
+    // draw() is implemented in specific vehicle subclasses.
+    // it contains the actual shapes and fills used to draw the object
+    public void draw(Graphics2D g2d) {}
 
-    public void draw(Graphics g2d) {}
-
-    void setPosition(double x, double y){
-
+    public void setPosition(double x, double y){
         this.x = x;
         this.y = y;
-
-        position = new Point(x, y);
-
+        this.position = new Point(x, y);
         updatePosition();
     }
 
-    void move(){
-        position = Velocity.calPosition(x, y, direction, velocity);
+    public void setPosition(Point point) {
+        this.x = point.getX();
+        this.y = point.getY();
+        this.position = point;
+        updatePosition();
+    }
 
+    public void move(){
+        position = Velocity.calPosition(x, y, direction, 1);
         x = position.getX();
         y = position.getY();
-
         updatePosition();
     }
 
-
-
-    void updatePosition(){ // centring method
+    private void updatePosition() { // centring method
         setBounds(
             (int)(x-width/2),
             (int)(y- height/2),
@@ -54,7 +54,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     // For acceleration pass positive number, for deceleration pass negative number
-    void accelerate(float change) {
+    void accelerate(double change) {
         velocity += change;
         if (velocity < 0) velocity = 0;
     }
@@ -65,7 +65,7 @@ public abstract class Vehicle extends JComponent {
 
 
 
-    void setVelocity(float velocity){
+    void setVelocity(double velocity){
         this.velocity = velocity;
     }
 
