@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Iterator;
 import java.util.List;
 
 public class VehicleSpawner {
@@ -13,6 +14,8 @@ public class VehicleSpawner {
     private final double WEST = 180;
 
     private final int VCL_TYPE_AMOUNT = 5;
+
+    private final int DESPAWN_BUFFER;
 
     private int width, height; // Frame dimensions
     private int spawnChance;
@@ -34,6 +37,7 @@ public class VehicleSpawner {
         EAST_SP = new Point(width, height*0.53);
         SOUTH_SP = new Point(width*0.42, height);
         WEST_SP = new Point(0, height*0.42);
+        DESPAWN_BUFFER = (int) (width*0.1);
         activeVehicles = new EntityStore<>(); // infers Vehicle from dec above
         rand = new Random();
     }
@@ -215,5 +219,21 @@ public class VehicleSpawner {
     public List<Vehicle> getVehicles() {
         // return store's read-only typed view for Panel's movement and drawing loops
         return activeVehicles.getEntities();
+    }
+
+    // run periodically to make vehicles outside frame dimensions eligible for garbage collection
+    public void despawn() {
+        // System.out.println("VehicleSpawner.despawn() called");
+        Iterator<Vehicle> iterator = activeVehicles.modifyEntities().iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
+            if (v.getPosition().getX() < 0-DESPAWN_BUFFER
+            || v.getPosition().getY() < 0-DESPAWN_BUFFER
+            || v.getPosition().getX() > width+DESPAWN_BUFFER
+            || v.getPosition().getY() > height+DESPAWN_BUFFER) {
+                // System.out.println("Vehicle despawned at " + v.getPosition());
+                iterator.remove();
+            }
+        }
     }
 }

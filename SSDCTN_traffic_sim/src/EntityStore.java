@@ -17,8 +17,20 @@ public class EntityStore<T extends Vehicle> {
         entities.add(entity);
     }
 
+    public void remove(T entity) {
+        if (entity == null) {
+            // fail at point of mistake instead of when Panel is trying to draw
+            throw new IllegalArgumentException("A simulation entity cannot be null.");
+        }
+        entities.remove(entity);
+    }
+
     public List<T> getEntities() {
         // read-only view, callers can iterate over vehicles but cant alter this store directly. vehicles themselves can still be changed e.g calling move()
         return Collections.unmodifiableList(entities);
+    }
+
+    public List<T> modifyEntities() {
+        return entities;
     }
 }

@@ -34,12 +34,17 @@ class Panel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
-        // ---------------------- Vehicle Spawn Timer ----------------------
+        // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
-        Timer vehicleSpawnTimer = new Timer(2000, e -> {              // attempt freq
+        Timer vehicleSpawnTimer = new Timer(2000, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
         vehicleSpawnTimer.start();
+
+        Timer vehicleDespawnTimer = new Timer(20000, e -> {
+            vehicleSpawner.despawn();
+        });
+        vehicleDespawnTimer.start();
 
         // ---------------------- Traffic Light Timers ----------------------
         Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
