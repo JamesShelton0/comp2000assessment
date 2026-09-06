@@ -52,6 +52,7 @@ class Panel extends JPanel {
         lightTimer4.start();
 
         // ---------------------- Movement Timer ----------------------
+
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
             if(trafficLight1.getLightState() == 2) {
