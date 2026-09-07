@@ -74,6 +74,10 @@ public abstract class Vehicle extends JComponent {
         this.direction = direction;
     }
 
+    public double getDirection(){
+        return this.direction;
+    }
+
     public Point getPosition() {
         return position;
     }
