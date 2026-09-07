@@ -38,7 +38,7 @@ public class CollisionDetection {
         for(int i = 0; i < stopLineArr.size(); i++){
             for(int j = 0; j < vehicleArr.size(); j++){
                 if(checkWithinRadius(vehicleArr.get(j), stopLineArr.get(i))){
-                    stopArr.add(vehicleArr.get(j));
+                    //stopArr.add(vehicleArr.get(j));
                 }
             }
         }
