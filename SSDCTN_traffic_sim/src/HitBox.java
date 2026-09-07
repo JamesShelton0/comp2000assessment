@@ -12,8 +12,8 @@ public class HitBox {
     Point centrePoint;
 
     HitBox(Point p, double Direction, double width, double height){
-        xAddon = height/2;
-        yAddon = width/2;
+        xAddon = height*0.55;   // *0.55 to create a small buffer between vehicles.
+        yAddon = width*0.5;
         getRadius();
         direction = Direction;
         centrePoint = p;

@@ -33,7 +33,6 @@ public class Car extends Vehicle {
 
 
         // ---------------- Car Body ----------------
-
         RoundRectangle2D.Double carBody =
             new RoundRectangle2D.Double(
                 left,
@@ -43,13 +42,11 @@ public class Car extends Vehicle {
                 8,
                 8
             );
-
         g.setColor(Color.RED);
         g.fill(carBody);
 
 
         // ---------------- Windows ----------------
-
         Rectangle2D.Double frontWindow =
             new Rectangle2D.Double(
                 left + width / 5,
@@ -57,10 +54,8 @@ public class Car extends Vehicle {
                 width / 5 * 3,
                 height / 6
             );
-
         g.setColor(Color.CYAN);
         g.fill(frontWindow);
-
 
         Rectangle2D.Double rearWindow =
             new Rectangle2D.Double(
@@ -69,12 +64,10 @@ public class Car extends Vehicle {
                 width / 5 * 3,
                 height / 6
             );
-
         g.fill(rearWindow);
 
 
         // ---------------- Wheels ----------------
-
         Rectangle2D.Double frontLeftWheel =
             new Rectangle2D.Double(
                 left - 2,
@@ -82,7 +75,6 @@ public class Car extends Vehicle {
                 4,
                 10
             );
-
 
         Rectangle2D.Double frontRightWheel =
             new Rectangle2D.Double(
@@ -92,7 +84,6 @@ public class Car extends Vehicle {
                 10
             );
 
-
         Rectangle2D.Double rearLeftWheel =
             new Rectangle2D.Double(
                 left - 2,
@@ -100,7 +91,6 @@ public class Car extends Vehicle {
                 4,
                 10
             );
-
 
         Rectangle2D.Double rearRightWheel =
             new Rectangle2D.Double(
@@ -110,9 +100,7 @@ public class Car extends Vehicle {
                 10
             );
 
-
         g.setColor(Color.BLACK);
-
         g.fill(frontLeftWheel);
         g.fill(frontRightWheel);
         g.fill(rearLeftWheel);

@@ -47,13 +47,13 @@ public class TrafficLightController {
 
 
     public void start() {
-        System.out.println("TrafficLightController.start() called");
+        // System.out.println("TrafficLightController.start() called");
         timer.start();
     }
 
 
     private void changePhase() {
-        System.out.println("TrafficLightController.changePhase() called");
+        // System.out.println("TrafficLightController.changePhase() called");
         switch (trafficPhase) {
 
             // North/South GREEN -> YELLOW

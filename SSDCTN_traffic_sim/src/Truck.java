@@ -15,7 +15,7 @@ public class Truck extends Vehicle {
         super.height = h;
 
         this.p = p;
-        super.hitBox = new HitBox(p, 0, w, h);
+        super.hitBox = new HitBox(p, 0, w, h*1.2);
         
         // super.accelerationRate =
         // super.decelerationRate =
