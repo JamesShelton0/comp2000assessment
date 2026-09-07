@@ -19,15 +19,6 @@ public class Truck extends Vehicle {
         // super.decelerationRate =
     }
 
-    // is this method for anything? I removed it but it has re-appeared? Might just ber merge artifact
-    // protected void paintComponent(Graphics g){
-    //     Graphics2D g2d = (Graphics2D) g;
-    //     super.velocity = 0;
-    //     super.direction = 0;
-    //     super.accelerationRate = 0;
-    //     super.decelerationRate = 0;
-    // }
-
     @Override
     public void draw(Graphics2D g2d) {
         // Truck cabin
