@@ -10,11 +10,11 @@ public class Truck extends Vehicle {
 
     Point p;
 
-    public Truck(double w, double h) {
+    public Truck(Point p, double w, double h) {
         super.width = w;
         super.height = h;
 
-        p = new Point(500, 500);
+        this.p = p;
         super.hitBox = new HitBox(p, 0, w, h);
         
         // super.accelerationRate =

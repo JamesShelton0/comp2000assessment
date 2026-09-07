@@ -51,7 +51,7 @@ public class VehicleSpawner {
             // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    Bus bus = new Bus(NORTH_SP, width*0.05, height*0.12, SOUTH);   // arbitrary arguments
+                    Bus bus = new Bus(NORTH_SP, 50, 100, SOUTH);   // arbitrary arguments
                     bus.setPosition(NORTH_SP);
                     bus.setDirection((float) SOUTH);
                     activeVehicles.add(bus);
@@ -72,14 +72,14 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(EAST_SP, width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(EAST_SP, 20, 30);
                     motorbike.setPosition(NORTH_SP);
                     motorbike.setDirection((float) SOUTH);
                     activeVehicles.add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(width*0.1, height*0.08);
+                    Truck truck = new Truck(NORTH_SP, 30, 200);
                     truck.setPosition(NORTH_SP);
                     truck.setDirection((float) SOUTH);
                     activeVehicles.add(truck);
@@ -94,7 +94,7 @@ public class VehicleSpawner {
             // System.out.println("east spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                     Bus bus = new Bus(EAST_SP, width*0.05, height*0.12, WEST);   // arbitrary arguments
+                     Bus bus = new Bus(EAST_SP, 50, 100, WEST);   // arbitrary arguments
                      bus.setPosition(EAST_SP);
                      bus.setDirection((float) WEST);
                     activeVehicles.add(bus);
@@ -115,14 +115,14 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(EAST_SP, width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(EAST_SP, 20, 30);
                     motorbike.setPosition(EAST_SP);
                     motorbike.setDirection((float) WEST);
                     activeVehicles.add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(width*0.1, height*0.08);
+                    Truck truck = new Truck(EAST_SP, 30, 200);
                     truck.setPosition(EAST_SP);
                     truck.setDirection((float) WEST);
                     activeVehicles.add(truck);
@@ -137,7 +137,7 @@ public class VehicleSpawner {
             // System.out.println("south spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    Bus bus = new Bus(SOUTH_SP, width*0.05, height*0.12, NORTH);   // arbitrary arguments
+                    Bus bus = new Bus(SOUTH_SP, 50, 100, NORTH);   // arbitrary arguments
                     bus.setPosition(SOUTH_SP);
                     bus.setDirection((float) NORTH);
                     activeVehicles.add(bus);
@@ -158,14 +158,14 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(SOUTH_SP, width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(SOUTH_SP, 20, 30);
                     motorbike.setPosition(SOUTH_SP);
                     motorbike.setDirection((float) NORTH);
                     activeVehicles.add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(width*0.1, height*0.08);
+                    Truck truck = new Truck(SOUTH_SP, 30, 200);
                     truck.setPosition(SOUTH_SP);
                     truck.setDirection((float) NORTH);
                     activeVehicles.add(truck);
@@ -180,7 +180,7 @@ public class VehicleSpawner {
             // System.out.println("west spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    Bus bus = new Bus(WEST_SP, width*0.05, height*0.12, EAST);   // arbitrary arguments
+                    Bus bus = new Bus(WEST_SP, 50, 100, EAST);   // arbitrary arguments
                     bus.setPosition(WEST_SP);
                     bus.setDirection((float) EAST);
                     activeVehicles.add(bus);
@@ -201,14 +201,14 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(WEST_SP, width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(WEST_SP, 20, 30);
                     motorbike.setPosition(WEST_SP);
                     motorbike.setDirection((float) EAST);
                     activeVehicles.add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(width*0.1, height*0.08);
+                    Truck truck = new Truck(WEST_SP, 30, 200);
                     truck.setPosition(WEST_SP);
                     truck.setDirection((float) EAST);
                     activeVehicles.add(truck);
