@@ -142,7 +142,7 @@ class Panel extends JPanel {
 
     private boolean shouldStopAtRed(Vehicle vehicle) {
 
-        Point p = vehicle.getPosition();
+        Point p = vehicle.hitBox.getPointAhead();
 
         double x = p.getX();
         double y = p.getY();
@@ -154,11 +154,11 @@ class Panel extends JPanel {
         double leftIntersection = width * 0.375;
         double rightIntersection = width * 0.625;
 
-        double detectionDistance = 50;
+        double detectionDistance = 15;
 
         // Vehicle travelling SOUTH
         if (direction == 90) {
-            if (trafficLight2.getLightState() == 2) {
+            if (trafficLight2.getLightState() == 2 || trafficLight2.getLightState() == 1) {
                 return y >= topIntersection - detectionDistance
                         && y < topIntersection;
             }
@@ -166,7 +166,7 @@ class Panel extends JPanel {
 
         // Vehicle travelling NORTH
         if (direction == 270) {
-            if (trafficLight3.getLightState() == 2) {
+            if (trafficLight3.getLightState() == 2 || trafficLight3.getLightState() == 1) {
                 return y <= bottomIntersection + detectionDistance
                         && y > bottomIntersection;
             }
@@ -174,7 +174,7 @@ class Panel extends JPanel {
 
         // Vehicle travelling WEST
         if (direction == 180) {
-            if (trafficLight4.getLightState() == 2) {
+            if (trafficLight4.getLightState() == 2 || trafficLight4.getLightState() == 1) {
                 return x <= rightIntersection + detectionDistance
                         && x > rightIntersection;
             }
@@ -182,7 +182,7 @@ class Panel extends JPanel {
 
         // Vehicle travelling EAST
         if (direction == 0) {
-            if (trafficLight1.getLightState() == 2) {
+            if (trafficLight1.getLightState() == 2 || trafficLight1.getLightState() == 1) {
                 return x >= leftIntersection - detectionDistance
                         && x < leftIntersection;
             }
