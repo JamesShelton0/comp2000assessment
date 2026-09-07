@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class CollisionDetection {
 
@@ -18,7 +19,7 @@ public class CollisionDetection {
         return false;
     }
 
-    public static ArrayList<Vehicle> checkVehicleCollisions(ArrayList<Vehicle> vehicleArr){
+    public static ArrayList<Vehicle> checkVehicleCollisions(List<Vehicle> vehicleArr){
         ArrayList<Vehicle> stopArr = new ArrayList<>();
         for(int i = 0; i < vehicleArr.size() - 1; i++){
             for(int j = i + 1; j < vehicleArr.size(); j++){
@@ -33,7 +34,7 @@ public class CollisionDetection {
         return stopArr;
     }
 
-    public static ArrayList<Vehicle> checkVehicleAtStopLine(ArrayList<StopLine> stopLineArr, ArrayList<Vehicle> vehicleArr){
+    public static ArrayList<Vehicle> checkVehicleAtStopLine(ArrayList<StopLine> stopLineArr, List<Vehicle> vehicleArr){
         ArrayList<Vehicle> stopArr = new ArrayList<>();
         for(int i = 0; i < stopLineArr.size(); i++){
             for(int j = 0; j < vehicleArr.size(); j++){
