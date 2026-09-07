@@ -47,17 +47,17 @@ public class TrafficLightController {
 
 
     public void start() {
+        // System.out.println("TrafficLightController.start() called");
         timer.start();
     }
 
 
     private void changePhase() {
-
+        // System.out.println("TrafficLightController.changePhase() called");
         switch (trafficPhase) {
 
             // North/South GREEN -> YELLOW
             case 0:
-
                 trafficLight2.setLightState(YELLOW);
                 trafficLight3.setLightState(YELLOW);
 
@@ -73,7 +73,6 @@ public class TrafficLightController {
 
             // North/South RED -> East/West GREEN
             case 1:
-
                 trafficLight2.setLightState(RED);
                 trafficLight3.setLightState(RED);
 
@@ -89,7 +88,6 @@ public class TrafficLightController {
 
             // East/West GREEN -> YELLOW
             case 2:
-
                 trafficLight1.setLightState(YELLOW);
                 trafficLight4.setLightState(YELLOW);
 
@@ -105,7 +103,6 @@ public class TrafficLightController {
 
             // East/West RED -> North/South GREEN
             case 3:
-
                 trafficLight1.setLightState(RED);
                 trafficLight4.setLightState(RED);
 

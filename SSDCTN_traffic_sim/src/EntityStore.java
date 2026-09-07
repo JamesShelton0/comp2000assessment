@@ -25,6 +25,10 @@ public class EntityStore<T extends Vehicle> {
         entities.remove(entity);
     }
 
+    public Vehicle get(int index) {
+        return entities.get(index);
+    }
+
     public List<T> getEntities() {
         // read-only view, callers can iterate over vehicles but cant alter this store directly. vehicles themselves can still be changed e.g calling move()
         return Collections.unmodifiableList(entities);

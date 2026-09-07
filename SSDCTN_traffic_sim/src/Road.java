@@ -44,7 +44,7 @@ public class Road extends Path {
         }
     }
 
-
+    
     private void drawIntersection(Graphics2D g2d) {
         // if there's anything we want in the actual intersection
     }
@@ -54,8 +54,6 @@ public class Road extends Path {
         Rectangle2D.Double stopLine2 = new Rectangle2D.Double(x+width-(width*0.47), y+height-(height*0.03), width*0.47, height*0.03);
         Rectangle2D.Double middleLine1 = new Rectangle2D.Double(x+(width*0.47), y, width*0.028, height);
         Rectangle2D.Double middleLine2 = new Rectangle2D.Double(x+(width*0.53), y, width*0.028, height);
-
-
 
         g2d.setColor(lineColor);
         g2d.fill(stopLine1);
@@ -69,8 +67,6 @@ public class Road extends Path {
         Rectangle2D.Double stopLine2 = new Rectangle2D.Double(x, y+height-(height*0.47), width*0.03, height*0.47);
         Rectangle2D.Double middleLine1 = new Rectangle2D.Double(x, y+(height*0.47), width, height*0.028);
         Rectangle2D.Double middleLine2 = new Rectangle2D.Double(x, y+(height*0.53), width, height*0.028);
-
-
 
         g2d.setColor(lineColor);
         g2d.fill(stopLine1);

@@ -1,6 +1,7 @@
 public class Edge {
     Point left;
     Point right;
+    
     public Edge(Point left, Point right){
         this.left = left;
         this.right = right;

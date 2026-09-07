@@ -41,22 +41,15 @@ class Panel extends JPanel {
 
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
-        Timer vehicleSpawnTimer = new Timer(2000, e -> {           // attempt freq
+        vehicleSpawner = new VehicleSpawner(width, height, 40); // % chance
+        Timer vehicleSpawnTimer = new Timer(1900, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
         vehicleSpawnTimer.start();
-
-        // ---------------------- Traffic Light Timers ----------------------
-        Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
-        lightTimer1.start();
-        Timer lightTimer2 = new Timer(4800, e -> { trafficLight2.changeLight(); });
-        lightTimer2.start();
-        Timer lightTimer3 = new Timer(6800, e -> { trafficLight3.changeLight(); });
-        lightTimer3.start();
-        Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });
-        lightTimer4.start();
-
+        Timer vehicleDespawnTimer = new Timer(20000, e -> {
+            vehicleSpawner.despawn();
+        });
+        vehicleDespawnTimer.start();
 
 
         // ---------------------- Movement Timer ----------------------
@@ -73,28 +66,44 @@ class Panel extends JPanel {
                     vehicle.move();
                 }*/
             }
+
+            
             ArrayList<Vehicle> stopAtColl = CollisionDetection.checkVehicleCollisions(vehicleSpawner.getVehicles());
             ArrayList<Vehicle> stopAtLine = CollisionDetection.checkVehicleAtStopLine(stopLineArr, vehicleSpawner.getVehicles());
-            for(Vehicle vehicle : vehicleSpawner.getVehicles()){
-                vehicle.setVelocity(1);
+        
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+                for (Vehicle vehicle : sublist.getEntities()) {
+                    vehicle.setVelocity(1);
+                }
             }
-            for(Vehicle vehicle : stopAtColl){
+            for (Vehicle vehicle : stopAtColl) {
                 vehicle.setVelocity(0);
             }
-            for(Vehicle vehicle : stopAtLine){
+            for (Vehicle vehicle : stopAtLine) {
                 vehicle.setVelocity(0);
             }
-            for(Vehicle vehicle : vehicleSpawner.getVehicles()){
-                vehicle.move();
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+                for (Vehicle vehicle : sublist.getEntities()) {
+                    if (!shouldStopAtRed(vehicle)) {
+                        vehicle.move();
+                    }
                 vehicle.updateHitBox();
+                }
             }
             this.repaint();
         });
         moveTimer.start();
-        Timer vehicleDespawnTimer = new Timer(20000, e -> {
-            vehicleSpawner.despawn();
-        });
-        vehicleDespawnTimer.start();
+
+        // Timer moveTimer2 = new Timer(16, e -> {
+        //     for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+        //         if (!shouldStopAtRed(vehicle)) {
+        //             vehicle.move();
+        //         }
+        //     }
+        //     this.repaint();
+        // });
+        //moveTimer2.start();
+
         
         // ---------------------- Static objects ----------------------
         roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
@@ -102,11 +111,6 @@ class Panel extends JPanel {
         roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
-
-        this.trafficLight1 = new TrafficLight(250, 210); // top left
-        this.trafficLight2 = new TrafficLight(500, 210); // top right
-        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
-        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
 
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
@@ -116,37 +120,23 @@ class Panel extends JPanel {
         stopLineArr.add(stopLine2);
         stopLineArr.add(stopLine3);
         stopLineArr.add(stopLine4);
+
+        this.trafficLight1 = new TrafficLight(250, 210); // top left
+        this.trafficLight2 = new TrafficLight(500, 210); // top right
+        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
+        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
         trafficLightController = new TrafficLightController(
            trafficLight1,
            trafficLight2,
            trafficLight3,
            trafficLight4
         );
-
         trafficLightController.start();
 
         pothole = new Pothole(8, 8);
         speedCamera = new SpeedCamera(610, 240);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
 
-
-        // ---------------------- Movement Timer ----------------------
-
-        // Vehicle movement & repaint timer (~60fps)
-        Timer moveTimer2 = new Timer(16, e -> {
-
-            for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-
-                if (!shouldStopAtRed(vehicle)) {
-                    vehicle.move();
-                }
-
-            }
-
-            this.repaint();
-        });
-
-        //moveTimer2.start();
     }
 
 
@@ -166,50 +156,37 @@ class Panel extends JPanel {
 
         double detectionDistance = 50;
 
-
         // Vehicle travelling SOUTH
         if (direction == 90) {
-
             if (trafficLight2.getLightState() == 2) {
-
                 return y >= topIntersection - detectionDistance
                         && y < topIntersection;
             }
         }
 
-
         // Vehicle travelling NORTH
         if (direction == 270) {
-
             if (trafficLight3.getLightState() == 2) {
-
                 return y <= bottomIntersection + detectionDistance
                         && y > bottomIntersection;
             }
         }
 
-
         // Vehicle travelling WEST
         if (direction == 180) {
-
             if (trafficLight4.getLightState() == 2) {
-
                 return x <= rightIntersection + detectionDistance
                         && x > rightIntersection;
             }
         }
 
-
         // Vehicle travelling EAST
         if (direction == 0) {
-
             if (trafficLight1.getLightState() == 2) {
-
                 return x >= leftIntersection - detectionDistance
                         && x < leftIntersection;
             }
         }
-
 
         return false;
     }
@@ -221,10 +198,10 @@ class Panel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
 
         // draw components
-        roadN.draw(g2d);
-        roadE.draw(g2d);
-        roadS.draw(g2d);
         roadW.draw(g2d);
+        roadS.draw(g2d);
+        roadE.draw(g2d);
+        roadN.draw(g2d);
         intersection.draw(g2d);
         pothole.draw(g2d);
         speedCamera.draw(g2d);
@@ -234,8 +211,10 @@ class Panel extends JPanel {
         trafficLight4.draw(g2d);
         //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
 
-        for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-            vehicle.draw(g2d);
+        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (Vehicle vehicle : sublist.getEntities()) {
+                vehicle.draw(g2d);
+            }
         }
     }
 
