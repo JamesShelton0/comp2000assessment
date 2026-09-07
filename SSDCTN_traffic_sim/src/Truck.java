@@ -55,18 +55,29 @@ public class Truck extends Vehicle {
         g.setColor(Color.BLUE);
         g.fill(truckLoad);
 
+        // Front windscreen
+        Rectangle2D.Double windscreen = new Rectangle2D.Double(
+            left + 3,                         
+            y - (height / 5 * 2) / 2 + 3,    
+            4,                                
+            (height / 5 * 2) - 6              
+        );
+
+g.setColor(Color.CYAN);
+g.fill(windscreen);
+
         // Front left wheel
         Rectangle2D.Double frontLeftWheel = new Rectangle2D.Double(
-            left + 5,
-            y - (height / 5 * 2) / 2 - 2,
+            left + width / 7 * 2 + 5,
+            y - (height / 5 * 3) / 2 - 2,
             10,
             4
         );
 
-        // Front right wheel
+       // Front right wheel
         Rectangle2D.Double frontRightWheel = new Rectangle2D.Double(
-            left + 5,
-            y + (height / 5 * 2) / 2 - 2,
+            left + width / 7 * 2 + 5,
+            y + (height / 5 * 3) / 2 - 2,
             10,
             4
         );
