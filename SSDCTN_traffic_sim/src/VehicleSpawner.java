@@ -7,6 +7,7 @@ public class VehicleSpawner {
     private final Point EAST_SP;
     private final Point SOUTH_SP;
     private final Point WEST_SP;
+    private final Point TEST_SP;
 
     private final double NORTH = 270;
     private final double EAST = 0;
@@ -15,7 +16,7 @@ public class VehicleSpawner {
 
     private final int VCL_TYPE_AMOUNT = 5;
 
-    private final int DESPAWN_BUFFER;
+    private final int SPAWN_BUFFER;
 
     private int width, height; // Frame dimensions
     private int spawnChance;
@@ -33,11 +34,12 @@ public class VehicleSpawner {
         this.width = w;
         this.height = h;
         this.spawnChance = spawnChance;
-        NORTH_SP = new Point(width*0.54, 0);
-        EAST_SP = new Point(width, height*0.53);
-        SOUTH_SP = new Point(width*0.42, height);
-        WEST_SP = new Point(0, height*0.42);
-        DESPAWN_BUFFER = (int) (width*0.1);
+        NORTH_SP = new Point(width*0.57, 0);
+        EAST_SP = new Point(width, height*0.57);
+        SOUTH_SP = new Point(width*0.43, height);
+        WEST_SP = new Point(0, height*0.43);
+        TEST_SP = new Point(0,0);
+        SPAWN_BUFFER = (int) (width*0.1);
         activeVehicles = new EntityStore<>(); // infers Vehicle from dec above
         rand = new Random();
     }
@@ -227,10 +229,10 @@ public class VehicleSpawner {
         Iterator<Vehicle> iterator = activeVehicles.modifyEntities().iterator();
         while (iterator.hasNext()) {
             Vehicle v = iterator.next();
-            if (v.getPosition().getX() < 0-DESPAWN_BUFFER
-            || v.getPosition().getY() < 0-DESPAWN_BUFFER
-            || v.getPosition().getX() > width+DESPAWN_BUFFER
-            || v.getPosition().getY() > height+DESPAWN_BUFFER) {
+            if (v.getPosition().getX() < 0-SPAWN_BUFFER
+            || v.getPosition().getY() < 0-SPAWN_BUFFER
+            || v.getPosition().getX() > width+SPAWN_BUFFER
+            || v.getPosition().getY() > height+SPAWN_BUFFER) {
                 // System.out.println("Vehicle despawned at " + v.getPosition());
                 iterator.remove();
             }
