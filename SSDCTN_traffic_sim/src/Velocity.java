@@ -1,7 +1,7 @@
 //import java.math.*;
 
 public class Velocity {
-    static public Point calPosition(double x, double y, double direction, double velocity){
+    static public Point calPosition(double x, double y, double direction, double velocity) {
         direction = direction * Math.PI/180;
         double xPosAddition = Math.cos(direction) * velocity;
         double yPosAddition = Math.sin(direction) * velocity;

@@ -18,82 +18,105 @@ public class Car extends Vehicle {
     }
 
     @Override
-    public void draw(Graphics2D g2d) {
+    public void draw(Graphics2D g2d) {// this creates a copy so I can rotate the car without breaking the sim
 
-        // Main car body
-        RoundRectangle2D.Double carBody = new RoundRectangle2D.Double(
+        Graphics2D g = (Graphics2D) g2d.create();
+
+        g.rotate(
+            Math.toRadians(direction + 90),
             x,
-            y,
-            width,
-            height,
-            8,
-            8   
+            y
         );
 
-        g2d.setColor(Color.RED);
-        g2d.fill(carBody);
+        double left = x - width / 2;
+        double top = y - height / 2;
 
 
-        // Front window
-        Rectangle2D.Double frontWindow = new Rectangle2D.Double(
-            x + width / 5,
-            y + height / 5,
-            width / 5 * 3,
-            height / 6
-        );
+        // ---------------- Car Body ----------------
 
-        g2d.setColor(Color.CYAN);
-        g2d.fill(frontWindow);
+        RoundRectangle2D.Double carBody =
+            new RoundRectangle2D.Double(
+                left,
+                top,
+                width,
+                height,
+                8,
+                8
+            );
 
-
-        // Rear window
-        Rectangle2D.Double rearWindow = new Rectangle2D.Double(
-            x + width / 5,
-            y + height / 5 * 3,
-            width / 5 * 3,
-            height / 6
-        );
-
-        g2d.fill(rearWindow);
+        g.setColor(Color.RED);
+        g.fill(carBody);
 
 
-       // Front left wheel
-        Rectangle2D.Double frontLeftWheel = new Rectangle2D.Double(
-            x - 2,
-            y + 8,
-            4,
-            10
-        );
+        // ---------------- Windows ----------------
 
-        // Front right wheel
-        Rectangle2D.Double frontRightWheel = new Rectangle2D.Double(
-            x + width - 2,
-            y + 8,
-            4,
-            10
-        );
+        Rectangle2D.Double frontWindow =
+            new Rectangle2D.Double(
+                left + width / 5,
+                top + height / 5,
+                width / 5 * 3,
+                height / 6
+            );
 
-        // Rear left wheel
-        Rectangle2D.Double rearLeftWheel = new Rectangle2D.Double(
-            x - 2,
-            y + height - 18,
-            4,
-            10
-        );
+        g.setColor(Color.CYAN);
+        g.fill(frontWindow);
 
-        // Rear right wheel
-        Rectangle2D.Double rearRightWheel = new Rectangle2D.Double(
-            x + width - 2,
-            y + height - 18,
-            4,
-            10
-        );
 
-        g2d.setColor(Color.BLACK);
+        Rectangle2D.Double rearWindow =
+            new Rectangle2D.Double(
+                left + width / 5,
+                top + height / 5 * 3,
+                width / 5 * 3,
+                height / 6
+            );
 
-        g2d.fill(frontLeftWheel);
-        g2d.fill(frontRightWheel);
-        g2d.fill(rearLeftWheel);
-        g2d.fill(rearRightWheel);   
+        g.fill(rearWindow);
+
+
+        // ---------------- Wheels ----------------
+
+        Rectangle2D.Double frontLeftWheel =
+            new Rectangle2D.Double(
+                left - 2,
+                top + 8,
+                4,
+                10
+            );
+
+
+        Rectangle2D.Double frontRightWheel =
+            new Rectangle2D.Double(
+                left + width - 2,
+                top + 8,
+                4,
+                10
+            );
+
+
+        Rectangle2D.Double rearLeftWheel =
+            new Rectangle2D.Double(
+                left - 2,
+                top + height - 18,
+                4,
+                10
+            );
+
+
+        Rectangle2D.Double rearRightWheel =
+            new Rectangle2D.Double(
+                left + width - 2,
+                top + height - 18,
+                4,
+                10
+            );
+
+
+        g.setColor(Color.BLACK);
+
+        g.fill(frontLeftWheel);
+        g.fill(frontRightWheel);
+        g.fill(rearLeftWheel);
+        g.fill(rearRightWheel);
+        g.dispose();
     }
 }

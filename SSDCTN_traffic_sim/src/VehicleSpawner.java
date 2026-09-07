@@ -1,12 +1,13 @@
 import java.util.Random;
-import java.util.ArrayList;
-import java.lang.Math;
+import java.util.Iterator;
+import java.util.List;
 
 public class VehicleSpawner {
     private final Point NORTH_SP;
     private final Point EAST_SP;
     private final Point SOUTH_SP;
     private final Point WEST_SP;
+    private final Point TEST_SP;
 
     private final double NORTH = 270;
     private final double EAST = 0;
@@ -15,20 +16,31 @@ public class VehicleSpawner {
 
     private final int VCL_TYPE_AMOUNT = 5;
 
+    private final int SPAWN_BUFFER;
+
     private int width, height; // Frame dimensions
     private int spawnChance;
     private Random rand;
-    private ArrayList<Vehicle> activeVehicles;
+    private final EntityStore<Vehicle> activeVehicles; // now uses EntityStore to reject unrelated object types at compile time (generics yay!) 
 
-    VehicleSpawner(int w, int h, int spawnChance) {
+    VehicleSpawner(int w, int h, int spawnChance) throws SimulationConfigurationException {
+        // validate at startup so bad settings create error
+        if (w <= 0 || h <= 0) {
+            throw new SimulationConfigurationException("Simulation dimensions must be positive.");
+        }
+        if (spawnChance < 0 || spawnChance > 100) {
+            throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
+        }
         this.width = w;
         this.height = h;
         this.spawnChance = spawnChance;
-        NORTH_SP = new Point(width*0.54, 0);
-        EAST_SP = new Point(width, height*0.53);
-        SOUTH_SP = new Point(width*0.42, height);
-        WEST_SP = new Point(0, height*0.42);
-        activeVehicles = new ArrayList<Vehicle>();
+        NORTH_SP = new Point(width*0.57, 0);
+        EAST_SP = new Point(width, height*0.57);
+        SOUTH_SP = new Point(width*0.43, height);
+        WEST_SP = new Point(0, height*0.43);
+        TEST_SP = new Point(0,0);
+        SPAWN_BUFFER = (int) (width*0.1);
+        activeVehicles = new EntityStore<>(); // infers Vehicle from dec above
         rand = new Random();
     }
 
@@ -39,10 +51,10 @@ public class VehicleSpawner {
             // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(NORTH_SP);
-                    // bus.setDirection((float) SOUTH);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(NORTH_SP);
+                    bus.setDirection((float) SOUTH);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -82,10 +94,10 @@ public class VehicleSpawner {
             // System.out.println("east spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(EAST_SP);
-                    // bus.setDirection((float) WEST);
-                    // activeVehicles.add(bus);
+                     Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                     bus.setPosition(EAST_SP);
+                     bus.setDirection((float) WEST);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -125,10 +137,10 @@ public class VehicleSpawner {
             // System.out.println("south spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(SOUTH_SP);
-                    // bus.setDirection((float) NORTH);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(SOUTH_SP);
+                    bus.setDirection((float) NORTH);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -168,10 +180,10 @@ public class VehicleSpawner {
             // System.out.println("west spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(WEST_SP);
-                    // bus.setDirection((float) EAST);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(WEST_SP);
+                    bus.setDirection((float) EAST);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -206,7 +218,24 @@ public class VehicleSpawner {
         }
     }
 
-    public ArrayList<Vehicle> getVehicles() {
-        return activeVehicles;
+    public List<Vehicle> getVehicles() {
+        // return store's read-only typed view for Panel's movement and drawing loops
+        return activeVehicles.getEntities();
+    }
+
+    // run periodically to make vehicles outside frame dimensions eligible for garbage collection
+    public void despawn() {
+        // System.out.println("VehicleSpawner.despawn() called");
+        Iterator<Vehicle> iterator = activeVehicles.modifyEntities().iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
+            if (v.getPosition().getX() < 0-SPAWN_BUFFER
+            || v.getPosition().getY() < 0-SPAWN_BUFFER
+            || v.getPosition().getX() > width+SPAWN_BUFFER
+            || v.getPosition().getY() > height+SPAWN_BUFFER) {
+                // System.out.println("Vehicle despawned at " + v.getPosition());
+                iterator.remove();
+            }
+        }
     }
 }
