@@ -41,11 +41,15 @@ class Panel extends JPanel {
 
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
+        vehicleSpawner = new VehicleSpawner(width, height, 80); // % chance
         Timer vehicleSpawnTimer = new Timer(2000, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
         vehicleSpawnTimer.start();
+        Timer vehicleDespawnTimer = new Timer(20000, e -> {
+            vehicleSpawner.despawn();
+        });
+        vehicleDespawnTimer.start();
 
         // ---------------------- Traffic Light Timers ----------------------
         Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
@@ -90,10 +94,6 @@ class Panel extends JPanel {
             }
             this.repaint();
         });
-        Timer vehicleDespawnTimer = new Timer(20000, e -> {
-            vehicleSpawner.despawn();
-        });
-        vehicleDespawnTimer.start();
         
         // ---------------------- Static objects ----------------------
         roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
