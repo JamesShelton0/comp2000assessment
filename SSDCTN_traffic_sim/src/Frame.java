@@ -41,7 +41,7 @@ class Panel extends JPanel {
 
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(width, height, 80); // % chance
+        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
         Timer vehicleSpawnTimer = new Timer(2000, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
@@ -133,19 +133,15 @@ class Panel extends JPanel {
 
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer2 = new Timer(16, e -> {
-
             for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-
                 if (!shouldStopAtRed(vehicle)) {
                     vehicle.move();
                 }
-
             }
-
             this.repaint();
         });
 
-        moveTimer.start();
+        //moveTimer2.start();
     }
 
 
