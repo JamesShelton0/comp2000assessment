@@ -14,7 +14,7 @@ public class Car extends Vehicle {
     }
 
     @Override
-    public void draw(Graphics2D g2d) {
+    public void draw(Graphics2D g2d) {// this creates a copy so I can rotate the car without breaking the sim
 
         Graphics2D g = (Graphics2D) g2d.create();
 
