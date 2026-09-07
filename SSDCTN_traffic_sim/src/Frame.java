@@ -90,6 +90,7 @@ class Panel extends JPanel {
             }
             this.repaint();
         });
+        moveTimer.start();
         Timer vehicleDespawnTimer = new Timer(20000, e -> {
             vehicleSpawner.despawn();
         });
@@ -145,7 +146,7 @@ class Panel extends JPanel {
             this.repaint();
         });
 
-        moveTimer.start();
+        //moveTimer2.start();
     }
 
 
