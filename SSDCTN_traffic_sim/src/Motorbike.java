@@ -10,7 +10,7 @@ public class Motorbike extends Vehicle {
         super.width = width;
         super.height = height;
         this.p = p;
-        super.hitBox = new HitBox(p, super.direction, width+10, height+55); // some magic numbers to make the hitbox cover the wheels
+        super.hitBox = new HitBox(p, super.direction, width*2, height*2); // some magic numbers to make the hitbox cover the wheels
     }
 
     @Override
