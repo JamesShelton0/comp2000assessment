@@ -7,13 +7,12 @@ public class Truck extends Vehicle {
     int shape;              
     boolean hasSunroof;
     Point p;
-    HitBox h;
 
     public Truck(double w, double h) {
         super.width = w;
         super.height = h;
         p = new Point(500, 500);
-        this.h = new HitBox(p, 0, w, h);
+        super.hitBox = new HitBox(p, 0, w, h);
         
         // super.accelerationRate =
         // super.decelerationRate =

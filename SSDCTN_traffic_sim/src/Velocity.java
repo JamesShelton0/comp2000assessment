@@ -10,10 +10,27 @@ public class Velocity {
         return new Point(x, y);
     }
 
-    static public Point calPositionWithRadius(Point p, double direction, double radius, int xMultiplier, int yMultiplier){
-        direction = direction * Math.PI/180;
-        double newX = p.getX() + radius * Math.cos(direction);
-        double newY = p.getY() + radius * Math.sin(direction);
+    static public Point calPositionWithRadius(Point p, double direction, double radius, int xMultiplier, int yMultiplier, double xAddon, double yAddon){
+        double dir = direction * Math.PI/180;
+        double newX = 0.0;
+        double newY = 0.0;
+        if(direction % 180 != 0 && direction % 90.0 == 0){
+            newX = p.getX() + yAddon * xMultiplier;
+            newY = p.getY() + xAddon * yMultiplier;
+        }
+        else if(direction % 180 == 0){
+            newX = p.getX() + xAddon * xMultiplier;
+            newY = p.getY() + yAddon * yMultiplier;
+        }
+        return new Point(newX, newY);
+    }
+
+    static public Point calPositionWithRadius(Point p, double direction, double radius){
+        double dir = direction * Math.PI/180;
+        double newX = 0.0;
+        double newY = 0.0;
+        newX = p.getX() + Math.cos(dir) * radius;
+        newY = p.getY() + Math.sin(dir) * radius;
         return new Point(newX, newY);
     }
 }

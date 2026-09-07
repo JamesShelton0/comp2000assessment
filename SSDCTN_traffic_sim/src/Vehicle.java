@@ -39,7 +39,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void move(){
-        position = Velocity.calPosition(x, y, direction, 1);
+        position = Velocity.calPosition(x, y, direction, velocity);
         x = position.getX();
         y = position.getY();
         updatePosition();
@@ -73,6 +73,18 @@ public abstract class Vehicle extends JComponent {
 
     void setDirection(float direction){
         this.direction = direction;
+    }
+
+    double getDirection(){
+        return direction;
+    }
+
+    public HitBox getHitBox(){
+        return hitBox;
+    }
+
+    public void updateHitBox(){
+        hitBox.updateHitbox(position, direction);
     }
 }
 

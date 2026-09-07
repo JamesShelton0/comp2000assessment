@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Frame extends JFrame { 
     Panel panel;
@@ -24,6 +25,8 @@ class Panel extends JPanel {
     Road roadN, roadE, roadS, roadW, intersection;
     Pothole pothole;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    StopLine stopLine1, stopLine2, stopLine3, stopLine4;
+    ArrayList<StopLine> stopLineArr = new ArrayList<>();
     Explosion explosion;
 
     Panel(int w, int h) {
@@ -49,17 +52,36 @@ class Panel extends JPanel {
         Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });
         lightTimer4.start();
 
+
+
         // ---------------------- Movement Timer ----------------------
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
             if(trafficLight1.getLightState() == 2) {
-                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                stopLine1.setActive();
+                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
                     vehicle.setVelocity(0);
-                }
+                }*/
             } else {
-                for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                stopLine1.setInactive();
+                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
                     vehicle.move();
-                }
+                }*/
+            }
+            ArrayList<Vehicle> stopAtColl = CollisionDetection.checkVehicleCollisions(vehicleSpawner.getVehicles());
+            ArrayList<Vehicle> stopAtLine = CollisionDetection.checkVehicleAtStopLine(stopLineArr, vehicleSpawner.getVehicles());
+            for(Vehicle vehicle : vehicleSpawner.getVehicles()){
+                vehicle.setVelocity(1);
+            }
+            for(Vehicle vehicle : stopAtColl){
+                vehicle.setVelocity(0);
+            }
+            for(Vehicle vehicle : stopAtLine){
+                vehicle.setVelocity(0);
+            }
+            for(Vehicle vehicle : vehicleSpawner.getVehicles()){
+                vehicle.move();
+                vehicle.updateHitBox();
             }
             this.repaint();
         });
@@ -77,9 +99,20 @@ class Panel extends JPanel {
         this.trafficLight3 = new TrafficLight(250, 500); // bottom left
         this.trafficLight4 = new TrafficLight(500, 500); // bottom right
 
+        this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
+        this.stopLine2 = new StopLine(null, null, 90.0);
+        this.stopLine3 = new StopLine(null, null, 180.0);
+        this.stopLine4 = new StopLine(null, null, 270.0);
+        stopLineArr.add(stopLine1);
+        stopLineArr.add(stopLine2);
+        stopLineArr.add(stopLine3);
+        stopLineArr.add(stopLine4);
+
         pothole = new Pothole(8, 8);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
     }
+
+
 
     @Override
     public void paintComponent(Graphics g) {

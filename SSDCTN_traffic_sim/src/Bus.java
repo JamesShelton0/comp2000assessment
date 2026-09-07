@@ -22,7 +22,7 @@ public class Bus extends Vehicle {
     void checkBusStop(BusStop stop) { 
     
     if(!stoppedAtBusStop && !leavingBusStop &&
-        x >= stop.getx() - 10 &&x <=stop.getx());
+        x >= stop.getX() - 10 &&x <=stop.getX());
         accelerate(decelerationRate);
 
         if(velocity==0){

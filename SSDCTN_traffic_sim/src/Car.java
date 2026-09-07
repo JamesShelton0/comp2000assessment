@@ -4,13 +4,17 @@ import java.awt.geom.RoundRectangle2D;
 
 public class Car extends Vehicle {
 
-    public Car(double width, double height) {
+    Point p;
+
+    public Car(Point p, double width, double height) {
         super.width = width;
         super.height = height;
 
         super.accelerationRate = 8;
         super.decelerationRate = 10;
         super.pollutionRate = 50;
+        this.p = p;
+        super.hitBox = new HitBox(p, super.direction, width, height);
     }
 
     @Override
