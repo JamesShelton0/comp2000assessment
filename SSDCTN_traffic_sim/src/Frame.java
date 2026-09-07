@@ -51,6 +51,7 @@ class Panel extends JPanel {
         });
         vehicleDespawnTimer.start();
 
+
         // ---------------------- Traffic Light Timers ----------------------
         Timer lightTimer1 = new Timer(2000, e -> { trafficLight1.changeLight(); });
         lightTimer1.start();
@@ -60,7 +61,6 @@ class Panel extends JPanel {
         lightTimer3.start();
         Timer lightTimer4 = new Timer(8800, e -> { trafficLight4.changeLight(); });
         lightTimer4.start();
-
 
 
         // ---------------------- Movement Timer ----------------------
@@ -94,6 +94,7 @@ class Panel extends JPanel {
             }
             this.repaint();
         });
+        moveTimer.start();
         
         // ---------------------- Static objects ----------------------
         roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
@@ -140,7 +141,6 @@ class Panel extends JPanel {
             }
             this.repaint();
         });
-
         //moveTimer2.start();
     }
 
@@ -161,50 +161,37 @@ class Panel extends JPanel {
 
         double detectionDistance = 50;
 
-
         // Vehicle travelling SOUTH
         if (direction == 90) {
-
             if (trafficLight2.getLightState() == 2) {
-
                 return y >= topIntersection - detectionDistance
                         && y < topIntersection;
             }
         }
 
-
         // Vehicle travelling NORTH
         if (direction == 270) {
-
             if (trafficLight3.getLightState() == 2) {
-
                 return y <= bottomIntersection + detectionDistance
                         && y > bottomIntersection;
             }
         }
 
-
         // Vehicle travelling WEST
         if (direction == 180) {
-
             if (trafficLight4.getLightState() == 2) {
-
                 return x <= rightIntersection + detectionDistance
                         && x > rightIntersection;
             }
         }
 
-
         // Vehicle travelling EAST
         if (direction == 0) {
-
             if (trafficLight1.getLightState() == 2) {
-
                 return x >= leftIntersection - detectionDistance
                         && x < leftIntersection;
             }
         }
-
 
         return false;
     }
