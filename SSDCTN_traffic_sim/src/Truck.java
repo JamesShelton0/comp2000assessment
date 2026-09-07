@@ -22,7 +22,7 @@ public class Truck extends Vehicle {
     @Override
     public void draw(Graphics2D g2d) {
 
-        Graphics2D g = (Graphics2D) g2d.create();
+        Graphics2D g = (Graphics2D) g2d.create(); // this creates a copy so I can rotate the truck without breaking the sim
 
         g.rotate(
             Math.toRadians(direction - 180),
@@ -63,8 +63,8 @@ public class Truck extends Vehicle {
             (height / 5 * 2) - 6              
         );
 
-g.setColor(Color.CYAN);
-g.fill(windscreen);
+        g.setColor(Color.CYAN);
+        g.fill(windscreen);
 
         // Front left wheel
         Rectangle2D.Double frontLeftWheel = new Rectangle2D.Double(
