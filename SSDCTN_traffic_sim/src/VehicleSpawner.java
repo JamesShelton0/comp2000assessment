@@ -49,10 +49,10 @@ public class VehicleSpawner {
             // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(NORTH_SP);
-                    // bus.setDirection((float) SOUTH);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(NORTH_SP);
+                    bus.setDirection((float) SOUTH);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -92,10 +92,10 @@ public class VehicleSpawner {
             // System.out.println("east spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(EAST_SP);
-                    // bus.setDirection((float) WEST);
-                    // activeVehicles.add(bus);
+                     Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                     bus.setPosition(EAST_SP);
+                     bus.setDirection((float) WEST);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -135,10 +135,10 @@ public class VehicleSpawner {
             // System.out.println("south spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(SOUTH_SP);
-                    // bus.setDirection((float) NORTH);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(SOUTH_SP);
+                    bus.setDirection((float) NORTH);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
@@ -178,10 +178,10 @@ public class VehicleSpawner {
             // System.out.println("west spawn succeeded. Vehicle type: "+vehicleType);
             switch (vehicleType) {
                 case 0: // BUS
-                    // Bus bus = new Bus(width*0.1, height*0.1);   // arbitrary arguments
-                    // bus.setPosition(WEST_SP);
-                    // bus.setDirection((float) EAST);
-                    // activeVehicles.add(bus);
+                    Bus bus = new Bus(width*0.05, height*0.12);   // arbitrary arguments
+                    bus.setPosition(WEST_SP);
+                    bus.setDirection((float) EAST);
+                    activeVehicles.add(bus);
                     break;
                 
                 case 1: // CAR
