@@ -118,7 +118,7 @@ public class HitBox {
     }
 
     public Double getRightMostPoint(){
-        Double rightMostPoint = 0.0;
+        Double rightMostPoint = null;
         for(Point p : pointArr){
             if(rightMostPoint == null || p.getX() > rightMostPoint){
                 rightMostPoint = p.getX();
