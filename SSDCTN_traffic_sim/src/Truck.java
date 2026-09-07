@@ -16,9 +16,6 @@ public class Truck extends Vehicle {
 
         this.p = p;
         super.hitBox = new HitBox(p, 0, w, h*1.2);
-        
-        // super.accelerationRate =
-        // super.decelerationRate =
     }
 
     protected void paintComponent(Graphics g){
@@ -42,7 +39,7 @@ public class Truck extends Vehicle {
             y
         );
 
-        double left = x - width / 2;
+        double left = x - width / 2; // centers the truck
         double top = y - height / 2;
 
         // Truck cabin
