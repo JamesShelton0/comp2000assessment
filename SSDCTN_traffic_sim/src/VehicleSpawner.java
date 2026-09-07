@@ -70,7 +70,7 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(width*0.05, height*0.033335);
                     motorbike.setPosition(NORTH_SP);
                     motorbike.setDirection((float) SOUTH);
                     activeVehicles.add(motorbike);
@@ -113,7 +113,7 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(width*0.05, height*0.033335);
                     motorbike.setPosition(EAST_SP);
                     motorbike.setDirection((float) WEST);
                     activeVehicles.add(motorbike);
@@ -156,7 +156,7 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(width*0.05, height*0.033335);
                     motorbike.setPosition(SOUTH_SP);
                     motorbike.setDirection((float) NORTH);
                     activeVehicles.add(motorbike);
@@ -199,7 +199,7 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(width*0.1, height*0.06667);
+                    Motorbike motorbike = new Motorbike(width*0.05, height*0.033335);
                     motorbike.setPosition(WEST_SP);
                     motorbike.setDirection((float) EAST);
                     activeVehicles.add(motorbike);
