@@ -24,6 +24,7 @@ class Panel extends JPanel {
     VehicleSpawner vehicleSpawner;
     Road roadN, roadE, roadS, roadW, intersection;
     Pothole pothole;
+    SpeedCamera speedCamera;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
     Explosion explosion;
     TrafficLightController trafficLightController;
@@ -70,6 +71,7 @@ class Panel extends JPanel {
         trafficLightController.start();
 
         pothole = new Pothole(8, 8);
+        speedCamera = new SpeedCamera(610, 240);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
 
 
@@ -170,6 +172,7 @@ class Panel extends JPanel {
         roadW.draw(g2d);
         intersection.draw(g2d);
         pothole.draw(g2d);
+        speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
