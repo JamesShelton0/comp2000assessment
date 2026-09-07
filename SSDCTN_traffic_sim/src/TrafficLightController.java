@@ -14,6 +14,9 @@ public class TrafficLightController {
     private final int YELLOW = 1;
     private final int RED = 2;
 
+    private final int GREEN_TIME = 20000; // 20 seconds
+    private final int YELLOW_TIME = 2000; // 2 seconds
+
     public TrafficLightController(
         TrafficLight trafficLight1,
         TrafficLight trafficLight2,
@@ -36,7 +39,10 @@ public class TrafficLightController {
         trafficLight2.setLightState(GREEN);
         trafficLight3.setLightState(GREEN);
 
-        timer = new Timer(5000, e -> changePhase());
+        timer = new Timer(GREEN_TIME, e -> changePhase());
+
+        // Timer only fires once
+        timer.setRepeats(false);
     }
 
 
@@ -60,7 +66,7 @@ public class TrafficLightController {
 
                 trafficPhase = 1;
 
-                timer.setDelay(2000);
+                startTimer(YELLOW_TIME);
 
                 break;
 
@@ -76,7 +82,7 @@ public class TrafficLightController {
 
                 trafficPhase = 2;
 
-                timer.setDelay(5000);
+                startTimer(GREEN_TIME);
 
                 break;
 
@@ -92,7 +98,7 @@ public class TrafficLightController {
 
                 trafficPhase = 3;
 
-                timer.setDelay(2000);
+                startTimer(YELLOW_TIME);
 
                 break;
 
@@ -108,9 +114,16 @@ public class TrafficLightController {
 
                 trafficPhase = 0;
 
-                timer.setDelay(5000);
+                startTimer(GREEN_TIME);
 
                 break;
         }
+    }
+
+
+    private void startTimer(int delay) {
+
+        timer.setInitialDelay(delay);
+        timer.restart();
     }
 }
