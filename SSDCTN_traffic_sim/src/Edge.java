@@ -27,16 +27,16 @@ public class Edge {
     }
 
     public boolean pointIsOnFlatEdge(Point p, double direction){
-        if(direction == 0.0 && p.getX() > left.getX() && p.getX() < right.getX() && p.getY() == left.getY()){
+        if(direction == 90.0 && p.getX() > left.getX() && p.getX() < right.getX() && p.getY() == left.getY()){
             return true;
         }
-        if(direction == 180.0 && p.getX() < left.getX() && p.getX() > right.getX() && p.getY() == left.getY()){
+        if(direction == 270.0 && p.getX() < left.getX() && p.getX() > right.getX() && p.getY() == left.getY()){
             return true;
         }
-        if(direction == 90.0 && p.getY() > left.getY() && p.getY() < right.getY() && p.getX() == left.getX()){
+        if(direction == 0.0 && p.getY() > left.getY() && p.getY() < right.getY() && p.getX() == left.getX()){
             return true;
         }
-        if(direction == 270.0 && p.getY() < left.getY() && p.getY() > right.getY() && p.getX() == left.getX()){
+        if(direction == 180.0 && p.getY() < left.getY() && p.getY() > right.getY() && p.getX() == left.getX()){
             return true;
         }
         return false;

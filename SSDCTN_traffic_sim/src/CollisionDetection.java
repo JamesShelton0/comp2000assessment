@@ -6,7 +6,6 @@ public class CollisionDetection {
     // checks if one object is infront of the other and could face a collision 
     static boolean checkWithinRadius(Vehicle a, Vehicle b){
         if(a.getHitBox().detectHitboxOverlap(b.getHitBox())){
-            //System.out.println("overlap!!!");
             return true;
         }
         return false;
@@ -38,7 +37,9 @@ public class CollisionDetection {
         ArrayList<Vehicle> stopArr = new ArrayList<>();
         for(int i = 0; i < stopLineArr.size(); i++){
             for(int j = 0; j < vehicleArr.size(); j++){
-
+                if(checkWithinRadius(vehicleArr.get(j), stopLineArr.get(i))){
+                    stopArr.add(vehicleArr.get(j));
+                }
             }
         }
         return stopArr;
