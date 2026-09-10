@@ -40,7 +40,7 @@ public class VehicleSpawner {
         if (spawnChance < 0 || spawnChance > 100) {
             throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
         }
-        this.width = w;
+        this.width = w;     // provides panel bounds for determining spawn positions
         this.height = h;
         this.spawnChance = spawnChance;
         SPAWN_BUFFER = (int) ((width+height)/2 * 0.18);
@@ -283,15 +283,12 @@ public class VehicleSpawner {
     // run periodically to make vehicles outside frame dimensions eligible for garbage collection
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
-        despawnHelper(0);
-        despawnHelper(1);
-        despawnHelper(2);
-        despawnHelper(3);
+        for (EntityStore<Vehicle> sublist : activeVehicles) despawnHelper(sublist);
     }
     
     // takes the index for the N/E/S/W sublist 
-    private void despawnHelper(int index) {
-        Iterator<Vehicle> iterator = activeVehicles.get(index).modifyEntities().iterator();
+    private void despawnHelper(EntityStore<Vehicle> sublist) {
+        Iterator<Vehicle> iterator = sublist.modifyEntities().iterator();
         while (iterator.hasNext()) {
             Vehicle v = iterator.next();
             if (v.getPosition().getX() < 0-SPAWN_BUFFER
@@ -305,15 +302,15 @@ public class VehicleSpawner {
     }
 
     private void assignDimensions() {
-        BUS_W = width*0.05;
-        BUS_H = height*0.12;
-        CAR_W = width*0.0375;
-        CAR_H = height*0.0625;
-        CYCLIST_W = width*0.05;
-        CYCLIST_H = height*0.05;
-        MOTORBIKE_W = (width*0.025);
-        MOTORBIKE_H = (height*0.0375);
-        TRUCK_W = width*0.1;
-        TRUCK_H = height*0.08;
+        BUS_W       = width * 0.05;
+        BUS_H       = height* 0.12;
+        CAR_W       = width * 0.0375;
+        CAR_H       = height* 0.0625;
+        CYCLIST_W   = width * 0.05;
+        CYCLIST_H   = height* 0.05;
+        MOTORBIKE_W = width * 0.025;
+        MOTORBIKE_H = height* 0.0375;
+        TRUCK_W     = width * 0.1;
+        TRUCK_H     = height* 0.08;
     }
 }
