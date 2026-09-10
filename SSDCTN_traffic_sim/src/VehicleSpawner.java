@@ -43,7 +43,7 @@ public class VehicleSpawner {
         this.width = w;     // provides panel bounds for determining spawn positions
         this.height = h;
         this.spawnChance = spawnChance;
-        SPAWN_BUFFER = (int) ((width+height)/2 * 0.18);
+        SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
         NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
         EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
         SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
@@ -71,7 +71,7 @@ public class VehicleSpawner {
             
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(0).getEntities().size()-1;
-            if (lastElement > 0 && activeVehicles.get(0).get(lastElement).getY() < 0) {
+            if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < 0) {
                 // System.out.println("VehicleSpawner: North spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -122,7 +122,7 @@ public class VehicleSpawner {
             
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(1).getEntities().size()-1;
-            if (lastElement > 0 && activeVehicles.get(1).get(lastElement).getX() > width) {
+            if (lastElement >= 0 && activeVehicles.get(1).get(lastElement).getPosition().getX() > width) {
                 // System.out.println("VehicleSpawner: East spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -173,7 +173,7 @@ public class VehicleSpawner {
 
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(2).getEntities().size()-1;
-            if (lastElement > 0 && activeVehicles.get(2).get(lastElement).getY() > height) {
+            if (lastElement >= 0 && activeVehicles.get(2).get(lastElement).getPosition().getY() > height) {
                 // System.out.println("VehicleSpawner: South spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -224,7 +224,7 @@ public class VehicleSpawner {
 
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(3).getEntities().size()-1;
-            if (lastElement > 0 && activeVehicles.get(3).get(lastElement).getX() < 0) {
+            if (lastElement >= 0 && activeVehicles.get(3).get(lastElement).getPosition().getX() < 0) {
                 // System.out.println("VehicleSpawner: West spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }

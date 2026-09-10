@@ -24,7 +24,7 @@ class Panel extends JPanel {
 
         // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
-        Timer vehicleSpawnTimer = new Timer(1490, e -> {           // attempt freq
+        Timer vehicleSpawnTimer = new Timer(1390, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
         vehicleSpawnTimer.start();
