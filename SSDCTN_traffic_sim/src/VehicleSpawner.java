@@ -70,11 +70,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(0).getEntities()) {
-                if (v.getPosition().getY() < 0) {
-                    // System.out.println("VehicleSpawner: North spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(0).getEntities().size()-1;
+            if (lastElement > 0 && activeVehicles.get(0).get(lastElement).getY() < 0) {
+                System.out.println("VehicleSpawner: North spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
 
             // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
@@ -122,11 +121,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(1).getEntities()) {
-                if (v.getPosition().getX() > width) {
-                    // System.out.println("VehicleSpawner: East spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(1).getEntities().size()-1;
+            if (lastElement > 0 && activeVehicles.get(1).get(lastElement).getX() > width) {
+                // System.out.println("VehicleSpawner: East spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
             
             // System.out.println("east spawn succeeded. Vehicle type: "+vehicleType);
@@ -174,11 +172,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
 
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(2).getEntities()) {
-                if (v.getPosition().getY() > height) {
-                    // System.out.println("VehicleSpawner: South spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(2).getEntities().size()-1;
+            if (lastElement > 0 && activeVehicles.get(2).get(lastElement).getY() > height) {
+                // System.out.println("VehicleSpawner: South spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
             
             // System.out.println("south spawn succeeded. Vehicle type: "+vehicleType);
@@ -226,11 +223,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
 
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(3).getEntities()) {
-                if (v.getPosition().getX() < 0) {
-                    // System.out.println("VehicleSpawner: West spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(3).getEntities().size()-1;
+            if (lastElement > 0 && activeVehicles.get(3).get(lastElement).getX() < 0) {
+                // System.out.println("VehicleSpawner: West spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
 
             // System.out.println("west spawn succeeded. Vehicle type: "+vehicleType);
