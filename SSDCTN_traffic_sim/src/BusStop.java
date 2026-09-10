@@ -1,8 +1,11 @@
-public class BusStop{
+public class BusStop {
     private double  x, y;
-    double getX(){
-        return x;
     
+    public double getX() {
+        return x;
     }
 
+    public double getY() {
+        return y;
+    }
 }
