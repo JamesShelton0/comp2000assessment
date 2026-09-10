@@ -43,7 +43,7 @@ public class VehicleSpawner {
         this.width = w;
         this.height = h;
         this.spawnChance = spawnChance;
-        SPAWN_BUFFER = (int) (width*0.15);
+        SPAWN_BUFFER = (int) ((width+height)/2 * 0.17);
         NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
         EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
         SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
@@ -270,6 +270,11 @@ public class VehicleSpawner {
         }
     }
 
+
+    private void spawnHelper() {
+
+    }
+
     public List<EntityStore<Vehicle>> getVehicles() {
         // return store's read-only typed view for Panel's movement and drawing loops
         return activeVehicles;
@@ -278,51 +283,23 @@ public class VehicleSpawner {
     // run periodically to make vehicles outside frame dimensions eligible for garbage collection
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
-        Iterator<Vehicle> iteratorN = activeVehicles.get(0).modifyEntities().iterator();
-        while (iteratorN.hasNext()) {
-            Vehicle v = iteratorN.next();
+        despawnHelper(0);
+        despawnHelper(1);
+        despawnHelper(2);
+        despawnHelper(3);
+    }
+    
+    // takes the index for the N/E/S/W sublist 
+    private void despawnHelper(int index) {
+        Iterator<Vehicle> iterator = activeVehicles.get(index).modifyEntities().iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
             if (v.getPosition().getX() < 0-SPAWN_BUFFER
             || v.getPosition().getY() < 0-SPAWN_BUFFER
             || v.getPosition().getX() > width+SPAWN_BUFFER
             || v.getPosition().getY() > height+SPAWN_BUFFER) {
                 // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorN.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorE = activeVehicles.get(1).modifyEntities().iterator();
-        while (iteratorE.hasNext()) {
-            Vehicle v = iteratorE.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorE.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorS = activeVehicles.get(2).modifyEntities().iterator();
-        while (iteratorS.hasNext()) {
-            Vehicle v = iteratorS.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorS.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorW = activeVehicles.get(3).modifyEntities().iterator();
-        while (iteratorW.hasNext()) {
-            Vehicle v = iteratorW.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorW.remove();
+                iterator.remove();
             }
         }
     }
