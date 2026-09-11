@@ -8,13 +8,11 @@ public class Truck extends Vehicle {
     int shape;              
     boolean hasSunroof;
 
-    Point p;
-
     public Truck(Point p, double w, double h) {
+        super.position = p;
         super.width = w;
         super.height = h;
-
-        this.p = p;
+        
         super.hitBox = new HitBox(p, 0, w, h*1.2);
     }
 
