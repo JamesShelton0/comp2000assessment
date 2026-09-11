@@ -1,18 +1,14 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class Truck extends Vehicle {
-
-    int colour;
-    int size;
-    int shape;              
-    boolean hasSunroof;
+public class Truck extends Vehicle {        
+    private boolean hasSunroof;
 
     public Truck(Point p, double w, double h) {
         super.position = p;
         super.width = w;
         super.height = h;
-        
+
         super.hitBox = new HitBox(p, 0, w, h*1.2);
     }
 
