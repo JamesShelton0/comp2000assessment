@@ -18,16 +18,6 @@ public class Truck extends Vehicle {
         super.hitBox = new HitBox(p, 0, w, h*1.2);
     }
 
-    protected void paintComponent(Graphics g){
-
-        Graphics2D g2d = (Graphics2D) g;
-
-        super.velocity = 0;
-        super.direction = 0;
-        super.accelerationRate = 0;
-        super.decelerationRate = 0;
-    }
-
     @Override
     public void draw(Graphics2D g2d) {
 

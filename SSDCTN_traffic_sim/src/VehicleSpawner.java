@@ -280,13 +280,13 @@ public class VehicleSpawner {
         return activeVehicles;
     }
 
-    // run periodically to make vehicles outside frame dimensions eligible for garbage collection
+    // run periodically to delete (make eligible for garbage collection) vehicles out of the frame bounds
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
         for (EntityStore<Vehicle> sublist : activeVehicles) despawnHelper(sublist);
     }
     
-    // takes the index for the N/E/S/W sublist 
+    // takes the N/E/S/W activeVehicle sublists 
     private void despawnHelper(EntityStore<Vehicle> sublist) {
         Iterator<Vehicle> iterator = sublist.modifyEntities().iterator();
         while (iterator.hasNext()) {
