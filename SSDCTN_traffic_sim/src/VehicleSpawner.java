@@ -40,10 +40,10 @@ public class VehicleSpawner {
         if (spawnChance < 0 || spawnChance > 100) {
             throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
         }
-        this.width = w;
+        this.width = w;     // provides panel bounds for determining spawn positions
         this.height = h;
         this.spawnChance = spawnChance;
-        SPAWN_BUFFER = (int) (width*0.15);
+        SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
         NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
         EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
         SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
@@ -70,11 +70,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(0).getEntities()) {
-                if (v.getPosition().getY() < 0) {
-                    // System.out.println("VehicleSpawner: North spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(0).getEntities().size()-1;
+            if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < 0) {
+                // System.out.println("VehicleSpawner: North spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
 
             // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
@@ -122,11 +121,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(1).getEntities()) {
-                if (v.getPosition().getX() > width) {
-                    // System.out.println("VehicleSpawner: East spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(1).getEntities().size()-1;
+            if (lastElement >= 0 && activeVehicles.get(1).get(lastElement).getPosition().getX() > width) {
+                // System.out.println("VehicleSpawner: East spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
             
             // System.out.println("east spawn succeeded. Vehicle type: "+vehicleType);
@@ -174,11 +172,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
 
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(2).getEntities()) {
-                if (v.getPosition().getY() > height) {
-                    // System.out.println("VehicleSpawner: South spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(2).getEntities().size()-1;
+            if (lastElement >= 0 && activeVehicles.get(2).get(lastElement).getPosition().getY() > height) {
+                // System.out.println("VehicleSpawner: South spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
             
             // System.out.println("south spawn succeeded. Vehicle type: "+vehicleType);
@@ -226,11 +223,10 @@ public class VehicleSpawner {
             int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
 
             // prevents spawning when a vehicle is already in spawn zone
-            for (Vehicle v : activeVehicles.get(3).getEntities()) {
-                if (v.getPosition().getX() < 0) {
-                    // System.out.println("VehicleSpawner: West spawn full - aborting.");
-                    vehicleType = -1;   // uses default case (doesn't create vehicle)
-                }
+            int lastElement = activeVehicles.get(3).getEntities().size()-1;
+            if (lastElement >= 0 && activeVehicles.get(3).get(lastElement).getPosition().getX() < 0) {
+                // System.out.println("VehicleSpawner: West spawn full - aborting.");
+                vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
 
             // System.out.println("west spawn succeeded. Vehicle type: "+vehicleType);
@@ -274,73 +270,47 @@ public class VehicleSpawner {
         }
     }
 
+
+    private void spawnHelper() {
+
+    }
+
     public List<EntityStore<Vehicle>> getVehicles() {
         // return store's read-only typed view for Panel's movement and drawing loops
         return activeVehicles;
     }
 
-    // run periodically to make vehicles outside frame dimensions eligible for garbage collection
+    // run periodically to delete (make eligible for garbage collection) vehicles out of the frame bounds
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
-        Iterator<Vehicle> iteratorN = activeVehicles.get(0).modifyEntities().iterator();
-        while (iteratorN.hasNext()) {
-            Vehicle v = iteratorN.next();
+        for (EntityStore<Vehicle> sublist : activeVehicles) despawnHelper(sublist);
+    }
+    
+    // takes the N/E/S/W activeVehicle sublists 
+    private void despawnHelper(EntityStore<Vehicle> sublist) {
+        Iterator<Vehicle> iterator = sublist.modifyEntities().iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
             if (v.getPosition().getX() < 0-SPAWN_BUFFER
             || v.getPosition().getY() < 0-SPAWN_BUFFER
             || v.getPosition().getX() > width+SPAWN_BUFFER
             || v.getPosition().getY() > height+SPAWN_BUFFER) {
                 // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorN.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorE = activeVehicles.get(1).modifyEntities().iterator();
-        while (iteratorE.hasNext()) {
-            Vehicle v = iteratorE.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorE.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorS = activeVehicles.get(2).modifyEntities().iterator();
-        while (iteratorS.hasNext()) {
-            Vehicle v = iteratorS.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorS.remove();
-            }
-        }
-
-        Iterator<Vehicle> iteratorW = activeVehicles.get(3).modifyEntities().iterator();
-        while (iteratorW.hasNext()) {
-            Vehicle v = iteratorW.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
-                // System.out.println("Vehicle despawned at " + v.getPosition());
-                iteratorW.remove();
+                iterator.remove();
             }
         }
     }
 
     private void assignDimensions() {
-        BUS_W = width*0.05;
-        BUS_H = height*0.12;
-        CAR_W = width*0.0375;
-        CAR_H = height*0.0625;
-        CYCLIST_W = width*0.05;
-        CYCLIST_H = height*0.05;
-        MOTORBIKE_W = (width*0.025);
-        MOTORBIKE_H = (height*0.0375);
-        TRUCK_W = width*0.1;
-        TRUCK_H = height*0.08;
+        BUS_W       = width * 0.05;
+        BUS_H       = height* 0.12;
+        CAR_W       = width * 0.0375;
+        CAR_H       = height* 0.0625;
+        CYCLIST_W   = width * 0.05;
+        CYCLIST_H   = height* 0.05;
+        MOTORBIKE_W = width * 0.025;
+        MOTORBIKE_H = height* 0.0375;
+        TRUCK_W     = width * 0.1;
+        TRUCK_H     = height* 0.08;
     }
 }

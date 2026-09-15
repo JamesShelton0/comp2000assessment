@@ -26,6 +26,7 @@ public class Road extends Path {
         g2d.setColor(asphaltColor);
         g2d.fill(asphalt);
 
+        // implement state design pattern instead of this
         switch (mode) {
             case 0:
                 drawIntersection(g2d);

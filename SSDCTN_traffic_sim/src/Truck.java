@@ -1,34 +1,15 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class Truck extends Vehicle {
-
-    int colour;
-    int size;
-    int shape;              
-    boolean hasSunroof;
-
-    Point p;
+public class Truck extends Vehicle {        
+    private boolean hasSunroof;
 
     public Truck(Point p, double w, double h) {
+        super.position = p;
         super.width = w;
         super.height = h;
 
-        this.p = p;
         super.hitBox = new HitBox(p, 0, w, h*1.2);
-        
-        // super.accelerationRate =
-        // super.decelerationRate =
-    }
-
-    protected void paintComponent(Graphics g){
-
-        Graphics2D g2d = (Graphics2D) g;
-
-        super.velocity = 0;
-        super.direction = 0;
-        super.accelerationRate = 0;
-        super.decelerationRate = 0;
     }
 
     @Override
@@ -42,7 +23,7 @@ public class Truck extends Vehicle {
             y
         );
 
-        double left = x - width / 2;
+        double left = x - width / 2; // centers the truck
         double top = y - height / 2;
 
         // Truck cabin

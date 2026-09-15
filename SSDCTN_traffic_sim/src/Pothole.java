@@ -1,8 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-public class Pothole extends JComponent{
+public class Pothole {
 
     int width; 
     int height;

@@ -11,10 +11,9 @@ public class Bus extends Vehicle {
     private int waitTime = 0; //how long has it waited
     private int maxWaitTime = 100; //how long it will wait
 
-    Point p;
 
     Bus(Point p, double width, double height, double direction) {
-        this.p = p;
+        super.position = p;
         super.width = width;
         super.height = height;
         super.hitBox = new HitBox(p, direction, width, height);

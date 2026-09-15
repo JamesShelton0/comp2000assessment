@@ -1,9 +1,6 @@
-import java.awt.*;
-
 public class Path {
     protected double x, y;
-    protected double width, height; 
-    protected Color primary, accent; 
+    protected double width, height;  
 
     Path(){}
 
@@ -16,4 +13,5 @@ public class Path {
         this.x = x;
         this.y = y;
     }
+
 }

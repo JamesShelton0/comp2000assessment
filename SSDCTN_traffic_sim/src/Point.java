@@ -6,11 +6,19 @@ public class Point {
         this.y = y;
     }
 
-    double getX(){
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getX() {
         return x;
     }
 
-    double getY(){
+    public double getY() {
         return y;
     }
 
