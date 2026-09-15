@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
 public class HitBox {
-    double xAddon;
-    double yAddon;
-    double radius;
-    Point pointAhead;
-    double direction;
-    boolean isActive;
-    ArrayList<Point> pointArr = new ArrayList<>();
-    ArrayList<Edge> edgeArr = new ArrayList<>();
-    Point centrePoint;
+    private double xAddon;
+    private double yAddon;
+    private double radius;
+    private Point pointAhead;
+    private double direction;
+    private boolean isActive;
+    private ArrayList<Point> pointArr = new ArrayList<>();
+    private ArrayList<Edge> edgeArr = new ArrayList<>();
+    private Point centrePoint;
 
     HitBox(Point p, double Direction, double width, double height){
         xAddon = height*0.55;   // *0.55 to create a small buffer between vehicles.

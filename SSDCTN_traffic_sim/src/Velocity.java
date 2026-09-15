@@ -11,7 +11,6 @@ public class Velocity {
     }
 
     static public Point calPositionWithRadius(Point p, double direction, double radius, int xMultiplier, int yMultiplier, double xAddon, double yAddon){
-        double dir = direction * Math.PI/180;
         double newX = 0.0;
         double newY = 0.0;
         if(direction % 180 != 0 && direction % 90.0 == 0){

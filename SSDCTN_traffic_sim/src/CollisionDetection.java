@@ -5,8 +5,13 @@ public class CollisionDetection {
 
     // checks if one object is infront of the other and could face a collision 
     static boolean checkWithinRadius(Vehicle a, Vehicle b){
-        if(a.getHitBox().detectHitboxOverlap(b.getHitBox())){
-            return true;
+        try{
+            if(a.getHitBox().detectHitboxOverlap(b.getHitBox())){
+                return true;
+            }
+        }
+        catch(NullPointerException e){
+            System.out.println("EXCEPTION: One of the vehicle objects has a null hitbox");
         }
         return false;
     }
