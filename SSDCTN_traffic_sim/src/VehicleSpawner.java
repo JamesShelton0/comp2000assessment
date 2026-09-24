@@ -28,7 +28,7 @@ public class VehicleSpawner {
     private int spawnChance;
     private Random rand;
 
-     // now uses EntityStore to reject unrelated object types at compile time (generics yay!) 
+    // now uses EntityStore to reject unrelated object types at compile time (generics yay!)
     private List<EntityStore<Vehicle>> activeVehicles;
     private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn;
 

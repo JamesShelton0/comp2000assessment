@@ -10,8 +10,10 @@ public class Car extends Vehicle {
         super.width = width;
         super.height = height;
 
-        super.accelerationRate = 8;
-        super.decelerationRate = 10;
+        super.accelerationRate = 0.7;
+        super.decelerationRate = -1;
+        super.topSpeed = 8;
+
         super.pollutionRate = 50;
         super.hitBox = new HitBox(p, super.direction, width, height);
     }

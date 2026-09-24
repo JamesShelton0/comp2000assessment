@@ -17,10 +17,10 @@ public class Bus extends Vehicle {
         super.width = width;
         super.height = height;
         super.hitBox = new HitBox(p, direction, width, height);
-        velocity = 60;
-        topSpeed = 60;
-        decelerationRate = -5;
-        accelerationRate = 5;   
+
+        super.accelerationRate = 0.5;
+        super.decelerationRate = -1;
+        super.topSpeed = 5;
     }
 
     @Override

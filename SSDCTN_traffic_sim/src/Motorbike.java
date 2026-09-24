@@ -3,8 +3,9 @@ import java.awt.*;
 public class Motorbike extends Vehicle {
 
     Motorbike(Point p, double width, double height) {
-        super.accelerationRate = 8;
+        super.accelerationRate = 0.8;
         super.decelerationRate = -5;
+        super.topSpeed = 10;
 
         super.position = p;
         super.width = width;

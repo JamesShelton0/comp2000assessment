@@ -8,6 +8,9 @@ public class Truck extends Vehicle {
         super.position = p;
         super.width = w;
         super.height = h;
+        super.accelerationRate = 0.4;
+        super.decelerationRate = -1;
+        super.topSpeed = 7;
 
         super.hitBox = new HitBox(p, 0, w, h*1.2);
     }
