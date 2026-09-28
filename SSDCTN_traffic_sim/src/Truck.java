@@ -22,7 +22,7 @@ public class Truck extends Vehicle {
             x,
             y
         );
-
+            
         double left = x - width / 2; // centers the truck
         double top = y - height / 2;
 
