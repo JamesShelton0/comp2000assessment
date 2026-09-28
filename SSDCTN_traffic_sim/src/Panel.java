@@ -13,6 +13,7 @@ class Panel extends JPanel {
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
     Explosion explosion;
     TrafficLightController trafficLightController;
+    BusStop busStop;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException {
@@ -33,11 +34,24 @@ class Panel extends JPanel {
         });
         vehicleDespawnTimer.start();
 
+        
+        // ---------------------- Vehicle Acceleration Timers ----------------------
+        Timer vehicleAccelTimer = new Timer(1000, e -> {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+                for (Vehicle vehicle : sublist.getEntities()) {
+                    if (vehicle.velocity < vehicle.topSpeed) {
+                        vehicle.accelerate(vehicle.accelerationRate);
+                    }
+                }
+            }
+        });
+        vehicleAccelTimer.start();
+
 
         // ---------------------- Movement Timer ----------------------
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
-            if(trafficLight1.getLightState() == 2) {
+            if (trafficLight1.getLightState() == 2) {
                 stopLine1.setActive();
                 /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
                     vehicle.setVelocity(0);
@@ -48,16 +62,10 @@ class Panel extends JPanel {
                     vehicle.move();
                 }*/
             }
-
             
             ArrayList<Vehicle> stopAtColl = CollisionDetection.checkVehicleCollisions(vehicleSpawner.getVehicles());
             ArrayList<Vehicle> stopAtLine = CollisionDetection.checkVehicleAtStopLine(stopLineArr, vehicleSpawner.getVehicles());
-        
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
-                for (Vehicle vehicle : sublist.getEntities()) {
-                    vehicle.setVelocity(1);
-                }
-            }
+
             for (Vehicle vehicle : stopAtColl) {
                 vehicle.setVelocity(0);
             }
@@ -114,10 +122,13 @@ class Panel extends JPanel {
            trafficLight4
         );
         trafficLightController.start();
-
+       
+        this.busStop = new BusStop(260, 30);//top left bus stop
         pothole = new Pothole(8, 8);
         speedCamera = new SpeedCamera(610, 240);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
+        
+        
 
     }
 
@@ -192,6 +203,7 @@ class Panel extends JPanel {
         trafficLight3.draw(g2d);
         trafficLight4.draw(g2d);
         explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        busStop.draw(g2d);
 
         for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
             for (Vehicle vehicle : sublist.getEntities()) {
