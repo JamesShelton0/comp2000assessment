@@ -101,6 +101,11 @@ class Panel extends JPanel {
         roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
+        // draw stop line only at end facing intersection.. idk man 
+        roadN.setStopLines(false, true);
+        roadE.setStopLines(true, false);
+        roadS.setStopLines(true, false);
+        roadW.setStopLines(false, true);
 
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
@@ -184,11 +189,50 @@ class Panel extends JPanel {
         return false;
     }
 
+    // extend road and intersection to resized window 
+    private void updateViewport(double left, double top, double right, double bottom) {
+        double intersectionLeft = width * 0.375;
+        double intersectionRight = width * 0.625;
+        double intersectionTop = height * 0.375;
+        double intersectionBottom = height * 0.625;
+        double roadWidth = width * 0.25;
+        double roadHeight = height * 0.25;
+
+        // vertical roads
+        roadN.setBounds(intersectionLeft, top, roadWidth, intersectionTop - top);
+        roadS.setBounds(intersectionLeft, intersectionBottom, roadWidth, bottom - intersectionBottom);
+        // horizontal roads
+        roadW.setBounds(left, intersectionTop, intersectionLeft - left, roadHeight);
+        roadE.setBounds(intersectionRight, intersectionTop, right - intersectionRight, roadHeight);
+        // spawning and despawning
+        vehicleSpawner.updateViewportBounds(left, top, right, bottom);
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);            // paints JPanel stuff like the background
-        Graphics2D g2d = (Graphics2D) g;    // for our 2D graphics components
+        // draw disposable graphics copy so swing one is not changed
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        // use one uniform scale so all assets keep proportions
+        double scale = Math.min(getWidth() / (double) width, getHeight() / (double) height);
+        // centre simulation when window and simulation have different aspect ratios
+        double xOffset = (getWidth() - width * scale) / 2.0;
+        double yOffset = (getHeight() - height * scale) / 2.0;
+        // convert panel edges into coords 
+        double viewportLeft = -xOffset / scale;
+        double viewportTop = -yOffset / scale;
+        double viewportRight = (getWidth() - xOffset) / scale;
+        double viewportBottom = (getHeight() - yOffset) / scale;
+        // synchronise all size dependent simulation bounds before resizing
+        updateViewport(viewportLeft, viewportTop, viewportRight, viewportBottom);
+        // view transform only; physics are in logical units
+        g2d.translate(xOffset, yOffset);
+        g2d.scale(scale, scale);
+        // preserve curves and images when assets are enlarged etc 
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         // draw components
         roadW.draw(g2d);
@@ -210,6 +254,9 @@ class Panel extends JPanel {
                 vehicle.draw(g2d);
             }
         }
+
+        // release graphics copy
+        g2d.dispose();
     }
 
 }

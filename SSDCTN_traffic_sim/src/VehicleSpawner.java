@@ -4,10 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class VehicleSpawner {
-    private final Point NORTH_SP;
-    private final Point EAST_SP;
-    private final Point SOUTH_SP;
-    private final Point WEST_SP;
+    // spawn points are replaced when visible view changes after resize
+    private Point NORTH_SP;
+    private Point EAST_SP;
+    private Point SOUTH_SP;
+    private Point WEST_SP;
     private final Point TEST_SP;
 
     private final double NORTH = 270;
@@ -25,6 +26,8 @@ public class VehicleSpawner {
     private final int SPAWN_BUFFER;
 
     private int width, height; // Frame dimensions
+    // track the current visible bounds so spawning and despawning follow window edges
+    private double viewportLeft, viewportTop, viewportRight, viewportBottom;
     private int spawnChance;
     private Random rand;
 
@@ -44,10 +47,8 @@ public class VehicleSpawner {
         this.height = h;
         this.spawnChance = spawnChance;
         SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
-        NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
-        EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
-        SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
-        WEST_SP = new Point(0-SPAWN_BUFFER, height*0.43);
+        // initialise viewport and four spawn points to original panel bounds 
+        updateViewportBounds(0, 0, width, height);
         TEST_SP = new Point(0,0);
         assignDimensions();
         rand = new Random();
@@ -71,7 +72,7 @@ public class VehicleSpawner {
             
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(0).getEntities().size()-1;
-            if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < 0) {
+            if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < viewportTop) {
                 // System.out.println("VehicleSpawner: North spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -100,7 +101,8 @@ public class VehicleSpawner {
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(EAST_SP, MOTORBIKE_W, MOTORBIKE_H);
+                    // construct at north spawn so initial hitbox is not left at east spawn for one frame lol 
+                    Motorbike motorbike = new Motorbike(NORTH_SP, MOTORBIKE_W, MOTORBIKE_H);
                     motorbike.setPosition(NORTH_SP);
                     motorbike.setDirection((float) SOUTH);
                     activeVehicles.get(0).add(motorbike);
@@ -122,7 +124,7 @@ public class VehicleSpawner {
             
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(1).getEntities().size()-1;
-            if (lastElement >= 0 && activeVehicles.get(1).get(lastElement).getPosition().getX() > width) {
+            if (lastElement >= 0 && activeVehicles.get(1).get(lastElement).getPosition().getX() > viewportRight) {
                 // System.out.println("VehicleSpawner: East spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -173,7 +175,7 @@ public class VehicleSpawner {
 
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(2).getEntities().size()-1;
-            if (lastElement >= 0 && activeVehicles.get(2).get(lastElement).getPosition().getY() > height) {
+            if (lastElement >= 0 && activeVehicles.get(2).get(lastElement).getPosition().getY() > viewportBottom) {
                 // System.out.println("VehicleSpawner: South spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -224,7 +226,7 @@ public class VehicleSpawner {
 
             // prevents spawning when a vehicle is already in spawn zone
             int lastElement = activeVehicles.get(3).getEntities().size()-1;
-            if (lastElement >= 0 && activeVehicles.get(3).get(lastElement).getPosition().getX() < 0) {
+            if (lastElement >= 0 && activeVehicles.get(3).get(lastElement).getPosition().getX() < viewportLeft) {
                 // System.out.println("VehicleSpawner: West spawn full - aborting.");
                 vehicleType = -1;   // uses default case (doesn't create vehicle)
             }
@@ -280,6 +282,20 @@ public class VehicleSpawner {
         return activeVehicles;
     }
 
+    // move spawn / despawn boundaries to the coords of resized panel 
+    public void updateViewportBounds(double left, double top, double right, double bottom) {
+        viewportLeft = left;
+        viewportTop = top;
+        viewportRight = right;
+        viewportBottom = bottom;
+
+        // replace points so active vehicles never share a moving spawn coord
+        NORTH_SP = new Point(width * 0.57, viewportTop - SPAWN_BUFFER);
+        EAST_SP = new Point(viewportRight + SPAWN_BUFFER, height * 0.57);
+        SOUTH_SP = new Point(width * 0.43, viewportBottom + SPAWN_BUFFER);
+        WEST_SP = new Point(viewportLeft - SPAWN_BUFFER, height * 0.43);
+    }
+
     // run periodically to delete (make eligible for garbage collection) vehicles out of the frame bounds
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
@@ -291,10 +307,11 @@ public class VehicleSpawner {
         Iterator<Vehicle> iterator = sublist.modifyEntities().iterator();
         while (iterator.hasNext()) {
             Vehicle v = iterator.next();
-            if (v.getPosition().getX() < 0-SPAWN_BUFFER
-            || v.getPosition().getY() < 0-SPAWN_BUFFER
-            || v.getPosition().getX() > width+SPAWN_BUFFER
-            || v.getPosition().getY() > height+SPAWN_BUFFER) {
+            // remove vehicles only after they have passed beyond current visible window and buffer
+            if (v.getPosition().getX() < viewportLeft-SPAWN_BUFFER
+            || v.getPosition().getY() < viewportTop-SPAWN_BUFFER
+            || v.getPosition().getX() > viewportRight+SPAWN_BUFFER
+            || v.getPosition().getY() > viewportBottom+SPAWN_BUFFER) {
                 // System.out.println("Vehicle despawned at " + v.getPosition());
                 iterator.remove();
             }

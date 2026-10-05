@@ -28,6 +28,8 @@ public abstract class Vehicle extends JComponent {
         this.y = y;
         this.position = new Point(x, y);
         updatePosition();
+        // keep collision geometry synced when vehicle is repositioned 
+        if (hitBox != null) hitBox.updateHitbox(position, direction);
     }
 
     public void setPosition(Point point) {
@@ -35,6 +37,8 @@ public abstract class Vehicle extends JComponent {
         this.y = point.getY();
         this.position = point;
         updatePosition();
+        // keep collision geometry synced when vehicle is repositioned 
+        if (hitBox != null) hitBox.updateHitbox(position, direction);
     }
 
     public void move(){
@@ -57,6 +61,8 @@ public abstract class Vehicle extends JComponent {
     void accelerate(double change) {
         velocity += change;
         if (velocity < 0) velocity = 0;
+        // clamp acceleration at top speed so fractional rates cant go above it
+        if (change > 0 && velocity > topSpeed) velocity = topSpeed;
     }
 
     void turn(int degrees, int radius) {
@@ -72,6 +78,8 @@ public abstract class Vehicle extends JComponent {
 
     void setDirection(float direction){
         this.direction = direction;
+        // rotate hitbox immediately so collision checks use vehicles new travel direction
+        if (hitBox != null && position != null) hitBox.updateHitbox(position, direction);
     }
 
     double getDirection(){
