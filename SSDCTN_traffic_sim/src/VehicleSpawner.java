@@ -308,8 +308,8 @@ public class VehicleSpawner {
         CAR_H       = height* 0.0625;
         CYCLIST_W   = width * 0.05;
         CYCLIST_H   = height* 0.05;
-        MOTORBIKE_W = width * 0.025;
-        MOTORBIKE_H = height* 0.0375;
+        MOTORBIKE_W = 80;
+        MOTORBIKE_H = 120 ;
         TRUCK_W     = width * 0.1;
         TRUCK_H     = height* 0.08;
     }
