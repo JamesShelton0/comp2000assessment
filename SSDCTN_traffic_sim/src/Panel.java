@@ -39,13 +39,17 @@ class Panel extends JPanel {
         Timer vehicleAccelTimer = new Timer(1000, e -> {
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
+                    //Do not accelerate the bus while it is stopped at the bus stop
+                    if (vehicle instanceof Bus && ((Bus) vehicle).isStoppedAtBusStop()){
+                        continue;
+                    }
                     if (vehicle.velocity < vehicle.topSpeed) {
                         vehicle.accelerate(vehicle.accelerationRate);
                     }
                 }
             }
         });
-        vehicleAccelTimer.start();
+        vehicleAccelTimer.start(); 
 
 
         // ---------------------- Movement Timer ----------------------
@@ -74,6 +78,15 @@ class Panel extends JPanel {
             }
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
+                    // Bus stop behaviour
+                    if (vehicle instanceof Bus){
+                        Bus bus = (Bus) vehicle;
+
+                        bus.checkBusStop(busStop);
+                        bus.waitAtBusStop();
+                        bus.leaveBusStop();
+                    }
+
                     if (!shouldStopAtRed(vehicle)) {
                         vehicle.move();
                     }
