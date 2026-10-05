@@ -69,13 +69,13 @@ class Panel extends JPanel {
             for (Vehicle vehicle : stopAtColl) {
                 vehicle.setVelocity(0);
             }
-            for (Vehicle vehicle : stopAtLine) {
-                vehicle.setVelocity(0);
-            }
+
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     if (!shouldStopAtRed(vehicle)) {
                         vehicle.move();
+                    } else {
+                        vehicle.velocity = 0;
                     }
                 vehicle.updateHitBox();
                 }
