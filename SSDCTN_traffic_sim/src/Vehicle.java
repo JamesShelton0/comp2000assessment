@@ -83,7 +83,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void updateHitBox(){
-        hitBox.updateHitbox(position, direction);
+        hitBox.updateHitbox(position, direction, velocity);
     }
 
     public Point getPosition() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 class Panel extends JPanel {
     private int width, height;
     VehicleSpawner vehicleSpawner;
-    Road roadN, roadE, roadS, roadW, intersection;
+    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight;
     Pothole pothole;
     SpeedCamera speedCamera;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
@@ -101,6 +101,7 @@ class Panel extends JPanel {
         roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
         roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
+        roadOnFarRight = new Road(width*1.0, height*0.18, width*0.25, height*0.4, 1);
 
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
@@ -196,6 +197,7 @@ class Panel extends JPanel {
         roadE.draw(g2d);
         roadN.draw(g2d);
         intersection.draw(g2d);
+        roadOnFarRight.draw(g2d);
         pothole.draw(g2d);
         speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
