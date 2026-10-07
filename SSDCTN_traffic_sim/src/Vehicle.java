@@ -13,6 +13,7 @@ public abstract class Vehicle extends JComponent {
     protected double velocity;
     protected double accelerationRate, decelerationRate;
     protected double direction;
+    private boolean movementBlocked;
 
     // aesthetics
     protected int pollutionRate;
@@ -38,7 +39,13 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void move(){
-        position = Velocity.calPosition(x, y, direction, velocity);
+        // use vehicles desired velocity when no traffic constraints are applied
+        move(velocity);
+    }
+
+    public void move(double movementVelocity){
+        // allow smooth, temporary speed matching without overwriting desired velocity
+        position = Velocity.calPosition(x, y, direction, movementVelocity);
         x = position.getX();
         y = position.getY();
         updatePosition();
@@ -69,6 +76,16 @@ public abstract class Vehicle extends JComponent {
         this.velocity = velocity;
     }
 
+    // record whether traffic light or obstacle is preventing movement
+    void setMovementBlocked(boolean movementBlocked) {
+        this.movementBlocked = movementBlocked;
+    }
+
+    // let acceleration pause whilst vehicle is waiting in traffic
+    boolean isMovementBlocked() {
+        return movementBlocked;
+    }
+
 
     void setDirection(float direction){
         this.direction = direction;
@@ -83,7 +100,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void updateHitBox(){
-        hitBox.updateHitbox(position, direction);
+        hitBox.updateHitbox(position, direction, velocity);
     }
 
     public Point getPosition() {
