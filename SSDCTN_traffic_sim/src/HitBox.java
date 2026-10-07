@@ -171,4 +171,14 @@ public class HitBox {
     public double getDirection(){
         return direction;
     }
+
+    // provide buffered front-to-centre distance
+    public double getForwardExtent() {
+        return xAddon;
+    }
+
+    // provide centre-to-side distance for adjacent lane checks
+    public double getLateralExtent() {
+        return yAddon;
+    }
 }
