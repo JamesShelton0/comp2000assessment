@@ -49,6 +49,12 @@ class Panel extends JPanel {
         Timer vehicleAccelTimer = new Timer(1000, e -> {
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
+
+                    //Do not accelerate the bus while it is stopped at the bus stop
+                    if (vehicle instanceof Bus && ((Bus) vehicle).isStoppedAtBusStop()){
+                        continue;
+                    }
+                  
                     // dont build up speed when movement is blocked
                     if (!vehicle.isMovementBlocked() && vehicle.velocity < vehicle.topSpeed) {
                         vehicle.accelerate(vehicle.accelerationRate);
@@ -56,7 +62,7 @@ class Panel extends JPanel {
                 }
             }
         });
-        vehicleAccelTimer.start();
+        vehicleAccelTimer.start(); 
 
 
         // ---------------------- Movement Timer ----------------------
@@ -79,6 +85,15 @@ class Panel extends JPanel {
             Map<Vehicle, Boolean> environmentBlocks = new IdentityHashMap<>();
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
+                    //Bus stop behaviour
+                    if (vehicle instanceof Bus){
+                        Bus bus = (Bus) vehicle;
+
+                        bus.checkBusStop(busStop);
+                        bus.waitAtBusStop();
+                        bus.leaveBusStop();
+                    }
+                    
                     // shouldStopAtRed handles lights until stop-line collision logic is implemented
                     boolean environmentBlocked = shouldStopAtRed(vehicle)
                         || pothole.shouldBlock(vehicle);
