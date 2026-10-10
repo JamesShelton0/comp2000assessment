@@ -38,7 +38,7 @@ public class HitBox {
         edgeArr.add(e4);        
     }
 
-    public void updateHitbox(Point p, double direction){
+    public void updateHitbox(Point p, double direction, double velocity){
         this.direction = direction;
         centrePoint = p;
         pointArr.set(0, Velocity.calPositionWithRadius(p, direction, radius, -1, 1, xAddon, yAddon));
@@ -170,5 +170,15 @@ public class HitBox {
 
     public double getDirection(){
         return direction;
+    }
+
+    // provide buffered front-to-centre distance
+    public double getForwardExtent() {
+        return xAddon;
+    }
+
+    // provide centre-to-side distance for adjacent lane checks
+    public double getLateralExtent() {
+        return yAddon;
     }
 }
