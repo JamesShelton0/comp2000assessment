@@ -12,7 +12,8 @@ class Panel extends JPanel {
 
     private int width, height;
     VehicleSpawner vehicleSpawner;
-    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight;
+    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight; // upper road
+    Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
     SpeedCamera speedCamera;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
@@ -148,6 +149,11 @@ class Panel extends JPanel {
         roadW = new Road(width*0.18, height*0.25, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.25, width*0.25, height*0.25, 0);
 
+        roadE2 = new Road(width*0.82, height*0.75, width*0.4, height*0.25, 2);
+        roadS2 = new Road(width*0.5, height*0.9625, width*0.25, height*0.175, 1); 
+        roadW2 = new Road(width*0.18, height*0.75, width*0.4, height*0.25, 2);
+        intersection2 = new Road(width*0.5, height*0.75, width*0.25, height*0.25, 0);
+
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
         this.stopLine3 = new StopLine(null, null, 180.0);
@@ -253,13 +259,17 @@ class Panel extends JPanel {
         roadE.draw(g2d);
         roadN.draw(g2d);
         intersection.draw(g2d);
+        roadW2.draw(g2d);
+        roadS2.draw(g2d);
+        roadE2.draw(g2d);
+        intersection2.draw(g2d);
         pothole.draw(g2d);
         speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
         trafficLight4.draw(g2d);
-        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+       //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
         
 
