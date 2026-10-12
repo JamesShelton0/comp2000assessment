@@ -12,6 +12,8 @@ public class Cyclist extends Vehicle {
         // super.accelerationRate = 
         // super.decelerationRate = 
     }
+
+    @Override 
     public void draw(Graphics2D g2d) {
         // copy so the rotation doesn't affect anything else being drawn
         Graphics2D g = (Graphics2D) g2d.create();
