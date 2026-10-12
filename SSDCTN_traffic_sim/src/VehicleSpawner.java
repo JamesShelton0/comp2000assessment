@@ -92,11 +92,11 @@ public class VehicleSpawner {
                     activeVehicles.get(0).add(car);
                     break;
 
-                case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(NORTH_SP);
-                    // cyclist.setDirection((float) SOUTH);
-                    // activeVehicles.get(0).add(cyclist);
+                case 2:  //CYCLIST
+                    Cyclist cyclist = new Cyclist(NORTH_SP, CYCLIST_W, CYCLIST_H);  // arbitrary arguments
+                    cyclist.setPosition(NORTH_SP);
+                    cyclist.setDirection((float) SOUTH);
+                    activeVehicles.get(0).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
@@ -145,10 +145,10 @@ public class VehicleSpawner {
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(EAST_SP);
-                    // cyclist.setDirection((float) WEST);
-                    // activeVehicles.get(1).add(cyclist);
+                    Cyclist cyclist = new Cyclist(EAST_SP, CYCLIST_W, CYCLIST_H);  // arbitrary arguments
+                    cyclist.setPosition(EAST_SP);
+                    cyclist.setDirection((float) WEST);
+                    activeVehicles.get(1).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
@@ -196,10 +196,10 @@ public class VehicleSpawner {
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(SOUTH_SP);
-                    // cyclist.setDirection((float) NORTH);
-                    // activeVehicles.get(2).add(cyclist);
+                    Cyclist cyclist = new Cyclist(SOUTH_SP, CYCLIST_W, CYCLIST_H);
+                    cyclist.setPosition(SOUTH_SP);
+                    cyclist.setDirection((float) NORTH);
+                    activeVehicles.get(2).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
@@ -247,10 +247,10 @@ public class VehicleSpawner {
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(WEST_SP);
-                    // cyclist.setDirection((float) EAST);
-                    // activeVehicles.get(3).add(cyclist);
+                    Cyclist cyclist = new Cyclist(WEST_SP, CYCLIST_W, CYCLIST_H);
+                    cyclist.setPosition(WEST_SP);
+                    cyclist.setDirection((float) EAST);
+                    activeVehicles.get(3).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE

@@ -263,6 +263,7 @@ class Panel extends JPanel {
         trafficLight4.draw(g2d);
         explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
+        
 
         for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
             for (Vehicle vehicle : sublist.getEntities()) {
