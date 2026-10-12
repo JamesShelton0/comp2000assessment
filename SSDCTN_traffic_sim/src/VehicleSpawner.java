@@ -45,9 +45,9 @@ public class VehicleSpawner {
         this.spawnChance = spawnChance;
         SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
         NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
-        EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
+        EAST_SP = new Point(width+SPAWN_BUFFER, height*0.32);
         SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
-        WEST_SP = new Point(0-SPAWN_BUFFER, height*0.43);
+        WEST_SP = new Point(0-SPAWN_BUFFER, height*0.18);
         TEST_SP = new Point(0,0);
         assignDimensions();
         rand = new Random();

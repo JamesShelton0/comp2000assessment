@@ -142,14 +142,11 @@ class Panel extends JPanel {
 
         
         // ---------------------- Static objects ----------------------
-
-        roadN = new Road(width*0.5, height*0.0375, width*0.25, height*0.175, 1); 
+        roadN = new Road(width*0.5, height*0.0375, width*0.25, height*0.175, 1);  
         roadE = new Road(width*0.82, height*0.25, width*0.4, height*0.25, 2);
         roadS = new Road(width*0.5, height*0.6975, width*0.25, height*0.645, 1);  
         roadW = new Road(width*0.18, height*0.25, width*0.4, height*0.25, 2);
         intersection = new Road(width*0.5, height*0.25, width*0.25, height*0.25, 0);
-        intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
-        roadOnFarRight = new Road(width*1.0, height*0.18, width*0.25, height*0.4, 1);
 
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
@@ -172,18 +169,18 @@ class Panel extends JPanel {
         );
         trafficLightController.start();
        
-        this.busStop = new BusStop(260, 30);//top left bus stop
+        this.busStop = new BusStop(150, 310);//bottom left bus stop
 
         // place pothole halfway along road
         pothole = new Pothole(
             width * 0.57,
-            height * 0.18,
+            height * 0.6,
             INITIAL_POTHOLE_SIZE,
             INITIAL_POTHOLE_SIZE,
             VEHICLES_BEFORE_POTHOLE,
             POTHOLE_GROWTH_CHANCE
         );
-        speedCamera = new SpeedCamera(610, 240);
+        speedCamera = new SpeedCamera(610, 320);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
         
@@ -256,7 +253,6 @@ class Panel extends JPanel {
         roadE.draw(g2d);
         roadN.draw(g2d);
         intersection.draw(g2d);
-        roadOnFarRight.draw(g2d);
         pothole.draw(g2d);
         speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
