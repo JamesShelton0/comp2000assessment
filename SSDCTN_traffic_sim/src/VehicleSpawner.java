@@ -268,7 +268,7 @@ public class VehicleSpawner {
                     break;
                 default:
             }
-        }
+        }  
     }
 
 
