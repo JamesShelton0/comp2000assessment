@@ -2,15 +2,17 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 
-import java.awt.Graphics2D;
-
 public class Cyclist extends Vehicle {
  
-    Cyclist(double width, double height) {
-        super.width = width;
-        super.height = height;
-        // super.accelerationRate = 
-        // super.decelerationRate = 
+    public Cyclist(Point p, double w, double h) {
+        super.position = p;
+        super.width = w;
+        super.height = h;
+        super.accelerationRate = 0.4;
+        super.decelerationRate = -1;
+        super.topSpeed = 7;
+
+        super.hitBox = new HitBox(p, 0, w, h*1.2);
     }
 
     @Override 
