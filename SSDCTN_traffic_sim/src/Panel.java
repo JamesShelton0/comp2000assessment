@@ -142,10 +142,12 @@ class Panel extends JPanel {
 
         
         // ---------------------- Static objects ----------------------
-        roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
-        roadE = new Road(width*0.82, height*0.5, width*0.4, height*0.25, 2);
-        roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
-        roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
+
+        roadN = new Road(width*0.5, height*0.0375, width*0.25, height*0.175, 1); 
+        roadE = new Road(width*0.82, height*0.25, width*0.4, height*0.25, 2);
+        roadS = new Road(width*0.5, height*0.6975, width*0.25, height*0.645, 1);  
+        roadW = new Road(width*0.18, height*0.25, width*0.4, height*0.25, 2);
+        intersection = new Road(width*0.5, height*0.25, width*0.25, height*0.25, 0);
         intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
         roadOnFarRight = new Road(width*1.0, height*0.18, width*0.25, height*0.4, 1);
 
@@ -158,10 +160,10 @@ class Panel extends JPanel {
         stopLineArr.add(stopLine3);
         stopLineArr.add(stopLine4);
 
-        this.trafficLight1 = new TrafficLight(250, 210); // top left
-        this.trafficLight2 = new TrafficLight(500, 210); // top right
-        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
-        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
+        this.trafficLight1 = new TrafficLight(250, 10);  // top left
+        this.trafficLight2 = new TrafficLight(500, 10);  // top right
+        this.trafficLight3 = new TrafficLight(250, 305); // bottom left
+        this.trafficLight4 = new TrafficLight(500, 305); // bottom right
         trafficLightController = new TrafficLightController(
            trafficLight1,
            trafficLight2,
@@ -198,8 +200,8 @@ class Panel extends JPanel {
 
         int direction = (int) Math.round(vehicle.getDirection());
 
-        double topIntersection = height * 0.375;
-        double bottomIntersection = height * 0.625;
+        double topIntersection = height * 0.125;
+        double bottomIntersection = height * 0.375;
         double leftIntersection = width * 0.375;
         double rightIntersection = width * 0.625;
 
