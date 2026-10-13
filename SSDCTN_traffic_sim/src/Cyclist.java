@@ -37,7 +37,7 @@ public class Cyclist extends Vehicle {
         Ellipse2D.Double body = new Ellipse2D.Double(
             x - bodyW / 2, y - bodyH / 2, bodyW, bodyH
         );
-        g.setColor(Color.BLUE);
+        g.setColor(bodyColour);
         g.fill(body);
 
         

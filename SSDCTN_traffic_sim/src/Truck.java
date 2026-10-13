@@ -37,7 +37,7 @@ public class Truck extends Vehicle {
             height / 5 * 2
         );
 
-        g.setColor(Color.RED);
+        g.setColor(Color.LIGHT_GRAY);   
         g.fill(truckCabin);
 
         // Truck load
@@ -48,7 +48,7 @@ public class Truck extends Vehicle {
             height / 5 * 3
         );
 
-        g.setColor(Color.BLUE);
+        g.setColor(bodyColour);
         g.fill(truckLoad);
 
         // Front windscreen

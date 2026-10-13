@@ -43,7 +43,7 @@ public class Car extends Vehicle {
                 8,
                 8
             );
-        g.setColor(Color.RED);
+        g.setColor(bodyColour);   
         g.fill(carBody);
 
 

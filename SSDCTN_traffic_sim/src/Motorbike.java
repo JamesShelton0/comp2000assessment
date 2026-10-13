@@ -35,7 +35,7 @@ public class Motorbike extends Vehicle {
         g.fillRoundRect((int) bikeX + 18, (int) bikeY + 55, (int) (width*0.7), (int) (height*0.7), (int) (width*0.7), (int) (width*0.7));
 
         // body
-        g.setColor(Color.RED);
+        g.setColor(bodyColour);  
         g.fillRoundRect((int) bikeX + 12, (int) bikeY + 22, (int) (width*1.3), (int) (height*1.3333), (int) (width*0.4), (int) (height*0.26667));
 
         // helmet

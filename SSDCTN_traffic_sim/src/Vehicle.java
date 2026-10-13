@@ -1,6 +1,8 @@
 import javax.swing.*;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Vehicle extends JComponent {
     // size and position
@@ -23,7 +25,30 @@ public abstract class Vehicle extends JComponent {
     protected boolean brakeLightsOn;
 
     // vehicle colours
-    private C
+    
+    private static final Random RAND = new Random();
+
+    private static final Color[] SELECT = {
+        Color.RED, 
+        Color.YELLOW, 
+        Color.BLUE,
+        Color.BLACK,
+        Color.PINK,
+        Color.GREEN,
+        Color.ORANGE,
+        Color.WHITE,
+        Color.GRAY,
+        Color.DARK_GRAY,
+        new Color(0, 70, 160),      // SUBARU WR blue :)
+        new Color(153, 76, 0),      // Colour for Matthew
+        new Color(0, 153, 0),   // British Racing Green
+        new Color(229, 204,255),   // Porsche Frozenberrymetallic (Y08)
+    };
+    protected Color bodyColour = SELECT[RAND.nextInt(SELECT.length)];
+
+    public Color getBodyColour() {
+        return bodyColour;
+    }
 
 
     // draw() is implemented in specific vehicle subclasses.
@@ -42,10 +67,6 @@ public abstract class Vehicle extends JComponent {
         this.y = point.getY();
         this.position = point;
         updatePosition();
-    }
-
-    public void setColour(Colour colour) {
-        new ArrayList<Colour>().add(colour);
     }
 
     public void move(){
