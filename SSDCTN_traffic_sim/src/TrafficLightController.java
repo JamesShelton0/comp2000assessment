@@ -72,7 +72,7 @@ public class TrafficLightController {
             case 0:
                 trafficLight2.setLightState(YELLOW);
                 trafficLight3.setLightState(YELLOW);
-               trafficLight6.setLightState(YELLOW);
+               //trafficLight6.setLightState(YELLOW);
                // trafficLight7.setLightState(YELLOW);
 
                 trafficLight1.setLightState(RED);
