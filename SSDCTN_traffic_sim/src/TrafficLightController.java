@@ -42,7 +42,7 @@ public class TrafficLightController {
         // East / West RED
         trafficLight1.setLightState(RED);
         trafficLight4.setLightState(RED);
-        trafficLight5.setLightState(RED);
+        trafficLight5.setLightState(RED); 
         trafficLight8.setLightState(RED);
 
         // North / South GREEN
