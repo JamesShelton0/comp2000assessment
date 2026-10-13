@@ -90,6 +90,24 @@ public class CollisionDetection {
             }
         }
 
+        // restore collision checks between different spawn-point stores, which the lane-only Map pass omitted
+        for (int firstStoreIndex = 0; firstStoreIndex < vehicleArr.size() - 1; firstStoreIndex++) {
+            EntityStore<Vehicle> firstStore = vehicleArr.get(firstStoreIndex);
+            for (int secondStoreIndex = firstStoreIndex + 1;
+                    secondStoreIndex < vehicleArr.size(); secondStoreIndex++) {
+                EntityStore<Vehicle> secondStore = vehicleArr.get(secondStoreIndex);
+                for (Vehicle first : firstStore.getEntities()) {
+                    for (Vehicle second : secondStore.getEntities()) {
+                        // stop both vehicles once either directional hitbox check detects impact
+                        if (checkWithinRadius(first, second) || checkWithinRadius(second, first)) {
+                            allowedMovements.put(first, 0.0);
+                            allowedMovements.put(second, 0.0);
+                        }
+                    }
+                }
+            }
+        }
+
         return allowedMovements;
     }
 
