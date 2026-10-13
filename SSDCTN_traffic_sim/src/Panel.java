@@ -167,17 +167,19 @@ class Panel extends JPanel {
         this.trafficLight2 = new TrafficLight(500, 10);  // top right
         this.trafficLight3 = new TrafficLight(250, 305); // bottom left
         this.trafficLight4 = new TrafficLight(500, 305); // bottom right
-        this.trafficLight5 = new TrafficLight(500, 10);  // top left
-        this.trafficLight6 = new TrafficLight(750, 10);  // top right
-        this.trafficLight7 = new TrafficLight(500, 555); // bottom left
-        this.trafficLight8 = new TrafficLight(750, 555); // bottom right
+        this.trafficLight5 = new TrafficLight(250, 405);  // top left
+        this.trafficLight6 = new TrafficLight(500, 405);  // top right
+        this.trafficLight7 = new TrafficLight(250, 700); // bottom left
+        this.trafficLight8 = new TrafficLight(500, 700); // bottom right
         trafficLightController = new TrafficLightController(
            trafficLight1,
            trafficLight2,
            trafficLight3,
-           trafficLight4
-           
-            
+           trafficLight4,
+           trafficLight5,
+           trafficLight6,
+           trafficLight7,
+           trafficLight8
         );
         trafficLightController.start();
        
@@ -275,6 +277,10 @@ class Panel extends JPanel {
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
         trafficLight4.draw(g2d);
+        trafficLight5.draw(g2d);
+        trafficLight6.draw(g2d);
+        trafficLight7.draw(g2d);
+        trafficLight8.draw(g2d);
        //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
         

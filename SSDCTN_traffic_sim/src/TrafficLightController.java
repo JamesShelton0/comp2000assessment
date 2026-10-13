@@ -6,6 +6,10 @@ public class TrafficLightController {
     private TrafficLight trafficLight2;
     private TrafficLight trafficLight3;
     private TrafficLight trafficLight4;
+    private TrafficLight trafficLight5;
+    private TrafficLight trafficLight6;
+    private TrafficLight trafficLight7;
+    private TrafficLight trafficLight8;
 
     private Timer timer;
     private int trafficPhase = 0;
@@ -21,7 +25,11 @@ public class TrafficLightController {
         TrafficLight trafficLight1,
         TrafficLight trafficLight2,
         TrafficLight trafficLight3,
-        TrafficLight trafficLight4
+        TrafficLight trafficLight4,
+        TrafficLight trafficLight5,
+        TrafficLight trafficLight6,
+        TrafficLight trafficLight7,
+        TrafficLight trafficLight8
     ) {
 
         this.trafficLight1 = trafficLight1;
@@ -34,6 +42,7 @@ public class TrafficLightController {
         // East / West RED
         trafficLight1.setLightState(RED);
         trafficLight4.setLightState(RED);
+        
 
         // North / South GREEN
         trafficLight2.setLightState(GREEN);
@@ -108,7 +117,7 @@ public class TrafficLightController {
 
                 trafficLight2.setLightState(GREEN);
                 trafficLight3.setLightState(GREEN);
-                
+
 
                 trafficPhase = 0;
 
