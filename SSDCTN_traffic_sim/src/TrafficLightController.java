@@ -6,6 +6,10 @@ public class TrafficLightController {
     private TrafficLight trafficLight2;
     private TrafficLight trafficLight3;
     private TrafficLight trafficLight4;
+    private TrafficLight trafficLight5;
+    private TrafficLight trafficLight6;
+    private TrafficLight trafficLight7;
+    private TrafficLight trafficLight8;
 
     private Timer timer;
     private int trafficPhase = 0;
@@ -21,7 +25,11 @@ public class TrafficLightController {
         TrafficLight trafficLight1,
         TrafficLight trafficLight2,
         TrafficLight trafficLight3,
-        TrafficLight trafficLight4
+        TrafficLight trafficLight4,
+        TrafficLight trafficLight5,
+        TrafficLight trafficLight6,
+        TrafficLight trafficLight7,
+        TrafficLight trafficLight8
     ) {
 
         this.trafficLight1 = trafficLight1;
@@ -34,10 +42,14 @@ public class TrafficLightController {
         // East / West RED
         trafficLight1.setLightState(RED);
         trafficLight4.setLightState(RED);
+        trafficLight5.setLightState(RED);
+        trafficLight8.setLightState(RED);
 
         // North / South GREEN
         trafficLight2.setLightState(GREEN);
         trafficLight3.setLightState(GREEN);
+        trafficLight6.setLightState(GREEN);
+        trafficLight7.setLightState(GREEN);
 
         timer = new Timer(GREEN_TIME, e -> changePhase());
 
@@ -60,9 +72,13 @@ public class TrafficLightController {
             case 0:
                 trafficLight2.setLightState(YELLOW);
                 trafficLight3.setLightState(YELLOW);
+               //trafficLight6.setLightState(YELLOW);
+               // trafficLight7.setLightState(YELLOW);
 
                 trafficLight1.setLightState(RED);
                 trafficLight4.setLightState(RED);
+             //   trafficLight5.setLightState(RED);
+              //  trafficLight8.setLightState(RED);
 
                 trafficPhase = 1;
 
@@ -75,9 +91,13 @@ public class TrafficLightController {
             case 1:
                 trafficLight2.setLightState(RED);
                 trafficLight3.setLightState(RED);
+               // trafficLight6.setLightState(RED);
+               // trafficLight7.setLightState(RED);
 
                 trafficLight1.setLightState(GREEN);
                 trafficLight4.setLightState(GREEN);
+               // trafficLight5.setLightState(GREEN);
+               // trafficLight8.setLightState(GREEN);
 
                 trafficPhase = 2;
 
@@ -90,9 +110,12 @@ public class TrafficLightController {
             case 2:
                 trafficLight1.setLightState(YELLOW);
                 trafficLight4.setLightState(YELLOW);
-
+                //trafficLight5.setLightState(YELLOW);
+                //trafficLight8.setLightState(YELLOW);
                 trafficLight2.setLightState(RED);
                 trafficLight3.setLightState(RED);
+               // trafficLight6.setLightState(RED);
+               // trafficLight7.setLightState(RED);
 
                 trafficPhase = 3;
 
@@ -105,10 +128,13 @@ public class TrafficLightController {
             case 3:
                 trafficLight1.setLightState(RED);
                 trafficLight4.setLightState(RED);
+               // trafficLight5.setLightState(RED);
+                //trafficLight8.setLightState(RED);
 
                 trafficLight2.setLightState(GREEN);
                 trafficLight3.setLightState(GREEN);
-                
+                //trafficLight6.setLightState(GREEN);
+               // trafficLight7.setLightState(GREEN);
 
                 trafficPhase = 0;
 
