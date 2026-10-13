@@ -83,11 +83,13 @@ public class CollisionDetectionTest {
         return car;
     }
 
-    private static EntityStore<Vehicle> createLane(Vehicle first, Vehicle second) {
-        // build same typed store structure as live
+    private static EntityStore<Vehicle> createLane(Vehicle... vehicles) {
+        // build the same typed store structure as live for any number of test vehicles
         EntityStore<Vehicle> lane = new EntityStore<>();
-        lane.add(first);
-        lane.add(second);
+        // add each supplied vehicle so tests can also represent one vehicle per spawn store
+        for (Vehicle vehicle : vehicles) {
+            lane.add(vehicle);
+        }
         return lane;
     }
 
