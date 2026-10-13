@@ -10,7 +10,7 @@ public class TrafficLight {
         this.y = y;
     }
 
-    public int getLightState() {
+    public int getLightState() { // this is out state pattern
         return currentLight;
     }
 

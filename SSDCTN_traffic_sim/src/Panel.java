@@ -16,7 +16,7 @@ class Panel extends JPanel {
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
     SpeedCamera speedCamera;
-    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
     Explosion explosion;
@@ -167,11 +167,17 @@ class Panel extends JPanel {
         this.trafficLight2 = new TrafficLight(500, 10);  // top right
         this.trafficLight3 = new TrafficLight(250, 305); // bottom left
         this.trafficLight4 = new TrafficLight(500, 305); // bottom right
+        this.trafficLight5 = new TrafficLight(500, 10);  // top left
+        this.trafficLight6 = new TrafficLight(750, 10);  // top right
+        this.trafficLight7 = new TrafficLight(500, 555); // bottom left
+        this.trafficLight8 = new TrafficLight(750, 555); // bottom right
         trafficLightController = new TrafficLightController(
            trafficLight1,
            trafficLight2,
            trafficLight3,
            trafficLight4
+           
+            
         );
         trafficLightController.start();
        

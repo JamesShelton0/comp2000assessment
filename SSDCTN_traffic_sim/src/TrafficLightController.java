@@ -108,6 +108,7 @@ public class TrafficLightController {
 
                 trafficLight2.setLightState(GREEN);
                 trafficLight3.setLightState(GREEN);
+                
 
                 trafficPhase = 0;
 
