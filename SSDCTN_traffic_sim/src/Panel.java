@@ -19,7 +19,7 @@ class Panel extends JPanel {
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
-    Explosion explosion;
+    //Explosion explosion;
     TrafficLightController trafficLightController;
     BusStop busStop;
 
@@ -193,7 +193,7 @@ class Panel extends JPanel {
             POTHOLE_GROWTH_CHANCE
         );
         speedCamera = new SpeedCamera(610, 320);
-        explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
+        //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
         
 
