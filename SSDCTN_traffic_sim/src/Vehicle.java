@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public abstract class Vehicle extends JComponent {
     // size and position
@@ -14,11 +15,16 @@ public abstract class Vehicle extends JComponent {
     protected double accelerationRate, decelerationRate;
     protected double direction;
     private boolean movementBlocked;
+    
 
     // aesthetics
     protected int pollutionRate;
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
+
+    // vehicle colours
+    private C
+
 
     // draw() is implemented in specific vehicle subclasses.
     // it contains the actual shapes and fills used to draw the object
@@ -36,6 +42,10 @@ public abstract class Vehicle extends JComponent {
         this.y = point.getY();
         this.position = point;
         updatePosition();
+    }
+
+    public void setColour(Colour colour) {
+        new ArrayList<Colour>().add(colour);
     }
 
     public void move(){
