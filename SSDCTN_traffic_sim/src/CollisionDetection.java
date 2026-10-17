@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.*;
 
 public class CollisionDetection {
 
@@ -49,6 +51,17 @@ public class CollisionDetection {
             }
         }
         return stopArr;
+    }
+
+    // stream implementation of checkVehicleCollisions()
+    public static ArrayList<Vehicle> checkVehicleCollisionsStream(List<EntityStore<Vehicle>> vehicleArr) {
+        // flat maps 2D vehicle array into a single list for easy comparison
+        List<Vehicle> allVehicles = vehicleArr.stream()
+                                             .flatMap(sublist -> sublist.stream())
+                                             .collect(Collectors.toList());
+
+        // need to implement isFollowingTooClosely still
+        return allVehicles.stream().collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Map<Vehicle, Double> calculateAllowedMovements(
