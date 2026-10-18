@@ -32,4 +32,9 @@ public class Velocity {
         newY = p.getY() + Math.sin(dir) * radius;
         return new Point(newX, newY);
     }
+
+    static public Point calPositionTurning(Point vehiclePoint, Point turningPoint, double direction, double radius, boolean leftOrRight){
+        
+        return null;
+    }
 }

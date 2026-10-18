@@ -1,0 +1,2 @@
+ID, type of vertex, x, y, adjacent memeber ID's if any
+1,start,100,100
