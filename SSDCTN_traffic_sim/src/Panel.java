@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 class Panel extends JPanel {
     private int width, height;
+    private boolean pausedForResize;
     VehicleSpawner vehicleSpawner;
     Road roadN, roadE, roadS, roadW, intersection;
     Pothole pothole;
@@ -22,21 +23,30 @@ class Panel extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
 
-
         // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
         Timer vehicleSpawnTimer = new Timer(1390, e -> {           // attempt freq
-            vehicleSpawner.spawn();
+            // pause spawner when paused for resize 
+            if (!pausedForResize) {
+                vehicleSpawner.spawn();
+            }
         });
         vehicleSpawnTimer.start();
         Timer vehicleDespawnTimer = new Timer(20000, e -> {
-            vehicleSpawner.despawn();
+            // pause spawner when paused for resize
+            if (!pausedForResize) {
+                vehicleSpawner.despawn();
+            }
         });
         vehicleDespawnTimer.start();
 
         
         // ---------------------- Vehicle Acceleration Timers ----------------------
         Timer vehicleAccelTimer = new Timer(1000, e -> {
+            // pause acceleration when paused for resize
+            if (pausedForResize) {
+                return;
+            }
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     if (vehicle.velocity < vehicle.topSpeed) {
@@ -51,6 +61,10 @@ class Panel extends JPanel {
         // ---------------------- Movement Timer ----------------------
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
+            if (pausedForResize) {
+                this.repaint();
+                return;
+            }
             if (trafficLight1.getLightState() == 2) {
                 stopLine1.setActive();
                 /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
@@ -137,6 +151,21 @@ class Panel extends JPanel {
 
     }
 
+    public void beginResizePause() {
+        if (!pausedForResize) {
+            pausedForResize = true;
+            trafficLightController.pause();
+        }
+        repaint();
+    }
+
+    public void endResizePause() {
+        if (pausedForResize) {
+            pausedForResize = false;
+            trafficLightController.resume();
+            repaint();
+        }
+    }
 
     private boolean shouldStopAtRed(Vehicle vehicle) {
 
@@ -257,6 +286,47 @@ class Panel extends JPanel {
 
         // release graphics copy
         g2d.dispose();
+
+        // prevent pause notice from looking weird 
+        if (pausedForResize) {
+            drawPauseOverlay((Graphics2D) g);
+        }
+    }
+
+    // draw pause overlay
+    private void drawPauseOverlay(Graphics2D g) {
+        Graphics2D overlay = (Graphics2D) g.create();
+        overlay.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // dim background
+        overlay.setColor(new Color(0, 0, 0, 105));
+        overlay.fillRect(0, 0, getWidth(), getHeight());
+
+        int cardWidth = Math.min(330, Math.max(230, getWidth() - 40));
+        int cardHeight = 116;
+        int cardX = (getWidth() - cardWidth) / 2;
+        int cardY = (getHeight() - cardHeight) / 2;
+
+        // draw pause card
+        overlay.setColor(new Color(24, 29, 36, 235));
+        overlay.fillRoundRect(cardX, cardY, cardWidth, cardHeight, 22, 22);
+        overlay.setColor(new Color(255, 255, 255, 210));
+        overlay.setStroke(new BasicStroke(2f));
+        overlay.drawRoundRect(cardX, cardY, cardWidth, cardHeight, 22, 22);
+
+        // draw pause symbol
+        int pauseX = cardX + 28;
+        int pauseY = cardY + 28;
+        overlay.setColor(Color.WHITE);
+        overlay.fillRoundRect(pauseX, pauseY, 12, 38, 4, 4);
+        overlay.fillRoundRect(pauseX + 22, pauseY, 12, 38, 4, 4);
+
+        overlay.setFont(getFont().deriveFont(Font.BOLD, 17f));
+        overlay.drawString("SIMULATION PAUSED", cardX + 80, cardY + 48);
+        overlay.setFont(getFont().deriveFont(Font.PLAIN, 13f));
+        overlay.setColor(new Color(220, 225, 230));
+        overlay.drawString("Window is being resized.", cardX + 80, cardY + 73);
+        overlay.dispose();
     }
 
 }

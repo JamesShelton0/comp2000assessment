@@ -9,6 +9,10 @@ public class TrafficLightController {
 
     private Timer timer;
     private int trafficPhase = 0;
+    // track active phase so resize doesn't reset it
+    private int remainingDelay;
+    private long timerStartedAt;
+    private boolean paused;
 
     private final int GREEN = 0;
     private final int YELLOW = 1;
@@ -48,7 +52,25 @@ public class TrafficLightController {
 
     public void start() {
         // System.out.println("TrafficLightController.start() called");
-        timer.start();
+        startTimer(GREEN_TIME);
+    }
+
+    // remember unused portion of current phase 
+    public void pause() {
+        if (!paused && timer.isRunning()) {
+            long elapsed = (System.nanoTime() - timerStartedAt) / 1_000_000L;
+            remainingDelay = Math.max(1, remainingDelay - (int) elapsed);
+            timer.stop();
+            paused = true;
+        }
+    }
+
+    // continue interrupted phase 
+    public void resume() {
+        if (paused) {
+            paused = false;
+            startTimer(remainingDelay);
+        }
     }
 
 
@@ -119,7 +141,9 @@ public class TrafficLightController {
 
 
     private void startTimer(int delay) {
-
+        // record countdown duration and start time 
+        remainingDelay = delay;
+        timerStartedAt = System.nanoTime();
         timer.setInitialDelay(delay);
         timer.restart();
     }

@@ -1,7 +1,12 @@
 import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Frame extends JFrame { 
     Panel panel;
+    // remember display dimensions so doesn't show pause on load 
+    private int lastWindowWidth;
+    private int lastWindowHeight;
 
     // propagate invalid setup info to app, where user can then see
     Frame(int width, int height) throws SimulationConfigurationException {
@@ -15,6 +20,28 @@ public class Frame extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        // record size before user actually changes it
+        lastWindowWidth = getWidth();
+        lastWindowHeight = getHeight();
+
+        // require window size to remain unchanged for Xms before resuming 
+        Timer resizeFinishedTimer = new Timer(500, e -> panel.endResizePause());
+        resizeFinishedTimer.setRepeats(false);
+
+        // pause simulation
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent event) {
+                // ignore any duplicate events
+                if (getWidth() == lastWindowWidth && getHeight() == lastWindowHeight) {
+                    return;
+                }
+                lastWindowWidth = getWidth();
+                lastWindowHeight = getHeight();
+                panel.beginResizePause();
+                resizeFinishedTimer.restart();
+            }
+        });
     }
 }
 
