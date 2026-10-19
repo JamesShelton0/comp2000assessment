@@ -1,7 +1,7 @@
 import javax.swing.JOptionPane; // used to show GUI error instead of crashing silently
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         try {
             new Frame(800, 800);
         } catch (SimulationConfigurationException exception) {

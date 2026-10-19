@@ -10,4 +10,8 @@ public class Start {
     public int getID(){
         return ID;
     }
+
+    public Point getStartPoint(){
+        return startPoint;
+    }
 }

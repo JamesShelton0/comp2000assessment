@@ -7,33 +7,41 @@ public class Graph {
     // setting up file reading
     BufferedReader br;
 
-    // arraylist of vertices - could be a stream
+    // arraylist of vertices, start points, and finish points - could be a stream
     ArrayList<Vertex> vertexArr;
+    ArrayList<Vertex> startArr;
+    ArrayList<Vertex> finishArr;
 
     // constructor
     public Graph() throws Exception{
+        // setting up the arrays
+        vertexArr = new ArrayList<>();
+        startArr = new ArrayList<>();
+        finishArr = new ArrayList<>();
         // add start vertices to graph
         String vertexDesc;
         Vertex vertex;
-        br = new BufferedReader(new FileReader("GraphStartVertices.txt"));
+        br = new BufferedReader(new FileReader("src/GraphStartVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createStartVertexFromFile(vertexDesc);
             vertexArr.add(vertex);
+            startArr.add(vertex);
         }
         // add turn vertices to graph
-        br = new BufferedReader(new FileReader("GraphTurnVertices.txt"));
+        br = new BufferedReader(new FileReader("src/GraphTurnVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createTurnVertexFromFile(vertexDesc);
             vertexArr.add(vertex);
         }
         // add finish vertices to graph
-        br = new BufferedReader(new FileReader("GraphFinishVertices.txt"));
+        br = new BufferedReader(new FileReader("src/GraphFinishVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createFinishVertexFromFile(vertexDesc);
             vertexArr.add(vertex);
+            finishArr.add(vertex);
         }
     }
 
@@ -95,9 +103,6 @@ public class Graph {
         int ID = Integer.parseInt(vertexDescStrings[0]);
         double x = Double.parseDouble(vertexDescStrings[2]);
         double y = Double.parseDouble(vertexDescStrings[3]);
-        for(int i = 4; i < vertexDescStrings.length; i++){
-            adjVertices.add(Integer.parseInt(vertexDescStrings[i]));
-        }
         finish = new Finish(new Point(x, y), ID);
         vertex = new Vertex(finish, adjVertices);
         return vertex;
@@ -117,5 +122,17 @@ public class Graph {
             }
         }
         return null;
+    }
+
+    public ArrayList<Vertex> getVertexArr(){
+        return vertexArr;
+    }
+
+    public ArrayList<Vertex> getStartArr(){
+        return startArr;
+    }
+
+    public ArrayList<Vertex> getFinishArr(){
+        return finishArr;
     }
 }

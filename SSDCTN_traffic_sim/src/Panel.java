@@ -22,9 +22,11 @@ class Panel extends JPanel {
     //Explosion explosion;
     TrafficLightController trafficLightController;
     BusStop busStop;
+    Graph g;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
-    Panel(int w, int h) throws SimulationConfigurationException {
+    Panel(int w, int h) throws SimulationConfigurationException, Exception {
+        g = new Graph();
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
