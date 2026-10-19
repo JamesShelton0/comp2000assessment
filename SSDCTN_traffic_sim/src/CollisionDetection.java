@@ -20,53 +20,6 @@ public class CollisionDetection {
         return false;
     }
 
-    static boolean checkWithinRadius(Vehicle v, StopLine s){
-        if(s.getEdge().pointIsOnFlatEdge(v.hitBox.getPointAhead(), v.getDirection())){
-            return true;
-        }
-        return false;
-    }
-
-    public static ArrayList<Vehicle> checkVehicleCollisions(List<EntityStore<Vehicle>> vehicleArr){
-        ArrayList<Vehicle> comparisonList = new ArrayList<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for (Vehicle v : sublist.getEntities()) {
-                comparisonList.add(v);
-            }
-        }
-
-        ArrayList<Vehicle> stopArr = new ArrayList<>();
-        for(int i = 0; i < comparisonList.size() - 1; i++){
-            for(int j = i + 1; j < comparisonList.size(); j++){
-                Vehicle first = comparisonList.get(i);
-                Vehicle second = comparisonList.get(j);
-
-                // only rear vehicle in a shared lane recognises the vehicle ahead
-                if (isFollowingTooClosely(first, second)) {
-                    stopArr.add(first);
-                }
-                if (isFollowingTooClosely(second, first)) {
-                    stopArr.add(second);
-                }
-            }
-        }
-        return stopArr;
-    }
-
-    // stream implementation of checkVehicleCollisions()
-    public static ArrayList<Vehicle> checkVehicleCollisionsStream(List<EntityStore<Vehicle>> vehicleArr) {
-        // flat maps 2D vehicle array into a single list for easy comparison
-        List<Vehicle> allVehicles = vehicleArr.stream()
-                                             .flatMap(sublist -> sublist.stream())
-                                             .collect(Collectors.toList());
-
-        // need to implement isFollowingTooClosely still
-        return allVehicles.stream()
-                          .filter(follower -> allVehicles.stream()
-                                                         .anyMatch(v -> v != follower && isFollowingTooClosely(follower, v)))
-                          .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public static Map<Vehicle, Double> calculateAllowedMovements(
             List<EntityStore<Vehicle>> vehicleArr,
             Map<Vehicle, Double> desiredMovements) {
@@ -83,6 +36,8 @@ public class CollisionDetection {
 
         // each store is one directional lane, so only the nearest leader limits a follower
         for (EntityStore<Vehicle> sublist : vehicleArr) {
+            //Stream<Vehicle> lane = sublist.stream().filter((first, second) -> Double.compare(getTravelProgress(second), getTravelProgress(first)));
+
             ArrayList<Vehicle> lane = new ArrayList<>(sublist.getEntities());
             lane.sort((first, second) -> Double.compare(
                 getTravelProgress(second),
@@ -134,19 +89,6 @@ public class CollisionDetection {
             + vehicle.getPosition().getY() * Math.sin(directionRadians);
     }
 
-    private static boolean isFollowingTooClosely(Vehicle follower, Vehicle leader) {
-        // ignore vehicles that are behind or in another lane or travelling in another direction
-        double forwardGap = getForwardGapInSameLane(follower, leader);
-        if (Double.isNaN(forwardGap)) {
-            return false;
-        }
-
-        // prevents overlap from fast vehicles
-        double safeFollowingDistance = getSafeFollowingDistance(follower, leader);
-        double leaderMovement = leader.isMovementBlocked() ? 0 : leader.velocity;
-        double closingDistance = Math.max(0, follower.velocity - leaderMovement);
-        return forwardGap <= safeFollowingDistance + closingDistance;
-    }
 
     private static double getForwardGapInSameLane(Vehicle follower, Vehicle leader) {
         if (Math.round(follower.getDirection()) != Math.round(leader.getDirection())) {
@@ -177,17 +119,5 @@ public class CollisionDetection {
         return follower.getHitBox().getForwardExtent()
             + leader.getHitBox().getForwardExtent()
             + 2;
-    }
-
-    public static ArrayList<Vehicle> checkVehicleAtStopLine(ArrayList<StopLine> stopLineArr, List<EntityStore<Vehicle>> vehicleArr){
-        ArrayList<Vehicle> stopArr = new ArrayList<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for(int i = 0; i < sublist.getEntities().size(); i++){
-                for(int j = 0; j < sublist.getEntities().size(); j++){
-
-                }
-            }
-        }
-        return stopArr;
     }
 }
