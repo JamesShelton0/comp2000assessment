@@ -61,7 +61,10 @@ public class CollisionDetection {
                                              .collect(Collectors.toList());
 
         // need to implement isFollowingTooClosely still
-        return allVehicles.stream().collect(Collectors.toCollection(ArrayList::new));
+        return allVehicles.stream()
+                          .filter(follower -> allVehicles.stream()
+                                                         .anyMatch(v -> v != follower && isFollowingTooClosely(follower, v)))
+                          .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Map<Vehicle, Double> calculateAllowedMovements(
