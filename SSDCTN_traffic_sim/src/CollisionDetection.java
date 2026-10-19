@@ -9,12 +9,11 @@ public class CollisionDetection {
 
     // checks if one object is infront of the other and could face a collision 
     static boolean checkWithinRadius(Vehicle a, Vehicle b){
-        try{
-            if(a.getHitBox().detectHitboxOverlap(b.getHitBox())){
+        try {
+            if (a.getHitBox().detectHitboxOverlap(b.getHitBox())) {
                 return true;
             }
-        }
-        catch(NullPointerException e){
+        } catch(NullPointerException e){
             System.out.println("EXCEPTION: One of the vehicle objects has a null hitbox");
         }
         return false;
@@ -23,26 +22,22 @@ public class CollisionDetection {
     public static Map<Vehicle, Double> calculateAllowedMovements(
             List<EntityStore<Vehicle>> vehicleArr,
             Map<Vehicle, Double> desiredMovements) {
+
         // start with relevant limits
-        Map<Vehicle, Double> allowedMovements = new IdentityHashMap<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for (Vehicle vehicle : sublist.getEntities()) {
-                allowedMovements.put(
-                    vehicle,
-                    Math.max(0, desiredMovements.getOrDefault(vehicle, vehicle.velocity))
-                );
-            }
-        }
+        Map<Vehicle, Double> allowedMovements = vehicleArr.stream()
+                            .flatMap(sublist -> sublist.stream())
+                            .collect(Collectors.toMap(                                      // Using four parameter toMap()
+                                v -> v,                                                         // 1. key
+                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)), // 2. value
+                                (a, b) -> a,                                                    // 3. keep existing value if duplicate key
+                                IdentityHashMap::new)                                           // 4. specify map type
+                            );
 
         // each store is one directional lane, so only the nearest leader limits a follower
         for (EntityStore<Vehicle> sublist : vehicleArr) {
-            //Stream<Vehicle> lane = sublist.stream().filter((first, second) -> Double.compare(getTravelProgress(second), getTravelProgress(first)));
-
-            ArrayList<Vehicle> lane = new ArrayList<>(sublist.getEntities());
-            lane.sort((first, second) -> Double.compare(
-                getTravelProgress(second),
-                getTravelProgress(first)
-            ));
+            ArrayList<Vehicle> lane = sublist.stream()
+                                          .sorted((first, second) -> Double.compare(getTravelProgress(second), getTravelProgress(first)))
+                                          .collect(Collectors.toCollection(ArrayList::new));
 
             // front-to-back order passes the lead vehicle's movement through the whole queue
             for (int followerIndex = 1; followerIndex < lane.size(); followerIndex++) {
