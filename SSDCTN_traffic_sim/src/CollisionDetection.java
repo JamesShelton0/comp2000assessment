@@ -56,7 +56,7 @@ public class CollisionDetection {
             }
         }
 
-        // restore collision checks between different spawn-point stores, which the lane-only Map pass omitted
+        // restore collision checks between vehicles from different spawn-points.
         for (int firstStoreIndex = 0; firstStoreIndex < vehicleArr.size() - 1; firstStoreIndex++) {
             EntityStore<Vehicle> firstStore = vehicleArr.get(firstStoreIndex);
             for (int secondStoreIndex = firstStoreIndex + 1;
@@ -73,6 +73,20 @@ public class CollisionDetection {
                 }
             }
         }
+
+        // ---------- Testing new implementation ----------
+        // flat maps 2D vehicle array into a single list for easy comparison
+        // List<Vehicle> allVehicles = vehicleArr.stream()
+        //                                       .flatMap(sublist -> sublist.stream())
+        //                                       .collect(Collectors.toList());
+        // for (Vehicle first : allVehicles) {
+        //     for (Vehicle second : allVehicles) {
+        //         if ((first != second) && (checkWithinRadius(first, second))) {
+        //             // allowedMovements.put(second, second.velocity);
+        //             allowedMovements.put(first, 0.0);   // only vehicle doing the t-boning stops rather than both.
+        //         }
+        //     }
+        // }
 
         return allowedMovements;
     }
