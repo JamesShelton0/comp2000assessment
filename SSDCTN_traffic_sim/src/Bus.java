@@ -17,6 +17,7 @@ public class Bus extends Vehicle {
         super.position = p;
         super.width = width;
         super.height = height;
+        super.direction = direction;
         super.hitBox = new HitBox(p, direction, width, height);
 
         super.accelerationRate = 0.5;

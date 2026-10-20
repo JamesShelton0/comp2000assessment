@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 public class Graph {
@@ -11,9 +13,10 @@ public class Graph {
     ArrayList<Vertex> vertexArr;
     ArrayList<Vertex> startArr;
     ArrayList<Vertex> finishArr;
+    HashMap<Vertex, Vertex> finishPointUnreachableByStartPoint;
 
     // constructor
-    public Graph() throws Exception{
+    public Graph() throws IOException{
         // setting up the arrays
         vertexArr = new ArrayList<>();
         startArr = new ArrayList<>();
@@ -43,6 +46,16 @@ public class Graph {
             vertexArr.add(vertex);
             finishArr.add(vertex);
         }
+
+        finishPointUnreachableByStartPoint = mapFinishToStart();
+    }
+
+    private HashMap<Vertex, Vertex> mapFinishToStart(){
+        HashMap<Vertex, Vertex> map = new HashMap<>();
+        for(int i = 0; i < startArr.size(); i++){
+            map.put(startArr.get(i), finishArr.get(i));
+        }
+        return map;
     }
 
     //create start vertices

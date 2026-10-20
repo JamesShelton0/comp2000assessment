@@ -41,6 +41,11 @@ public abstract class Vehicle extends JComponent {
         moveForward = new MoveForward(this);
     }
 
+    // creating the vehicles route
+    public void createRoute(int startID, int finishID, Graph g){
+        vehicleRoute = BreadthFirstSearch.breadthFirstSearch(startID, finishID, g);
+    }
+
     // setting states
     public void setState(VehicleState state){
         this.state = state;
