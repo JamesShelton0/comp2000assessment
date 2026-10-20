@@ -4,7 +4,7 @@ public class Frame extends JFrame {
     Panel panel;
 
     // propagate invalid setup info to app, where user can then see
-    Frame(int width, int height) throws SimulationConfigurationException {
+    Frame(int width, int height) throws SimulationConfigurationException, Exception {
         panel = new Panel(width, height);
         this.setTitle("Traffic Sim");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

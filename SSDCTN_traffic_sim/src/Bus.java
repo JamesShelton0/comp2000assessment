@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
+
 public class Bus extends Vehicle {
 
     private boolean stoppedAtBusStop = false;  //if the bus is stopped atm
@@ -16,6 +17,7 @@ public class Bus extends Vehicle {
         super.position = p;
         super.width = width;
         super.height = height;
+        super.direction = direction;
         super.hitBox = new HitBox(p, direction, width, height);
 
         super.accelerationRate = 0.5;
@@ -48,7 +50,7 @@ public class Bus extends Vehicle {
             10,
             10
         );
-        g.setColor(Color.YELLOW);
+        g.setColor(bodyColour);   
         g.fill(busBody);
 
         // Front windscreen

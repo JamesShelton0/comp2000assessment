@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Motorbike extends Vehicle {
 
-    Motorbike(Point p, double width, double height) {
+    Motorbike(Point p, double width, double height, double direction) {
         super.accelerationRate = 0.8;
         super.decelerationRate = -5;
         super.topSpeed = 10;
@@ -10,6 +10,7 @@ public class Motorbike extends Vehicle {
         super.position = p;
         super.width = width;
         super.height = height;
+        super.direction = direction;
 
         super.hitBox = new HitBox(position, super.direction, width*2, height*2.1); // some magic numbers to extend hitbox over the wheels
     }
@@ -31,12 +32,20 @@ public class Motorbike extends Vehicle {
 
         // wheels
         g.setColor(Color.BLACK);
-        g.fillOval((int) bikeX + 15, (int) bikeY + 5, (int) width, (int) (height*0.66667));
-        g.fillOval((int) bikeX + 15, (int) bikeY + 55, (int) width, (int) (height*0.66667));
+        g.fillRoundRect((int) bikeX + 18, (int) bikeY + 5, (int) (width*0.7), (int) (height*0.7), (int) (width*0.7), (int) (width*0.7));
+        g.fillRoundRect((int) bikeX + 18, (int) bikeY + 55, (int) (width*0.7), (int) (height*0.7), (int) (width*0.7), (int) (width*0.7));
 
         // body
-        g.setColor(Color.RED);
+        g.setColor(bodyColour);  
         g.fillRoundRect((int) bikeX + 12, (int) bikeY + 22, (int) (width*1.3), (int) (height*1.3333), (int) (width*0.4), (int) (height*0.26667));
+
+        // helmet
+        g.setColor(Color.BLACK);
+        g.fillOval((int) bikeX + 16, (int) bikeY + 30, (int) (width*0.9), (int) (width*0.9));
+
+        // visor
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRoundRect((int) bikeX + 20, (int) bikeY + 33, (int) (width*0.5), (int) (height*0.15), 4, 4);
 
         // seat
         g.setColor(Color.BLACK);

@@ -4,10 +4,11 @@ import java.awt.geom.Rectangle2D;
 public class Truck extends Vehicle {        
     private boolean hasSunroof;
 
-    public Truck(Point p, double w, double h) {
+    public Truck(Point p, double w, double h, double direction) {
         super.position = p;
         super.width = w;
         super.height = h;
+        super.direction = direction;
         super.accelerationRate = 0.4;
         super.decelerationRate = -1;
         super.topSpeed = 7;
@@ -37,7 +38,7 @@ public class Truck extends Vehicle {
             height / 5 * 2
         );
 
-        g.setColor(Color.RED);
+        g.setColor(Color.LIGHT_GRAY);   
         g.fill(truckCabin);
 
         // Truck load
@@ -48,7 +49,7 @@ public class Truck extends Vehicle {
             height / 5 * 3
         );
 
-        g.setColor(Color.BLUE);
+        g.setColor(bodyColour);
         g.fill(truckLoad);
 
         // Front windscreen

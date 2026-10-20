@@ -37,7 +37,7 @@ public class PotholeTest {
 
     private static Car createCar(double x, double y, float direction) {
         // initialise position and hitbox as live
-        Car car = new Car(new Point(x, y), 30, 50);
+        Car car = new Car(new Point(x, y), 30, 50, direction);
         car.setPosition(x, y);
         car.setDirection(direction);
         car.updateHitBox();

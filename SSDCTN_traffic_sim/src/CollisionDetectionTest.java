@@ -50,7 +50,7 @@ public class CollisionDetectionTest {
     private static void testMotorbikeHitboxBufferIsRespected() {
         // motorbikes use a larger hitbox than base dimensions 
         Car rear = createCar(100, 100, 90);
-        Motorbike front = new Motorbike(new Point(100, 160), 20, 30);
+        Motorbike front = new Motorbike(new Point(100, 160), 20, 30, 90);
         front.setPosition(100, 160);
         front.setDirection(90);
         front.updateHitBox();
@@ -76,7 +76,7 @@ public class CollisionDetectionTest {
 
     private static Car createCar(double x, double y, float direction) {
         // initialise both component and hitbox pos for each vehicle 
-        Car car = new Car(new Point(x, y), 30, 50);
+        Car car = new Car(new Point(x, y), 30, 50, direction);
         car.setPosition(x, y);
         car.setDirection(direction);
         car.updateHitBox();

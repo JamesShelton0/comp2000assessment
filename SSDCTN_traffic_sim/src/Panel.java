@@ -12,18 +12,21 @@ class Panel extends JPanel {
 
     private int width, height;
     VehicleSpawner vehicleSpawner;
-    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight;
+    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight; // upper road
+    Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
     SpeedCamera speedCamera;
-    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4;
+    TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
-    Explosion explosion;
+    //Explosion explosion;
     TrafficLightController trafficLightController;
     BusStop busStop;
+    Graph g;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
-    Panel(int w, int h) throws SimulationConfigurationException {
+    Panel(int w, int h) throws SimulationConfigurationException, Exception {
+        g = new Graph();
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
@@ -157,12 +160,16 @@ class Panel extends JPanel {
 
         
         // ---------------------- Static objects ----------------------
-        roadN = new Road(width*0.5, height*0.18, width*0.25, height*0.4, 1);
-        roadE = new Road(width*0.82, height*0.5, width*0.4, height*0.25, 2);
-        roadS = new Road(width*0.5, height*0.82, width*0.25, height*0.4, 1);
-        roadW = new Road(width*0.18, height*0.5, width*0.4, height*0.25, 2);
-        intersection = new Road(width*0.5, height*0.5, width*0.25, height*0.25, 0);
-        roadOnFarRight = new Road(width*1.0, height*0.18, width*0.25, height*0.4, 1);
+        roadN = new Road(width*0.5, height*0.0375, width*0.25, height*0.175, 1);  
+        roadE = new Road(width*0.82, height*0.25, width*0.4, height*0.25, 2);
+        roadS = new Road(width*0.5, height*0.6975, width*0.25, height*0.645, 1);  
+        roadW = new Road(width*0.18, height*0.25, width*0.4, height*0.25, 2);
+        intersection = new Road(width*0.5, height*0.25, width*0.25, height*0.25, 0);
+
+        roadE2 = new Road(width*0.82, height*0.75, width*0.4, height*0.25, 2);
+        roadS2 = new Road(width*0.5, height*0.9625, width*0.25, height*0.175, 1); 
+        roadW2 = new Road(width*0.18, height*0.75, width*0.4, height*0.25, 2);
+        intersection2 = new Road(width*0.5, height*0.75, width*0.25, height*0.25, 0);
 
         this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
         this.stopLine2 = new StopLine(null, null, 90.0);
@@ -173,31 +180,39 @@ class Panel extends JPanel {
         stopLineArr.add(stopLine3);
         stopLineArr.add(stopLine4);
 
-        this.trafficLight1 = new TrafficLight(250, 210); // top left
-        this.trafficLight2 = new TrafficLight(500, 210); // top right
-        this.trafficLight3 = new TrafficLight(250, 500); // bottom left
-        this.trafficLight4 = new TrafficLight(500, 500); // bottom right
+        this.trafficLight1 = new TrafficLight(250, 10);  // top left
+        this.trafficLight2 = new TrafficLight(500, 10);  // top right
+        this.trafficLight3 = new TrafficLight(250, 305); // bottom left
+        this.trafficLight4 = new TrafficLight(500, 305); // bottom right
+        this.trafficLight5 = new TrafficLight(250, 405);  // top left
+        this.trafficLight6 = new TrafficLight(500, 405);  // top right
+        this.trafficLight7 = new TrafficLight(250, 700); // bottom left
+        this.trafficLight8 = new TrafficLight(500, 700); // bottom right
         trafficLightController = new TrafficLightController(
            trafficLight1,
            trafficLight2,
            trafficLight3,
-           trafficLight4
+           trafficLight4,
+           trafficLight5,
+           trafficLight6,
+           trafficLight7,
+           trafficLight8
         );
         trafficLightController.start();
        
-        this.busStop = new BusStop(260, 30);//top left bus stop
+        this.busStop = new BusStop(150, 310);//bottom left bus stop
 
         // place pothole halfway along road
         pothole = new Pothole(
             width * 0.57,
-            height * 0.18,
+            height * 0.6,
             INITIAL_POTHOLE_SIZE,
             INITIAL_POTHOLE_SIZE,
             VEHICLES_BEFORE_POTHOLE,
             POTHOLE_GROWTH_CHANCE
         );
-        speedCamera = new SpeedCamera(610, 240);
-        explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
+        speedCamera = new SpeedCamera(610, 320);
+        //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
         
 
@@ -213,8 +228,8 @@ class Panel extends JPanel {
 
         int direction = (int) Math.round(vehicle.getDirection());
 
-        double topIntersection = height * 0.375;
-        double bottomIntersection = height * 0.625;
+        double topIntersection = height * 0.125;
+        double bottomIntersection = height * 0.375;
         double leftIntersection = width * 0.375;
         double rightIntersection = width * 0.625;
 
@@ -269,15 +284,23 @@ class Panel extends JPanel {
         roadE.draw(g2d);
         roadN.draw(g2d);
         intersection.draw(g2d);
-        roadOnFarRight.draw(g2d);
+        roadW2.draw(g2d);
+        roadS2.draw(g2d);
+        roadE2.draw(g2d);
+        intersection2.draw(g2d);
         pothole.draw(g2d);
         speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
         trafficLight4.draw(g2d);
-        explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
+        trafficLight5.draw(g2d);
+        trafficLight6.draw(g2d);
+        trafficLight7.draw(g2d);
+        trafficLight8.draw(g2d);
+       //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
+        
 
         for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
             for (Vehicle vehicle : sublist.getEntities()) {
@@ -287,6 +310,14 @@ class Panel extends JPanel {
 
         g2d.dispose();
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 
 }

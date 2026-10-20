@@ -1,0 +1,2 @@
+ID, type, x, y, radius, direction, start angle, adjacent vertices
+2,Turn,100,100,90,left,90,3

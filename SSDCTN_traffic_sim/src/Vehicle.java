@@ -1,7 +1,17 @@
 import javax.swing.*;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Vehicle extends JComponent {
+    // states
+    VehicleState turnLeft;
+    VehicleState turnRight;
+    VehicleState moveForward;
+
+    VehicleState state;
+ 
     // size and position
     protected double width, height;
     protected double x, y;
@@ -14,11 +24,59 @@ public abstract class Vehicle extends JComponent {
     protected double accelerationRate, decelerationRate;
     protected double direction;
     private boolean movementBlocked;
+    
 
     // aesthetics
     protected int pollutionRate;
     protected boolean headLightsOn;
     protected boolean brakeLightsOn;
+
+    // arraylist of turns to dictate the path of the vehicle
+    ArrayList<Vertex> vehicleRoute;
+
+    // constructor
+    public Vehicle(){
+        turnLeft = new TurnLeft(this);
+        turnRight = new TurnRight(this);
+        moveForward = new MoveForward(this);
+    }
+
+    // creating the vehicles route
+    public void createRoute(int startID, int finishID, Graph g){
+        vehicleRoute = BreadthFirstSearch.breadthFirstSearch(startID, finishID, g);
+    }
+
+    // setting states
+    public void setState(VehicleState state){
+        this.state = state;
+    }
+
+    // vehicle colours
+    
+    private static final Random RAND = new Random();
+
+    private static final Color[] SELECT = {
+        Color.RED, 
+        Color.YELLOW, 
+        Color.BLUE,
+        Color.BLACK,
+        Color.PINK,
+        Color.GREEN,
+        Color.ORANGE,
+        Color.WHITE,
+        Color.GRAY,
+        Color.DARK_GRAY,
+        new Color(0, 70, 160),      // SUBARU WR blue :)
+        new Color(153, 76, 0),      // Colour for Matthew
+        new Color(0, 153, 0),   // British Racing Green
+        new Color(229, 204,255),   // Porsche Frozenberrymetallic (Y08)
+    };
+    protected Color bodyColour = SELECT[RAND.nextInt(SELECT.length)];
+
+    public Color getBodyColour() {
+        return bodyColour;
+    }
+
 
     // draw() is implemented in specific vehicle subclasses.
     // it contains the actual shapes and fills used to draw the object
@@ -66,11 +124,6 @@ public abstract class Vehicle extends JComponent {
         if (velocity < 0) velocity = 0;
     }
 
-    void turn(int degrees, int radius) {
-        // turn blinker on depending on degrees
-    }
-
-
 
     void setVelocity(double velocity){
         this.velocity = velocity;
@@ -105,5 +158,17 @@ public abstract class Vehicle extends JComponent {
 
     public Point getPosition() {
         return position;
+    }
+
+    public VehicleState getMoveForwadState(){
+        return moveForward;
+    }
+
+    public VehicleState getTurnLeftState(){
+        return turnLeft;
+    }
+
+    public VehicleState getTurnRightState(){
+        return turnRight;
     }
 }

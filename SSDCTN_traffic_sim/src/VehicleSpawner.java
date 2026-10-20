@@ -8,6 +8,8 @@ public class VehicleSpawner {
     private final Point EAST_SP;
     private final Point SOUTH_SP;
     private final Point WEST_SP;
+    private final Point EASTTOO_SP;
+    private final Point WESTTOO_SP;
     private final Point TEST_SP;
 
     private final double NORTH = 270;
@@ -30,7 +32,7 @@ public class VehicleSpawner {
 
     // now uses EntityStore to reject unrelated object types at compile time (generics yay!)
     private List<EntityStore<Vehicle>> activeVehicles;
-    private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn;
+    private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn, eastTooSpawn, westTooSpawn;
 
     VehicleSpawner(int w, int h, int spawnChance) throws SimulationConfigurationException {
         // validate at startup so bad settings create error
@@ -45,9 +47,11 @@ public class VehicleSpawner {
         this.spawnChance = spawnChance;
         SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
         NORTH_SP = new Point(width*0.57, 0-SPAWN_BUFFER);
-        EAST_SP = new Point(width+SPAWN_BUFFER, height*0.57);
+        EAST_SP = new Point(width+SPAWN_BUFFER, height*0.32);
         SOUTH_SP = new Point(width*0.43, height+SPAWN_BUFFER);
-        WEST_SP = new Point(0-SPAWN_BUFFER, height*0.43);
+        WEST_SP = new Point(0-SPAWN_BUFFER, height*0.18);
+        EASTTOO_SP = new Point(width+SPAWN_BUFFER, height*0.82);
+        WESTTOO_SP = new Point(0-SPAWN_BUFFER, height*0.68);
         TEST_SP = new Point(0,0);
         assignDimensions();
         rand = new Random();
@@ -56,12 +60,16 @@ public class VehicleSpawner {
         eastSpawn = new EntityStore<>();
         southSpawn = new EntityStore<>();
         westSpawn = new EntityStore<>();
+        eastTooSpawn = new EntityStore<>();
+        westTooSpawn = new EntityStore<>();
 
         activeVehicles = new ArrayList<>();
         activeVehicles.add(northSpawn);
         activeVehicles.add(eastSpawn);
         activeVehicles.add(southSpawn);
         activeVehicles.add(westSpawn);
+        activeVehicles.add(eastTooSpawn);
+        activeVehicles.add(westTooSpawn);
     }
 
     public void spawn() {
@@ -86,29 +94,29 @@ public class VehicleSpawner {
                     break;
                 
                 case 1: // CAR
-                    Car car = new Car(NORTH_SP, CAR_W, CAR_H);
+                    Car car = new Car(NORTH_SP, CAR_W, CAR_H, SOUTH);
                     car.setPosition(NORTH_SP);
                     car.setDirection((float) SOUTH);
                     activeVehicles.get(0).add(car);
                     break;
 
-                case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(NORTH_SP);
-                    // cyclist.setDirection((float) SOUTH);
-                    // activeVehicles.get(0).add(cyclist);
+                case 2:  //CYCLIST
+                    Cyclist cyclist = new Cyclist(NORTH_SP, CYCLIST_W, CYCLIST_H, SOUTH);  // arbitrary arguments
+                    cyclist.setPosition(NORTH_SP);
+                    cyclist.setDirection((float) SOUTH);
+                    activeVehicles.get(0).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
                     // construct at the north spawn so the initial hitbox matches its position
-                    Motorbike motorbike = new Motorbike(NORTH_SP, MOTORBIKE_W, MOTORBIKE_H);
+                    Motorbike motorbike = new Motorbike(NORTH_SP, MOTORBIKE_W, MOTORBIKE_H, SOUTH);
                     motorbike.setPosition(NORTH_SP);
                     motorbike.setDirection((float) SOUTH);
                     activeVehicles.get(0).add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(NORTH_SP, TRUCK_W, TRUCK_H);
+                    Truck truck = new Truck(NORTH_SP, TRUCK_W, TRUCK_H, SOUTH);
                     truck.setPosition(NORTH_SP);
                     truck.setDirection((float) SOUTH);
                     activeVehicles.get(0).add(truck);
@@ -138,28 +146,28 @@ public class VehicleSpawner {
                     break;
                 
                 case 1: // CAR
-                    Car car = new Car(EAST_SP, CAR_W, CAR_H);
+                    Car car = new Car(EAST_SP, CAR_W, CAR_H, WEST);
                     car.setPosition(EAST_SP);
                     car.setDirection((float) WEST);
                     activeVehicles.get(1).add(car);
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(EAST_SP);
-                    // cyclist.setDirection((float) WEST);
-                    // activeVehicles.get(1).add(cyclist);
+                    Cyclist cyclist = new Cyclist(EAST_SP, CYCLIST_W, CYCLIST_H, WEST);  // arbitrary arguments
+                    cyclist.setPosition(EAST_SP);
+                    cyclist.setDirection((float) WEST);
+                    activeVehicles.get(1).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(EAST_SP, MOTORBIKE_W, MOTORBIKE_H);
+                    Motorbike motorbike = new Motorbike(EAST_SP, MOTORBIKE_W, MOTORBIKE_H, WEST);
                     motorbike.setPosition(EAST_SP);
                     motorbike.setDirection((float) WEST);
                     activeVehicles.get(1).add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(EAST_SP, TRUCK_W, TRUCK_H);
+                    Truck truck = new Truck(EAST_SP, TRUCK_W, TRUCK_H, WEST);
                     truck.setPosition(EAST_SP);
                     truck.setDirection((float) WEST);
                     activeVehicles.get(1).add(truck);
@@ -189,28 +197,28 @@ public class VehicleSpawner {
                     break;
                 
                 case 1: // CAR
-                    Car car = new Car(SOUTH_SP, CAR_W, CAR_H);
+                    Car car = new Car(SOUTH_SP, CAR_W, CAR_H, NORTH);
                     car.setPosition(SOUTH_SP);
                     car.setDirection((float) NORTH);
                     activeVehicles.get(2).add(car);
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(SOUTH_SP);
-                    // cyclist.setDirection((float) NORTH);
-                    // activeVehicles.get(2).add(cyclist);
+                    Cyclist cyclist = new Cyclist(SOUTH_SP, CYCLIST_W, CYCLIST_H, NORTH);
+                    cyclist.setPosition(SOUTH_SP);
+                    cyclist.setDirection((float) NORTH);
+                    activeVehicles.get(2).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(SOUTH_SP, MOTORBIKE_W, MOTORBIKE_H);
+                    Motorbike motorbike = new Motorbike(SOUTH_SP, MOTORBIKE_W, MOTORBIKE_H, NORTH);
                     motorbike.setPosition(SOUTH_SP);
                     motorbike.setDirection((float) NORTH);
                     activeVehicles.get(2).add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(SOUTH_SP, TRUCK_W, TRUCK_H);
+                    Truck truck = new Truck(SOUTH_SP, TRUCK_W, TRUCK_H, NORTH);
                     truck.setPosition(SOUTH_SP);
                     truck.setDirection((float) NORTH);
                     activeVehicles.get(2).add(truck);
@@ -240,40 +248,110 @@ public class VehicleSpawner {
                     break;
                 
                 case 1: // CAR
-                    Car car = new Car(WEST_SP, CAR_W, CAR_H);
+                    Car car = new Car(WEST_SP, CAR_W, CAR_H, EAST);
                     car.setPosition(WEST_SP);
                     car.setDirection((float) EAST);
                     activeVehicles.get(3).add(car);
                     break;
 
                 case 2: // CYCLIST
-                    // Cyclist cyclist = new Cyclist(CYCLIST_W, CYCLIST_H);  // arbitrary arguments
-                    // cyclist.setPosition(WEST_SP);
-                    // cyclist.setDirection((float) EAST);
-                    // activeVehicles.get(3).add(cyclist);
+                    Cyclist cyclist = new Cyclist(WEST_SP, CYCLIST_W, CYCLIST_H, EAST);
+                    cyclist.setPosition(WEST_SP);
+                    cyclist.setDirection((float) EAST);
+                    activeVehicles.get(3).add(cyclist);
                     break;
                 
                 case 3: // MOTORBIKE
-                    Motorbike motorbike = new Motorbike(WEST_SP,  MOTORBIKE_W, MOTORBIKE_H);
+                    Motorbike motorbike = new Motorbike(WEST_SP,  MOTORBIKE_W, MOTORBIKE_H, EAST);
                     motorbike.setPosition(WEST_SP);
                     motorbike.setDirection((float) EAST);
                     activeVehicles.get(3).add(motorbike);
                     break;
 
                 case 4: // TRUCK
-                    Truck truck = new Truck(WEST_SP, TRUCK_W, TRUCK_H);
+                    Truck truck = new Truck(WEST_SP, TRUCK_W, TRUCK_H, EAST);
                     truck.setPosition(WEST_SP);
                     truck.setDirection((float) EAST);
                     activeVehicles.get(3).add(truck);
                     break;
                 default:
             }
+            switch (vehicleType) {
+                case 0: // BUS
+                    Bus bus = new Bus(WESTTOO_SP, BUS_W, BUS_H, EAST);
+                    bus.setPosition(WESTTOO_SP);
+                    bus.setDirection((float) EAST);
+                    activeVehicles.get(5).add(bus);
+                    break;
+                
+                case 1: // CAR
+                    Car car = new Car(WESTTOO_SP, CAR_W, CAR_H, EAST);
+                    car.setPosition(WESTTOO_SP);
+                    car.setDirection((float) EAST);
+                    activeVehicles.get(5).add(car);
+                    break;
+
+                case 2: // CYCLIST
+                    Cyclist cyclist = new Cyclist(WESTTOO_SP, CYCLIST_W, CYCLIST_H, EAST);
+                    cyclist.setPosition(WESTTOO_SP);
+                    cyclist.setDirection((float) EAST);
+                    activeVehicles.get(5).add(cyclist);
+                    break;
+                
+                case 3: // MOTORBIKE
+                    Motorbike motorbike = new Motorbike(WESTTOO_SP,  MOTORBIKE_W, MOTORBIKE_H, EAST);
+                    motorbike.setPosition(WESTTOO_SP);
+                    motorbike.setDirection((float) EAST);
+                    activeVehicles.get(5).add(motorbike);
+                    break;
+
+                case 4: // TRUCK
+                    Truck truck = new Truck(WESTTOO_SP, TRUCK_W, TRUCK_H, EAST);
+                    truck.setPosition(WESTTOO_SP);
+                    truck.setDirection((float) EAST);
+                    activeVehicles.get(5).add(truck);
+                    break;
+                default:
+            }
+
+            switch (vehicleType) {
+                case 0: // BUS
+                    Bus bus = new Bus(EASTTOO_SP, BUS_W, BUS_H, WEST);
+                    bus.setPosition(EASTTOO_SP);
+                    bus.setDirection((float) WEST);
+                    activeVehicles.get(5).add(bus);
+                    break;
+
+                case 1: // CAR
+                    Car car = new Car(EASTTOO_SP, CAR_W, CAR_H, WEST);
+                    car.setPosition(EASTTOO_SP);
+                    car.setDirection((float) WEST);
+                    activeVehicles.get(5).add(car);
+                    break;
+
+                case 2: // CYCLIST
+                    Cyclist cyclist = new Cyclist(EASTTOO_SP, CYCLIST_W, CYCLIST_H, WEST);
+                    cyclist.setPosition(EASTTOO_SP);
+                    cyclist.setDirection((float) WEST);
+                    activeVehicles.get(5).add(cyclist);
+                    break;
+
+                case 3: // MOTORBIKE
+                    Motorbike motorbike = new Motorbike(EASTTOO_SP,  MOTORBIKE_W, MOTORBIKE_H, WEST);
+                    motorbike.setPosition(EASTTOO_SP);
+                    motorbike.setDirection((float) WEST);
+                    activeVehicles.get(5).add(motorbike);
+                    break;
+
+                case 4: // TRUCK
+                    Truck truck = new Truck(EASTTOO_SP, TRUCK_W, TRUCK_H, WEST);
+                    truck.setPosition(EASTTOO_SP);
+                    truck.setDirection((float) WEST);
+                    activeVehicles.get(5).add(truck);
+                    break;
+                default:
+            }
         }
-    }
-
-
-    private void spawnHelper() {
-
     }
 
     public List<EntityStore<Vehicle>> getVehicles() {
@@ -284,7 +362,8 @@ public class VehicleSpawner {
     // run periodically to delete (make eligible for garbage collection) vehicles out of the frame bounds
     public void despawn() {
         // System.out.println("VehicleSpawner.despawn() called");
-        for (EntityStore<Vehicle> sublist : activeVehicles) despawnHelper(sublist);
+        for (EntityStore<Vehicle> sublist : activeVehicles) 
+            despawnHelper(sublist);
     }
     
     // takes the N/E/S/W activeVehicle sublists 

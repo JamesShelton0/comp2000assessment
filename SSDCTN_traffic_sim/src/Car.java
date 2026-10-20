@@ -5,10 +5,11 @@ import java.awt.geom.RoundRectangle2D;
 public class Car extends Vehicle {
     private boolean hasSunRoof;
 
-    public Car(Point p, double width, double height) {
+    public Car(Point p, double width, double height, double direction) {
         super.position = p;
         super.width = width;
         super.height = height;
+        super.direction = direction;
 
         super.accelerationRate = 0.7;
         super.decelerationRate = -1;
@@ -43,7 +44,7 @@ public class Car extends Vehicle {
                 8,
                 8
             );
-        g.setColor(Color.RED);
+        g.setColor(bodyColour);   
         g.fill(carBody);
 
 
