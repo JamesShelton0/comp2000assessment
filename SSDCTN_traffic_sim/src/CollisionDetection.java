@@ -99,12 +99,8 @@ public class CollisionDetection {
                 for (Vehicle first : firstStore.getEntities()) {
                     for (Vehicle second : secondStore.getEntities()) {
                         // stop both vehicles once either directional hitbox check detects impact
-                        if (checkWithinRadius(first, second)) {
+                        if (checkWithinRadius(first, second) || checkWithinRadius(second, first)) {
                             allowedMovements.put(first, 0.0);
-                            //allowedMovements.put(second, 0.0);
-                        }
-                        else if(checkWithinRadius(second, first)){
-                            //allowedMovements.put(first, 0.0);
                             allowedMovements.put(second, 0.0);
                         }
                     }

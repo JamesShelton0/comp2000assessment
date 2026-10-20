@@ -16,7 +16,7 @@ public class App {
                 JOptionPane.ERROR_MESSAGE
             );
         } catch(IOException e){
-            System.out.println("Program can NOT open file");
+            System.out.println(e.getMessage());
         }
     }
 }
