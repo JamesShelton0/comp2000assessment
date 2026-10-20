@@ -52,7 +52,7 @@ public class Graph {
 
     private HashMap<Vertex, Vertex> mapFinishToStart(){
         HashMap<Vertex, Vertex> map = new HashMap<>();
-        for(int i = 0; i < startArr.size(); i++){
+        for(int i = 0; i < startArr.size() && i < finishArr.size(); i++){
             map.put(startArr.get(i), finishArr.get(i));
         }
         return map;
