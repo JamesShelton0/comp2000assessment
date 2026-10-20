@@ -99,14 +99,17 @@ public class Bus extends Vehicle {
     //check if the bus is close to a bus stop
     void checkBusStop(BusStop stop) { 
         // getX case-sensitive, rvm semicolon and add {} because otherwise accelerate will run all the time 
-        if(!stoppedAtBusStop && !leavingBusStop && x >= stop.getX() - 10 &&x <=stop.getX()) {
+        if(!stoppedAtBusStop && !leavingBusStop && 
+            direction == 270 &&
+            y >= stop.getY() + 50 && y <=stop.getY() + 60) {
             accelerate(decelerationRate);
-        }
+        
 
         if(velocity==0) {
             stoppedAtBusStop = true;
         }
     }
+}
 
 
     void waitAtBusStop() {
@@ -130,6 +133,10 @@ public class Bus extends Vehicle {
                 leavingBusStop = false;
             }
         }
+    }
+    // Check if the bus is currently stopped at a bus stop.
+    boolean isStoppedAtBusStop() {
+        return stoppedAtBusStop;
     }
 
 
