@@ -27,7 +27,7 @@ public class Graph {
         // add start vertices to graph
         String vertexDesc;
         Vertex vertex;
-        br = new BufferedReader(new FileReader("src/resources/GraphStartVertices.txt"));
+        br = new BufferedReader(new FileReader("bin/resources/GraphStartVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createStartVertexFromFile(vertexDesc);
@@ -35,14 +35,14 @@ public class Graph {
             startArr.add(vertex);
         }
         // add turn vertices to graph
-        br = new BufferedReader(new FileReader("src/resources/GraphTurnVertices.txt"));
+        br = new BufferedReader(new FileReader("bin/resources/GraphTurnVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createTurnVertexFromFile(vertexDesc);
             vertexArr.add(vertex);
         }
         // add finish vertices to graph
-        br = new BufferedReader(new FileReader("src/resources/GraphFinishVertices.txt"));
+        br = new BufferedReader(new FileReader("bin/resources/GraphFinishVertices.txt"));
         br.readLine();
         while((vertexDesc = br.readLine()) != null){
             vertex = createFinishVertexFromFile(vertexDesc);

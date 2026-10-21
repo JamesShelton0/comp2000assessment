@@ -1,77 +1,43 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.*;
 
 public class CollisionDetection {
 
     // checks if one object is infront of the other and could face a collision 
     static boolean checkWithinRadius(Vehicle a, Vehicle b){
-        try{
-            if(a.getHitBox().detectHitboxOverlap(b.getHitBox())){
+        try {
+            if (a.getHitBox().detectHitboxOverlap(b.getHitBox())) {
                 return true;
             }
-        }
-        catch(NullPointerException e){
+        } catch(NullPointerException e){
             System.out.println("EXCEPTION: One of the vehicle objects has a null hitbox");
         }
         return false;
     }
 
-    static boolean checkWithinRadius(Vehicle v, StopLine s){
-        if(s.getEdge().pointIsOnFlatEdge(v.hitBox.getPointAhead(), v.getDirection())){
-            return true;
-        }
-        return false;
-    }
-
-    public static ArrayList<Vehicle> checkVehicleCollisions(List<EntityStore<Vehicle>> vehicleArr){
-        ArrayList<Vehicle> comparisonList = new ArrayList<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for (Vehicle v : sublist.getEntities()) {
-                comparisonList.add(v);
-            }
-        }
-
-        ArrayList<Vehicle> stopArr = new ArrayList<>();
-        for(int i = 0; i < comparisonList.size() - 1; i++){
-            for(int j = i + 1; j < comparisonList.size(); j++){
-                Vehicle first = comparisonList.get(i);
-                Vehicle second = comparisonList.get(j);
-
-                // only rear vehicle in a shared lane recognises the vehicle ahead
-                if (isFollowingTooClosely(first, second)) {
-                    stopArr.add(first);
-                }
-                if (isFollowingTooClosely(second, first)) {
-                    stopArr.add(second);
-                }
-            }
-        }
-        return stopArr;
-    }
-
     public static Map<Vehicle, Double> calculateAllowedMovements(
             List<EntityStore<Vehicle>> vehicleArr,
             Map<Vehicle, Double> desiredMovements) {
+
         // start with relevant limits
-        Map<Vehicle, Double> allowedMovements = new IdentityHashMap<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for (Vehicle vehicle : sublist.getEntities()) {
-                allowedMovements.put(
-                    vehicle,
-                    Math.max(0, desiredMovements.getOrDefault(vehicle, vehicle.velocity))
-                );
-            }
-        }
+        Map<Vehicle, Double> allowedMovements = vehicleArr.stream()
+                            .flatMap(sublist -> sublist.stream())
+                            .collect(Collectors.toMap(                                      // Using four parameter toMap()
+                                v -> v,                                                         // 1. key
+                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)), // 2. value
+                                (a, b) -> a,                                                    // 3. keep existing value if duplicate key
+                                IdentityHashMap::new)                                           // 4. specify map type
+                            );
 
         // each store is one directional lane, so only the nearest leader limits a follower
         for (EntityStore<Vehicle> sublist : vehicleArr) {
-            ArrayList<Vehicle> lane = new ArrayList<>(sublist.getEntities());
-            lane.sort((first, second) -> Double.compare(
-                getTravelProgress(second),
-                getTravelProgress(first)
-            ));
+            ArrayList<Vehicle> lane = sublist.stream()
+                                          .sorted((first, second) -> Double.compare(getTravelProgress(second), getTravelProgress(first)))
+                                          .collect(Collectors.toCollection(ArrayList::new));
 
             // front-to-back order passes the lead vehicle's movement through the whole queue
             for (int followerIndex = 1; followerIndex < lane.size(); followerIndex++) {
@@ -90,7 +56,7 @@ public class CollisionDetection {
             }
         }
 
-        // restore collision checks between different spawn-point stores, which the lane-only Map pass omitted
+        // restore collision checks between vehicles from different spawn-points.
         for (int firstStoreIndex = 0; firstStoreIndex < vehicleArr.size() - 1; firstStoreIndex++) {
             EntityStore<Vehicle> firstStore = vehicleArr.get(firstStoreIndex);
             for (int secondStoreIndex = firstStoreIndex + 1;
@@ -108,6 +74,20 @@ public class CollisionDetection {
             }
         }
 
+        // ---------- Testing new implementation ----------
+        // flat maps 2D vehicle array into a single list for easy comparison
+        // List<Vehicle> allVehicles = vehicleArr.stream()
+        //                                       .flatMap(sublist -> sublist.stream())
+        //                                       .collect(Collectors.toList());
+        // for (Vehicle first : allVehicles) {
+        //     for (Vehicle second : allVehicles) {
+        //         if ((first != second) && (checkWithinRadius(first, second))) {
+        //             // allowedMovements.put(second, second.velocity);
+        //             allowedMovements.put(first, 0.0);   // only vehicle doing the t-boning stops rather than both.
+        //         }
+        //     }
+        // }
+
         return allowedMovements;
     }
 
@@ -118,19 +98,6 @@ public class CollisionDetection {
             + vehicle.getPosition().getY() * Math.sin(directionRadians);
     }
 
-    private static boolean isFollowingTooClosely(Vehicle follower, Vehicle leader) {
-        // ignore vehicles that are behind or in another lane or travelling in another direction
-        double forwardGap = getForwardGapInSameLane(follower, leader);
-        if (Double.isNaN(forwardGap)) {
-            return false;
-        }
-
-        // prevents overlap from fast vehicles
-        double safeFollowingDistance = getSafeFollowingDistance(follower, leader);
-        double leaderMovement = leader.isMovementBlocked() ? 0 : leader.velocity;
-        double closingDistance = Math.max(0, follower.velocity - leaderMovement);
-        return forwardGap <= safeFollowingDistance + closingDistance;
-    }
 
     private static double getForwardGapInSameLane(Vehicle follower, Vehicle leader) {
         if (Math.round(follower.getDirection()) != Math.round(leader.getDirection())) {
@@ -161,17 +128,5 @@ public class CollisionDetection {
         return follower.getHitBox().getForwardExtent()
             + leader.getHitBox().getForwardExtent()
             + 2;
-    }
-
-    public static ArrayList<Vehicle> checkVehicleAtStopLine(ArrayList<StopLine> stopLineArr, List<EntityStore<Vehicle>> vehicleArr){
-        ArrayList<Vehicle> stopArr = new ArrayList<>();
-        for (EntityStore<Vehicle> sublist : vehicleArr) {
-            for(int i = 0; i < sublist.getEntities().size(); i++){
-                for(int j = 0; j < sublist.getEntities().size(); j++){
-
-                }
-            }
-        }
-        return stopArr;
     }
 }
