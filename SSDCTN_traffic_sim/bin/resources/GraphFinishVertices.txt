@@ -1,2 +1,7 @@
 ID,type,x,y
-3,finish,100,100
+30,finish,0.43,0
+31,finish,1,0.18
+32,finish,0.57,1
+33,finish,0,0.32
+34,finish,1,0.68
+35,finish,0,0.82

@@ -3,17 +3,20 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 
 public class Graph {
     // setting up file reading
-    BufferedReader br;
+    private BufferedReader br;
 
     // arraylist of vertices, start points, and finish points - could be a stream
-    ArrayList<Vertex> vertexArr;
-    ArrayList<Vertex> startArr;
-    ArrayList<Vertex> finishArr;
-    HashMap<Vertex, Vertex> finishPointUnreachableByStartPoint;
+    private ArrayList<Vertex> vertexArr;
+    private ArrayList<Vertex> startArr;
+    private ArrayList<Vertex> finishArr;
+    private HashMap<Vertex, Vertex> finishPointUnreachableByStartPoint;
+    private Random rand;
+
 
     // constructor
     public Graph() throws IOException{
@@ -50,6 +53,7 @@ public class Graph {
         finishPointUnreachableByStartPoint = mapFinishToStart();
     }
 
+    //maps every start point to their finish point
     private HashMap<Vertex, Vertex> mapFinishToStart(){
         HashMap<Vertex, Vertex> map = new HashMap<>();
         for(int i = 0; i < startArr.size() && i < finishArr.size(); i++){
@@ -57,6 +61,7 @@ public class Graph {
         }
         return map;
     }
+    
 
     //create start vertices
     private Vertex createStartVertexFromFile(String vertexDesc){
@@ -122,6 +127,16 @@ public class Graph {
     }
 
 
+    //gives a vehicle a random finish point based in their start point
+    public Vertex getRandomFinish(Vertex start){
+        Vertex nonUsableFinishPoint = finishPointUnreachableByStartPoint.get(start);
+        int random = nonUsableFinishPoint.getID();
+        while(random == nonUsableFinishPoint.getID()){
+            random = rand.nextInt(finishArr.size());
+        }
+        Vertex finish = getVertex(random);
+        return finish;
+    }
 
     public ArrayList<Integer> getAdjacentVertices(int ID){
         return getVertex(ID).getAdjVertexArr();

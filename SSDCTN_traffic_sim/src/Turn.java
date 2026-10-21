@@ -19,7 +19,7 @@ public class Turn {
     Turn(int turnID, Point rotationPoint, float radius, int direction, float startAngle){
         this.turnID = turnID;
 
-        this.rotationPoint = rotationPoint;
+        this.rotationPoint = setTurnPoint(rotationPoint);
         this.radius = radius;
         this.startAngle = startAngle;
 
@@ -45,6 +45,12 @@ public class Turn {
         if(this.finishAngle >= 360){this.finishAngle -= 360;}
         else if(this.finishAngle < 0){this.finishAngle += 360;}
     }
+
+    private Point setTurnPoint(Point rp){
+        double x = rp.getX()*App.width;
+        double y = rp.getY()*App.height;
+        return new Point(x, y);
+    } 
 
     public boolean vehicleOverLapTurn(Vehicle vehicle){
         if(direction == LEFT){

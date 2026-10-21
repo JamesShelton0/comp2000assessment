@@ -98,31 +98,38 @@ public class VehicleSpawnerTwo {
             vehicleType = -1;   // uses default case (doesn't create vehicle)
         }
 
+        //creates a random finish for the vehicle
+        Vertex finish = localGraph.getRandomFinish(localGraph.getVertex(start.getID()));
+
         // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
         switch (vehicleType) {
             case 0: // BUS
                 Bus bus = new Bus(start.getStartPoint(), BUS_W, BUS_H, direction);
-                bus.createRoute(start.getID(), lastElement, localGraph);
+                bus.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(bus);
                 break;
             
             case 1: // CAR
                 Car car = new Car(start.getStartPoint(), CAR_W, CAR_H, direction);
+                car.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(car);
                 break;
 
             case 2:  //CYCLIST
                 Cyclist cyclist = new Cyclist(start.getStartPoint(), CYCLIST_W, CYCLIST_H, direction);  // arbitrary arguments
+                cyclist.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(cyclist);
                 break;
             
             case 3: // MOTORBIKE  // construct at the north spawn so the initial hitbox matches its position
                 Motorbike motorbike = new Motorbike(start.getStartPoint(), MOTORBIKE_W, MOTORBIKE_H, direction);
+                motorbike.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(motorbike);
                 break;
 
             case 4: // TRUCK
                 Truck truck = new Truck(start.getStartPoint(), TRUCK_W, TRUCK_H, direction);
+                truck.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(truck);
                 break;
             default:
