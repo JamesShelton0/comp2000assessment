@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ class Panel extends JPanel {
 
     private int width, height;
     VehicleSpawnerTwo vehicleSpawner;
+    VehicleDespawner vehicleDespawner;
     Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight; // upper road
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
@@ -23,6 +25,7 @@ class Panel extends JPanel {
     TrafficLightController trafficLightController;
     BusStop busStop;
     Graph g;
+    private List<EntityStore<Vehicle>> activeVehicles;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
@@ -38,12 +41,14 @@ class Panel extends JPanel {
 
         // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawnerTwo(width, height, 30,g); // % chance
+        vehicleDespawner = new VehicleDespawner();
         Timer vehicleSpawnTimer = new Timer(1390, e -> {           // attempt freq
             vehicleSpawner.spawn();
+            activeVehicles = vehicleSpawner.getVehicles();
         });
         vehicleSpawnTimer.start();
-        Timer vehicleDespawnTimer = new Timer(20000, e -> {
-            //vehicleSpawner.despawn();
+        Timer vehicleDespawnTimer = new Timer(1390, e -> {
+            vehicleDespawner.despawnVehicle(activeVehicles);
         });
         vehicleDespawnTimer.start();
 

@@ -1,28 +1,29 @@
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
 
 public class VehicleDespawner {
     ArrayList<Finish> finishArr;
-
-    private final Finish NORTH_FP;
-    private final Finish EAST_FP;
-    private final Finish SOUTH_FP;
-    private final Finish WEST_FP;
-    private final Finish EASTTOO_FP;
-    private final Finish WESTTOO_FP;
-
-
-    VehicleDespawner(int startID, ArrayList<Finish> finishArr, Graph g){
-        NORTH_FP = g.getVertex(1).getFinish();
-        EAST_FP = g.getVertex(1).getFinish();
-        SOUTH_FP = g.getVertex(1).getFinish();
-        WEST_FP = g.getVertex(1).getFinish();
-        EASTTOO_FP = g.getVertex(1).getFinish();
-        WESTTOO_FP = g.getVertex(1).getFinish();
-    }
+    private final int SPAWN_BUFFER = (int) ((App.width+App.height)/2 * 0.15);
 
     //despawns the vehicles 
-    public void despawnVehicle(){
+    public void despawnVehicle(List<EntityStore<Vehicle>> activeVehicles){
+        for (EntityStore<Vehicle> sublist : activeVehicles) 
+            despawnHelper(sublist);
+    }
 
+    private void despawnHelper(EntityStore<Vehicle> sublist) {
+        Iterator<Vehicle> iterator = sublist.modifyEntities().iterator();
+        while (iterator.hasNext()) {
+            Vehicle v = iterator.next();
+            if (v.getPosition().getX() < 0-SPAWN_BUFFER
+            || v.getPosition().getY() < 0-SPAWN_BUFFER
+            || v.getPosition().getX() > App.width+SPAWN_BUFFER
+            || v.getPosition().getY() > App.height+SPAWN_BUFFER) {
+                // System.out.println("Vehicle despawned at " + v.getPosition());
+                iterator.remove();
+            }
+        }
     }
 
 
