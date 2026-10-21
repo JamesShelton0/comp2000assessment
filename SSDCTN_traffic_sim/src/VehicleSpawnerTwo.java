@@ -106,9 +106,6 @@ public class VehicleSpawnerTwo {
             case 0: // BUS
                 Bus bus = new Bus(start.getStartPoint(), BUS_W, BUS_H, direction);
                 bus.createRoute(start.getID(), finish.getID(), localGraph);
-                for(int i = 0; i < bus.vehicleRoute.size(); i++){
-                    System.out.println(bus.vehicleRoute.get(i).getID());
-                }
                 activeVehicles.get(entityStoreNum).add(bus);
                 bus.setPosition(start.getStartPoint());
                 bus.setDirection((float) direction);

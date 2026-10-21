@@ -44,7 +44,6 @@ public abstract class Vehicle extends JComponent {
     // creating the vehicles route
     public void createRoute(int startID, int finishID, Graph g){
         vehicleRoute = BreadthFirstSearch.breadthFirstSearch(startID, finishID, g);
-        System.out.println(vehicleRoute.get(0));
     }
 
     // setting states
