@@ -13,6 +13,7 @@ public class BreadthFirstSearch {
         HashMap<Vertex, Vertex> mapOfPrevVisited = new HashMap<>();
 
         //setting a tracker to start
+        System.out.println(startID + " " +finishID);
         int tracker = startID;
         vertexQueue.add(tracker);
         g.getVertex(tracker).setMarked();
@@ -21,9 +22,12 @@ public class BreadthFirstSearch {
         while(!vertexQueue.isEmpty()){
             tracker = vertexQueue.poll();
             if(g.getVertex(tracker).getID() == finishID){
+                setAllUnmarked(g);
+                System.out.println("hello2");
                 return breadthFirstSearchHelper(mapOfPrevVisited, tracker, g);
             }
             adjList = g.getVertex(tracker).getAdjVertexArr();
+            System.out.println("hello1");
             Iterator<Integer> vIt = adjList.iterator();
             while(vIt.hasNext()){
                 Integer u = vIt.next();
@@ -34,10 +38,18 @@ public class BreadthFirstSearch {
                 mapOfPrevVisited.put(g.getVertex(u), g.getVertex(tracker));
             }
         }
+        setAllUnmarked(g);
         return null;
     }
     
+    private static void setAllUnmarked(Graph g){
+        for(int i = 0; i < g.getVertexArr().size(); i++){
+            g.getVertexArr().get(i).setUnmarked();
+        }
+    }
+
     public static ArrayList<Vertex> breadthFirstSearchHelper(HashMap<Vertex, Vertex> vertexMap, int tracker, Graph g){
+        System.out.println("hello");
         ArrayList<Vertex> route = new ArrayList<>();
         while(vertexMap.get(g.getVertex(tracker)) != null){
             route.add(vertexMap.get(g.getVertex(tracker)));

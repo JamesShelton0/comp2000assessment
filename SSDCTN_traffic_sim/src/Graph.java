@@ -17,7 +17,6 @@ public class Graph {
     private HashMap<Vertex, Vertex> finishPointUnreachableByStartPoint;
     private Random rand;
 
-
     // constructor
     public Graph() throws IOException{
         // setting up the arrays
@@ -51,6 +50,7 @@ public class Graph {
         }
 
         finishPointUnreachableByStartPoint = mapFinishToStart();
+        rand = new Random();
     }
 
     //maps every start point to their finish point
@@ -132,7 +132,7 @@ public class Graph {
         Vertex nonUsableFinishPoint = finishPointUnreachableByStartPoint.get(start);
         int random = nonUsableFinishPoint.getID();
         while(random == nonUsableFinishPoint.getID()){
-            random = rand.nextInt(finishArr.size());
+            random = rand.nextInt(30, 36);
         }
         Vertex finish = getVertex(random);
         return finish;
@@ -145,7 +145,13 @@ public class Graph {
 
     public Vertex getVertex(int ID){
         for(int i = 0; i < vertexArr.size(); i++){
-            if(ID == vertexArr.get(i).getTurn().getID()){
+            if(vertexArr.get(i).getTurn() != null && ID == vertexArr.get(i).getTurn().getID()){
+                return vertexArr.get(i);
+            }
+            else if(vertexArr.get(i).getStart() != null && ID == vertexArr.get(i).getStart().getID()){
+                return vertexArr.get(i);
+            }
+            else if(vertexArr.get(i).getFinish() != null && ID == vertexArr.get(i).getFinish().getID()){
                 return vertexArr.get(i);
             }
         }

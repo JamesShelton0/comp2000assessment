@@ -43,12 +43,12 @@ public class VehicleSpawnerTwo {
         this.height = h;
         this.spawnChance = spawnChance;
 
-        NORTH_SP = g.getVertex(1).getStart();
-        EAST_SP = g.getVertex(2).getStart();
-        SOUTH_SP = g.getVertex(3).getStart();
-        WEST_SP = g.getVertex(4).getStart();
-        EASTTOO_SP = g.getVertex(5).getStart();
-        WESTTOO_SP = g.getVertex(6).getStart();
+        NORTH_SP = g.getVertex(0).getStart();
+        EAST_SP = g.getVertex(1).getStart();
+        SOUTH_SP = g.getVertex(2).getStart();
+        WEST_SP = g.getVertex(3).getStart();
+        EASTTOO_SP = g.getVertex(4).getStart();
+        WESTTOO_SP = g.getVertex(5).getStart();
 
         assignDimensions();
         rand = new Random();
@@ -106,34 +106,52 @@ public class VehicleSpawnerTwo {
             case 0: // BUS
                 Bus bus = new Bus(start.getStartPoint(), BUS_W, BUS_H, direction);
                 bus.createRoute(start.getID(), finish.getID(), localGraph);
+                for(int i = 0; i < bus.vehicleRoute.size(); i++){
+                    System.out.println(bus.vehicleRoute.get(i).getID());
+                }
                 activeVehicles.get(entityStoreNum).add(bus);
+                bus.setPosition(start.getStartPoint());
+                bus.setDirection((float) direction);
                 break;
             
             case 1: // CAR
                 Car car = new Car(start.getStartPoint(), CAR_W, CAR_H, direction);
                 car.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(car);
+                car.setPosition(start.getStartPoint());
+                car.setDirection((float) direction);
                 break;
 
             case 2:  //CYCLIST
                 Cyclist cyclist = new Cyclist(start.getStartPoint(), CYCLIST_W, CYCLIST_H, direction);  // arbitrary arguments
                 cyclist.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(cyclist);
+                cyclist.setPosition(start.getStartPoint());
+                cyclist.setDirection((float) direction);
                 break;
             
             case 3: // MOTORBIKE  // construct at the north spawn so the initial hitbox matches its position
                 Motorbike motorbike = new Motorbike(start.getStartPoint(), MOTORBIKE_W, MOTORBIKE_H, direction);
                 motorbike.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(motorbike);
+                motorbike.setPosition(start.getStartPoint());
+                motorbike.setDirection((float) direction);
                 break;
 
             case 4: // TRUCK
                 Truck truck = new Truck(start.getStartPoint(), TRUCK_W, TRUCK_H, direction);
                 truck.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(truck);
+                truck.setPosition(start.getStartPoint());
+                truck.setDirection((float) direction);
                 break;
             default:
         }
+    }
+
+    public List<EntityStore<Vehicle>> getVehicles() {
+        // return store's read-only typed view for Panel's movement and drawing loops
+        return activeVehicles;
     }
 
     private void assignDimensions() {

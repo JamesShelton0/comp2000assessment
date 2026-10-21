@@ -6,6 +6,8 @@ public class Start {
     Start(Point startPoint, int ID){
         this.startPoint = addSpawnBufferToPoint(startPoint);
         this.ID = ID;
+        System.out.println(this.startPoint.getX());
+        System.out.println(this.startPoint.getY());
     }
 
     private Point addSpawnBufferToPoint(Point sp){

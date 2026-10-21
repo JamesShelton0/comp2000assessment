@@ -11,7 +11,7 @@ class Panel extends JPanel {
     private static final double INITIAL_POTHOLE_SIZE = 12;
 
     private int width, height;
-    VehicleSpawner vehicleSpawner;
+    VehicleSpawnerTwo vehicleSpawner;
     Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight; // upper road
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
@@ -37,13 +37,13 @@ class Panel extends JPanel {
 
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
+        vehicleSpawner = new VehicleSpawnerTwo(width, height, 30,g); // % chance
         Timer vehicleSpawnTimer = new Timer(1390, e -> {           // attempt freq
             vehicleSpawner.spawn();
         });
         vehicleSpawnTimer.start();
         Timer vehicleDespawnTimer = new Timer(20000, e -> {
-            vehicleSpawner.despawn();
+            //vehicleSpawner.despawn();
         });
         vehicleDespawnTimer.start();
 
