@@ -32,13 +32,14 @@ public abstract class Vehicle extends JComponent {
     protected boolean brakeLightsOn;
 
     // arraylist of turns to dictate the path of the vehicle
-    ArrayList<Vertex> vehicleRoute;
+    private ArrayList<Vertex> vehicleRoute;
 
     // constructor
     public Vehicle(){
         turnLeft = new TurnLeft(this);
         turnRight = new TurnRight(this);
         moveForward = new MoveForward(this);
+        setState(turnLeft);
     }
 
     // creating the vehicles route
@@ -98,15 +99,21 @@ public abstract class Vehicle extends JComponent {
 
     public void move(){
         // use vehicles desired velocity when no traffic constraints are applied
-        move(velocity);
+        //move(velocity);
+        //state.move(vehicleRoute.get(1).getTurn());
     }
 
     public void move(double movementVelocity){
         // allow smooth, temporary speed matching without overwriting desired velocity
-        position = Velocity.calPosition(x, y, direction, movementVelocity);
-        x = position.getX();
-        y = position.getY();
-        updatePosition();
+        //position = Velocity.calPosition(x, y, direction, movementVelocity);
+        //x = position.getX();
+        //y = position.getY();
+        //updatePosition();
+        //System.out.println("Route length: " + vehicleRoute.size());
+        for(int i = 0; i < vehicleRoute.size(); i++){
+            //System.out.println("Vertex ID: " + vehicleRoute.get(i).getID());
+        }
+        state.move(vehicleRoute.get(1).getTurn());
     }
 
     private void updatePosition() { // centring method
