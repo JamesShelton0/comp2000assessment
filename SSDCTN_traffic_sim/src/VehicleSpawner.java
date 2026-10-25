@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +78,7 @@ public class VehicleSpawner {
         activeVehicles.add(westTooSpawn);
     }
 
+    
     public void spawn() {
         if (rand.nextInt(100) < spawnChance) spawnHelper(NORTH_SP, SOUTH, 0);
         if (rand.nextInt(100) < spawnChance) spawnHelper(EAST_SP, WEST, 1);
@@ -124,26 +126,6 @@ public class VehicleSpawner {
         }
     }
 
-    public List<EntityStore<Vehicle>> getVehicles() {
-        // return store's read-only typed view for Panel's movement and drawing loops
-        return activeVehicles;
-    }
-
-    // move spawn / despawn boundaries to the coords of resized panel 
-    public void updateViewportBounds(double left, double top, double right, double bottom) {
-        viewportLeft = left;
-        viewportTop = top;
-        viewportRight = right;
-        viewportBottom = bottom;
-
-        // replace points so active vehicles never share a moving spawn coord
-        NORTH_SP = new Point(width * 0.57, viewportTop - SPAWN_BUFFER);
-        EAST_SP = new Point(viewportRight + SPAWN_BUFFER, height * 0.32);
-        EASTTOO_SP = new Point(viewportRight + SPAWN_BUFFER, height*0.82);
-        SOUTH_SP = new Point(width * 0.43, viewportBottom + SPAWN_BUFFER);
-        WEST_SP = new Point(viewportLeft - SPAWN_BUFFER, height * 0.18);
-        WESTTOO_SP = new Point(viewportLeft - SPAWN_BUFFER, height*0.68);
-    }
 
     // run periodically to delete (make eligible for garbage collection) vehicles out of the frame bounds
     public void despawn() {
@@ -168,6 +150,7 @@ public class VehicleSpawner {
         }
     }
 
+
     private void assignDimensions() {
         BUS_W       = width * 0.05;
         BUS_H       = height* 0.12;
@@ -179,5 +162,35 @@ public class VehicleSpawner {
         MOTORBIKE_H = height * 0.0375;
         TRUCK_W     = width * 0.1;
         TRUCK_H     = height* 0.08;
+    }
+
+
+    // move spawn / despawn boundaries to the coords of resized panel 
+    public void updateViewportBounds(double left, double top, double right, double bottom) {
+        viewportLeft = left;
+        viewportTop = top;
+        viewportRight = right;
+        viewportBottom = bottom;
+
+        // replace points so active vehicles never share a moving spawn coord
+        NORTH_SP = new Point(width * 0.57, viewportTop - SPAWN_BUFFER);
+        EAST_SP = new Point(viewportRight + SPAWN_BUFFER, height * 0.32);
+        EASTTOO_SP = new Point(viewportRight + SPAWN_BUFFER, height*0.82);
+        SOUTH_SP = new Point(width * 0.43, viewportBottom + SPAWN_BUFFER);
+        WEST_SP = new Point(viewportLeft - SPAWN_BUFFER, height * 0.18);
+        WESTTOO_SP = new Point(viewportLeft - SPAWN_BUFFER, height*0.68);
+    }
+
+
+    // Returns active vehicles as a 2D array (essentially*)  
+    public List<EntityStore<Vehicle>> getVehicleList() {
+        // return store's read-only typed view for Panel's movement and drawing loops
+        return activeVehicles;
+    }
+
+    // Returns active vehicles as a stream
+    public Stream<Vehicle> getVehicleStream() {
+        return activeVehicles.stream()
+                             .flatMap(sublist -> sublist.stream());
     }
 }

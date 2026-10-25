@@ -69,7 +69,7 @@ class Panel extends JPanel implements KeyListener {
             if (pausedForResize) {
                 return;
             }
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
 
                     // Do not accelerate the bus while it is stopped at the bus stop
@@ -96,7 +96,7 @@ class Panel extends JPanel implements KeyListener {
             }
 
             explosions.removeIf(Explosion::isFinished);
-            Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicles());
+            Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicleList());
             if (collision != null) {
                 createExplosion(collision[0], collision[1]);
             }
@@ -104,7 +104,7 @@ class Panel extends JPanel implements KeyListener {
             // build each vehicles movement before applying distances
             Map<Vehicle, Double> desiredMovements = new IdentityHashMap<>();
             Map<Vehicle, Boolean> environmentBlocks = new IdentityHashMap<>();
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     //Bus stop behaviour
                     if (vehicle instanceof Bus){
@@ -130,13 +130,13 @@ class Panel extends JPanel implements KeyListener {
 
             // let queues match movement ahead instead of switching between stopping and full speed
             Map<Vehicle, Double> allowedMovements = CollisionDetection.calculateAllowedMovements(
-                vehicleSpawner.getVehicles(),
+                vehicleSpawner.getVehicleList(),
                 desiredMovements
             );
 
             // only one vehicle can be swallowed so a temporary list is not needed
             Vehicle swallowedVehicle = null;
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     double allowedMovement = allowedMovements.getOrDefault(vehicle, 0.0);
                     // pause acceleration whenever an obstacle limits the desired movement
@@ -159,7 +159,7 @@ class Panel extends JPanel implements KeyListener {
 
             // remove the swallowed vehicle after movement iteration finishes
             if (swallowedVehicle != null) {
-                for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+                for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                     sublist.remove(swallowedVehicle);
                 }
             }
@@ -303,7 +303,7 @@ class Panel extends JPanel implements KeyListener {
     }
 
     private void removeVehicle(Vehicle vehicle) {
-        for (EntityStore<Vehicle> lane : vehicleSpawner.getVehicles()) {
+        for (EntityStore<Vehicle> lane : vehicleSpawner.getVehicleList()) {
             lane.remove(vehicle);
         }
     }
@@ -413,7 +413,7 @@ class Panel extends JPanel implements KeyListener {
         //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         
 
-        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
             for (Vehicle vehicle : sublist.getEntities()) {
                 vehicle.draw(g2d);
             }
