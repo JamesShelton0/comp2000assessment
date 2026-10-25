@@ -4,11 +4,11 @@ import java.awt.geom.RoundRectangle2D;
 
 public class Car extends Vehicle {
 
-    public Car(Point p, double width, double height, double direction) {
-        super.position = p;
+    public Car(Point p, double width, double height, float direction) {
+        super.setPosition(p);
         super.width = width;
         super.height = height;
-        super.direction = direction;
+        super.setDirection(direction);
 
         super.accelerationRate = 0.7;
         super.decelerationRate = -1;

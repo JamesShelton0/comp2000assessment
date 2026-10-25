@@ -17,10 +17,10 @@ public class VehicleSpawner {
     private final Point TEST_SP;
 
     // directions of travel
-    private final double NORTH = 270;
-    private final double EAST = 0;
-    private final double SOUTH = 90;
-    private final double WEST = 180;
+    private final float NORTH = 270;
+    private final float EAST = 0;
+    private final float SOUTH = 90;
+    private final float WEST = 180;
 
     // number of vehicle types and declarations for their dimensions
     private final int VCL_TYPE_AMOUNT = 5;
@@ -86,7 +86,7 @@ public class VehicleSpawner {
         if (rand.nextInt(100) < spawnChance) spawnHelper(WESTTOO_SP, EAST, 5);
     }
 
-    private void spawnHelper(Point spawnPoint, double direction, int sublistIndex) {
+    private void spawnHelper(Point spawnPoint, float direction, int sublistIndex) {
         int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
         // prevents spawning when a vehicle is already in spawn zone
@@ -100,37 +100,29 @@ public class VehicleSpawner {
         switch (vehicleType) {
             case 0: // BUS
                 Bus bus = new Bus(spawnPoint, BUS_W, BUS_H, direction);
-                bus.setPosition(spawnPoint);
-                bus.setDirection((float) direction);
                 activeVehicles.get(sublistIndex).add(bus);
                 break;
             
             case 1: // CAR
                 Car car = new Car(spawnPoint, CAR_W, CAR_H, direction);
-                car.setPosition(spawnPoint);
-                car.setDirection((float) direction);
                 activeVehicles.get(sublistIndex).add(car);
                 break;
 
-            case 2:  //CYCLIST
-                Cyclist cyclist = new Cyclist(spawnPoint, CYCLIST_W, CYCLIST_H, direction);  // arbitrary arguments
-                cyclist.setPosition(spawnPoint);
-                cyclist.setDirection((float) direction);
+            case 2:  // CYCLIST
+                Cyclist cyclist = new Cyclist(spawnPoint, CYCLIST_W, CYCLIST_H, direction);
                 activeVehicles.get(sublistIndex).add(cyclist);
                 break;
             
             case 3: // MOTORBIKE
                 // construct at the north spawn so the initial hitbox matches its position
                 Motorbike motorbike = new Motorbike(spawnPoint, MOTORBIKE_W, MOTORBIKE_H, direction);
-                motorbike.setPosition(spawnPoint);
-                motorbike.setDirection((float) direction);
                 activeVehicles.get(sublistIndex).add(motorbike);
                 break;
 
             case 4: // TRUCK
                 Truck truck = new Truck(spawnPoint, TRUCK_W, TRUCK_H, direction);
-                truck.setPosition(spawnPoint);
-                truck.setDirection((float) direction);
+                //truck.setPosition(spawnPoint);
+                //truck.setDirection((float) direction);
                 activeVehicles.get(sublistIndex).add(truck);
                 break;
             default:

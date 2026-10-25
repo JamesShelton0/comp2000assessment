@@ -2,15 +2,15 @@ import java.awt.*;
 
 public class Motorbike extends Vehicle {
 
-    Motorbike(Point p, double width, double height, double direction) {
+    Motorbike(Point p, double width, double height, float direction) {
         super.accelerationRate = 0.8;
         super.decelerationRate = -5;
         super.topSpeed = 10;
 
-        super.position = p;
+        super.setPosition(p);
         super.width = width;
         super.height = height;
-        super.direction = direction;
+        super.setDirection(direction);
 
         super.hitBox = new HitBox(position, super.direction, width*2, super.height*2.1); // some magic numbers to extend hitbox over the wheels
     }

@@ -35,7 +35,7 @@ public abstract class Vehicle extends JComponent {
     private ArrayList<Vertex> vehicleRoute;
 
     // constructor
-    public Vehicle(){
+    public Vehicle() {
         turnLeft = new TurnLeft(this);
         turnRight = new TurnRight(this);
         moveForward = new MoveForward(this);
@@ -83,7 +83,7 @@ public abstract class Vehicle extends JComponent {
     // it contains the actual shapes and fills used to draw the object
     public void draw(Graphics2D g2d) {}
 
-    public void setPosition(double x, double y){
+    public void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
         this.position = new Point(x, y);
