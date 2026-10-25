@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class Statistics {
+    int width, height; // App dimensions
     int statWindowWidth, statWindowHeight;
     boolean keyToggled;
 
@@ -12,6 +13,11 @@ public class Statistics {
 
     Statistics() {
         keyToggled = false;
+    }
+
+    public void reset() {
+        totalVehicleCount = 0;
+        explosionCount = 0;
     }
 
     // ------------ Average Speed ------------
@@ -60,6 +66,8 @@ public class Statistics {
     }
 
     public void updateViewportBounds(double width, double height) {
+        this.width = (int) width;
+        this.height = (int) height;
         statWindowWidth = (int) width/3;
         statWindowHeight = (int) height/4;
     }
@@ -73,13 +81,16 @@ public class Statistics {
         int cardX = -8;
         int cardY = -8;
 
+        int titleRow = 30;
 
         if (!keyToggled) {
             // draw help/guide string 
             g2d.setColor(new Color(200, 200, 200));
             g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 14f));
-            g2d.drawString("Press 's' to toggle traffic statistics", cardX + 20, cardY + 30);
+            g2d.drawString("Press 's' to toggle traffic statistics", cardX + 20, cardY + titleRow);
         } else {
+            int rowOffset = 20;
+            int row1 = 55;
             // draw stat card
             RoundRectangle2D.Double statCard = new RoundRectangle2D.Double(cardX, cardY, cardWidth, cardHeight, 22, 22);
             g2d.setColor(new Color(24, 29, 36, 135));
@@ -91,13 +102,18 @@ public class Statistics {
             g2d.draw(statCardOutline);
 
             g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 17f));
-            g2d.drawString("STATISTICS", cardX + (int)(cardWidth*0.25)+8, cardY + 30);
+            g2d.drawString("STATISTICS", cardX + (int)(cardWidth*0.25)+8, cardY + titleRow);
             g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 13f));
             g2d.setColor(new Color(220, 225, 230));
-            g2d.drawString("Average vehicle speed: " + String.format("%.2f", getAvgVelocity()), cardX + 20, cardY + 55);
-            g2d.drawString("Active vehicle count: " + getCurVehicleCount(), cardX + 32, cardY + 75);
-            g2d.drawString("Total vehicles seen: " + getTotalVehicleCount(), cardX + 39, cardY + 95);
-            g2d.drawString("Number of explosions: " + getExplosionCount(), cardX + 19, cardY + 115);
+            g2d.drawString("Average vehicle speed: " + String.format("%.2f", getAvgVelocity()), cardX + 20, cardY + row1);
+            g2d.drawString("Active vehicle count: " + getCurVehicleCount(), cardX + 32, cardY + row1+rowOffset);
+            g2d.drawString("Total vehicles seen: " + getTotalVehicleCount(), cardX + 39, cardY + row1+rowOffset*2);
+            g2d.drawString("Number of explosions: " + getExplosionCount(), cardX + 19, cardY + row1+rowOffset*3);
+            
+            g2d.setColor(new Color(200, 200, 200));
+            g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 14f));
+            g2d.drawString("Press 'r' to reset stats", cardX + (int)(cardWidth*0.16), cardY + 150);
+
             g2d.dispose();
         }
     }

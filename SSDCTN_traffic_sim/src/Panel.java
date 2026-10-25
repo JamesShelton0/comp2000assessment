@@ -481,8 +481,12 @@ class Panel extends JPanel implements KeyListener {
 
     // Key stroke listeners
     @Override public void keyPressed(KeyEvent e) {
-        System.out.println("Key pressed: " + e.getKeyChar());
+        // System.out.println("Key pressed: " + e.getKeyChar());
         if (e.getKeyCode() == KeyEvent.VK_S) stats.keyPressed();
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+            explosionCounter = 0;
+            vehicleSpawner.resetVehicleCount();
+        }
     }
 
     // Not used rn but KeyListener interface requires implementations

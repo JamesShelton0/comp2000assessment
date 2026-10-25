@@ -198,6 +198,10 @@ public class VehicleSpawner {
                              .flatMap(sublist -> sublist.stream());
     }
 
+    public void resetVehicleCount() {
+        totalVehiclesSpawned = 0;
+    }
+
     public long getTotalVehicleCount() {
         return totalVehiclesSpawned;
     }
