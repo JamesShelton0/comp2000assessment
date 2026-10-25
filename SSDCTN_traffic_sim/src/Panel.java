@@ -50,7 +50,7 @@ class Panel extends JPanel implements KeyListener {
         stats = new Statistics();
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
+        vehicleSpawner = new VehicleSpawner(30); // % chance
         vehicleDespawner = new VehicleDespawner();
         Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
             // pause spawner when paused for resize 

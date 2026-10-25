@@ -10,6 +10,10 @@ public class Frame extends JFrame {
 
     // propagate invalid setup info to app, where user can then see
     Frame(int width, int height) throws SimulationConfigurationException, Exception {
+        if (width <= 0 || height <= 0) {
+            throw new SimulationConfigurationException("Simulation dimensions must be positive.");
+        }
+
         panel = new Panel(width, height);
         this.setTitle("Traffic Sim");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

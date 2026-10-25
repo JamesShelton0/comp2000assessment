@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class VehicleSpawner {
+    // Frame dimensions
+    private int width, height;
+
     // spawn points
     private Point NORTH_SP;
     private Point EAST_SP;
@@ -30,8 +33,6 @@ public class VehicleSpawner {
     // a buffer for spawning/despawning vehicles to ensure they are entirely off screen
     private final int SPAWN_BUFFER;
 
-    private int width, height; // Frame dimensions
-
     // track the current visible bounds so spawning and despawning follow window edges
     private double viewportLeft, viewportTop, viewportRight, viewportBottom;
 
@@ -42,17 +43,14 @@ public class VehicleSpawner {
     // List active vehicles with sublists based on spawn point (now uses EntityStore to reject unrelated object types at compile time (generics yay!))
     private List<EntityStore<Vehicle>> activeVehicles;
     private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn, eastTooSpawn, westTooSpawn;
+    private Graph localGraph;
 
-    VehicleSpawner(int w, int h, int spawnChance) throws SimulationConfigurationException {
-        // validate at startup so bad settings create error
-        if (w <= 0 || h <= 0) {
-            throw new SimulationConfigurationException("Simulation dimensions must be positive.");
-        }
+    VehicleSpawner(int spawnChance) throws SimulationConfigurationException {
         if (spawnChance < 0 || spawnChance > 100) {
             throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
         }
-        this.width = w;     // provides panel bounds for determining spawn positions
-        this.height = h;
+        this.width = App.width;     // provides panel bounds for determining spawn positions
+        this.height = App.height;
         this.spawnChance = spawnChance;     // specified as a percentage
         SPAWN_BUFFER = (int) ((width+height)/2 * 0.15);
         
