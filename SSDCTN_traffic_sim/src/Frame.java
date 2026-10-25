@@ -20,6 +20,9 @@ public class Frame extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        panel.requestFocusInWindow();   // recommended for key listening
+
         // record size before user actually changes it
         lastWindowWidth = getWidth();
         lastWindowHeight = getHeight();

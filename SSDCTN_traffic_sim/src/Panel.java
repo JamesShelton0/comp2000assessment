@@ -1,10 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-class Panel extends JPanel {
+class Panel extends JPanel implements KeyListener {
     private int width, height;
     private boolean pausedForResize;
+
     VehicleSpawner vehicleSpawner;
     Road roadN, roadE, roadS, roadW, intersection;
     Pothole pothole;
@@ -15,6 +18,7 @@ class Panel extends JPanel {
     Explosion explosion;
     TrafficLightController trafficLightController;
     BusStop busStop;
+    Statistics stats;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException {
@@ -22,6 +26,8 @@ class Panel extends JPanel {
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(new Color(63, 155, 11));
+        this.addKeyListener(this);
+        this.setFocusable(true);
 
         // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawner(width, height, 30); // % chance
@@ -47,7 +53,7 @@ class Panel extends JPanel {
             if (pausedForResize) {
                 return;
             }
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     if (vehicle.velocity < vehicle.topSpeed) {
                         vehicle.accelerate(vehicle.accelerationRate);
@@ -67,24 +73,24 @@ class Panel extends JPanel {
             }
             if (trafficLight1.getLightState() == 2) {
                 stopLine1.setActive();
-                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                /*for (Vehicle vehicle : vehicleSpawner.getVehicleList()) {
                     vehicle.setVelocity(0);
                 }*/
             } else {
                 stopLine1.setInactive();
-                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
+                /*for (Vehicle vehicle : vehicleSpawner.getVehicleList()) {
                     vehicle.move();
                 }*/
             }
             
-            ArrayList<Vehicle> stopAtColl = CollisionDetection.checkVehicleCollisions(vehicleSpawner.getVehicles());
-            ArrayList<Vehicle> stopAtLine = CollisionDetection.checkVehicleAtStopLine(stopLineArr, vehicleSpawner.getVehicles());
+            ArrayList<Vehicle> stopAtColl = CollisionDetection.checkVehicleCollisions(vehicleSpawner.getVehicleList());
+            ArrayList<Vehicle> stopAtLine = CollisionDetection.checkVehicleAtStopLine(stopLineArr, vehicleSpawner.getVehicleList());
 
             for (Vehicle vehicle : stopAtColl) {
                 vehicle.setVelocity(0);
             }
 
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     if (!shouldStopAtRed(vehicle)) {
                         vehicle.move();
@@ -97,16 +103,6 @@ class Panel extends JPanel {
             this.repaint();
         });
         moveTimer.start();
-
-        // Timer moveTimer2 = new Timer(16, e -> {
-        //     for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-        //         if (!shouldStopAtRed(vehicle)) {
-        //             vehicle.move();
-        //         }
-        //     }
-        //     this.repaint();
-        // });
-        //moveTimer2.start();
 
         
         // ---------------------- Static objects ----------------------
@@ -146,9 +142,7 @@ class Panel extends JPanel {
         pothole = new Pothole(8, 8);
         speedCamera = new SpeedCamera(610, 240);
         explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
-        
-        
-
+        stats = new Statistics();
     }
 
     public void beginResizePause() {
@@ -235,6 +229,7 @@ class Panel extends JPanel {
         roadE.setBounds(intersectionRight, intersectionTop, right - intersectionRight, roadHeight);
         // spawning and despawning
         vehicleSpawner.updateViewportBounds(left, top, right, bottom);
+        stats.updateViewportBounds(width, height);
     }
 
 
@@ -246,22 +241,32 @@ class Panel extends JPanel {
 
         // use one uniform scale so all assets keep proportions
         double scale = Math.min(getWidth() / (double) width, getHeight() / (double) height);
+
         // centre simulation when window and simulation have different aspect ratios
         double xOffset = (getWidth() - width * scale) / 2.0;
         double yOffset = (getHeight() - height * scale) / 2.0;
+
         // convert panel edges into coords 
         double viewportLeft = -xOffset / scale;
         double viewportTop = -yOffset / scale;
         double viewportRight = (getWidth() - xOffset) / scale;
         double viewportBottom = (getHeight() - yOffset) / scale;
+
         // synchronise all size dependent simulation bounds before resizing
         updateViewport(viewportLeft, viewportTop, viewportRight, viewportBottom);
+
+        Graphics2D uncentredG2D = (Graphics2D) g2d.create();    // for components that should be placed relative to 0,0
+
         // view transform only; physics are in logical units
         g2d.translate(xOffset, yOffset);
         g2d.scale(scale, scale);
+        uncentredG2D.scale(scale, scale);
+
         // preserve curves and images when assets are enlarged etc 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        uncentredG2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        uncentredG2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         // draw components
         roadW.draw(g2d);
@@ -278,11 +283,12 @@ class Panel extends JPanel {
         explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
 
-        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
             for (Vehicle vehicle : sublist.getEntities()) {
                 vehicle.draw(g2d);
             }
         }
+        stats.draw(uncentredG2D);
 
         // release graphics copy
         g2d.dispose();
@@ -329,4 +335,15 @@ class Panel extends JPanel {
         overlay.dispose();
     }
 
+    // Key stroke listeners
+    @Override public void keyPressed(KeyEvent e) {
+        System.out.println("Key pressed: " + e.getKeyChar());
+        if (e.getKeyCode() == KeyEvent.VK_S) stats.keyPressed();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
 }
