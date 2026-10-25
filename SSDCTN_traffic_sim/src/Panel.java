@@ -29,6 +29,7 @@ class Panel extends JPanel implements KeyListener {
     TrafficLightController trafficLightController;
     BusStop busStop;
     Statistics stats;
+    long explosionCounter = 0;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
@@ -99,6 +100,7 @@ class Panel extends JPanel implements KeyListener {
             Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicleList());
             if (collision != null) {
                 createExplosion(collision[0], collision[1]);
+                explosionCounter++;
             }
             
             // build each vehicles movement before applying distances
@@ -167,6 +169,7 @@ class Panel extends JPanel implements KeyListener {
             stats.inputTotalCount(vehicleSpawner.getTotalVehicleCount());
             stats.updateCurVehicleCount(vehicleSpawner.getVehicleStream());
             stats.calculateAvgVelocity(vehicleSpawner.getVehicleStream());
+            stats.inputExplosionCount(explosionCounter);
 
             this.repaint();
         });

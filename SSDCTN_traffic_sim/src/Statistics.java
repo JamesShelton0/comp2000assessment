@@ -8,7 +8,7 @@ public class Statistics {
     boolean keyToggled;
 
     double avgVehicleVelocity;
-    long totalVehicleCount, curVehicleCount;
+    long totalVehicleCount, curVehicleCount, explosionCount;
 
     Statistics() {
         keyToggled = false;
@@ -44,6 +44,15 @@ public class Statistics {
         return totalVehicleCount;
     }
 
+    // ------------ Explosion Count ------------
+    public void inputExplosionCount(long value) {
+        this.explosionCount = value;
+    }
+
+    public long getExplosionCount() {
+        return explosionCount;
+    }
+
 
     // ------------ Drawing Related ------------
     public void keyPressed() {
@@ -60,7 +69,7 @@ public class Statistics {
 
         // scales dimensions with frame size but not beyond specified minimum 
         int cardWidth = Math.min(550, Math.max(230, statWindowWidth - 40));
-        int cardHeight = 116;
+        int cardHeight = 130;
         int cardX = -8;
         int cardY = -8;
 
@@ -86,8 +95,9 @@ public class Statistics {
             g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 13f));
             g2d.setColor(new Color(220, 225, 230));
             g2d.drawString("Average vehicle speed: " + String.format("%.2f", getAvgVelocity()), cardX + 20, cardY + 55);
-            g2d.drawString("Active vehicle count: " + getCurVehicleCount(), cardX + 33, cardY + 75);
+            g2d.drawString("Active vehicle count: " + getCurVehicleCount(), cardX + 32, cardY + 75);
             g2d.drawString("Total vehicles seen: " + getTotalVehicleCount(), cardX + 39, cardY + 95);
+            g2d.drawString("Number of explosions: " + getExplosionCount(), cardX + 19, cardY + 115);
             g2d.dispose();
         }
     }
