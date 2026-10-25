@@ -19,7 +19,6 @@ public class Cyclist extends Vehicle {
     @Override 
     public void draw(Graphics2D g2d) {
         Graphics2D g = (Graphics2D) g2d.create();
-
         g.rotate(
             Math.toRadians(direction + 90),
             x,

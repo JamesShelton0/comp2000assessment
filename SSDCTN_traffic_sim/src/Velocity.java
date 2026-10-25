@@ -33,8 +33,26 @@ public class Velocity {
         return new Point(newX, newY);
     }
 
-    static public Point calPositionTurning(Point vehiclePoint, Point turningPoint, double direction, double radius, boolean leftOrRight){
-        
-        return null;
+    static public Point calPositionTurningLeft(Turn turn, double direction, double x, double y, int counter){
+        float radius = turn.getRadius();
+        direction = direction * Math.PI/180;
+        double startAngle = turn.getStartAngle() * Math.PI/180;
+        double plugin = startAngle - 5*counter/(Math.PI*turn.getRadius()) + Math.PI/2;
+        plugin = (plugin >= 2*Math.PI) ? plugin - 2*Math.PI : plugin;
+        plugin = (Math.PI*radius)/2 - plugin;
+        double xPos = turn.getRotationPoint().getX() - (radius * Math.cos(plugin));
+        double yPos = turn.getRotationPoint().getY() + (radius * Math.sin(plugin));
+        return new Point(xPos, yPos);
+    }
+
+    static public Point calPositionTurningRight(Turn turn, double direction, double x, double y, int counter){
+        float radius = turn.getRadius();
+        direction = direction * Math.PI/180;
+        double startAngle = turn.getStartAngle() * Math.PI/180;
+        double plugin = 10*counter/(Math.PI*turn.getRadius()) - Math.PI/2 + startAngle;
+        plugin = (plugin >= 2*Math.PI) ? plugin - 2*Math.PI : plugin;
+        double xPos = turn.getRotationPoint().getX() + (radius * Math.cos(plugin));
+        double yPos = turn.getRotationPoint().getY() + (radius * Math.sin(plugin));
+        return new Point(xPos, yPos);
     }
 }

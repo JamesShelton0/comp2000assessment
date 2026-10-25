@@ -26,11 +26,11 @@ public class Turn {
         switch (direction) {
             case LEFT:
                 this.direction = LEFT;
-                this.finishAngle = this.startAngle + 90;
+                this.finishAngle = this.startAngle - 90;
                 break;
             case RIGHT:
                 this.direction = RIGHT;
-                this.finishAngle = this.startAngle - 90;
+                this.finishAngle = this.startAngle + 90;
                 break;
             case STRAIGHT:
                 this.direction = STRAIGHT;
@@ -59,92 +59,139 @@ public class Turn {
         else if(direction == RIGHT){
             return vehicleOverlapRightTurn(vehicle.getPosition());
         }
+        else if(direction == STRAIGHT){
+            return vehicleOverlapStraight(vehicle.getPosition());
+        }
         return false;
     }
 
     private boolean vehicleOverlapLeftTurn(Point vehiclePoint){
         if(startAngle == NORTH){
-            checkOverlapNORTHLeftTurn(vehiclePoint);
+            return checkOverlapNORTHLeftTurn(vehiclePoint);
         }
         else if(startAngle == EAST){
-            checkOverlapEASTLeftTurn(vehiclePoint);
+            return checkOverlapEASTLeftTurn(vehiclePoint);
         }
         else if(startAngle == SOUTH){
-            checkOverlapSOUTHLeftTurn(vehiclePoint);
+            return checkOverlapSOUTHLeftTurn(vehiclePoint);
         }
         else if(startAngle == WEST){
-            checkOverlapWESTLeftTurn(vehiclePoint);
+            return checkOverlapWESTLeftTurn(vehiclePoint);
         }
         return false;
     }
 
     private boolean vehicleOverlapRightTurn(Point vehiclePoint){
         if(startAngle == NORTH){
-            checkOverlapNORTHRightTurn(vehiclePoint);
+            return checkOverlapNORTHRightTurn(vehiclePoint);
         }
         else if(startAngle == EAST){
-            checkOverlapEASTRightTurn(vehiclePoint);
+            return checkOverlapEASTRightTurn(vehiclePoint);
         }
         else if(startAngle == SOUTH){
-            checkOverlapSOUTHRightTurn(vehiclePoint);
+            return checkOverlapSOUTHRightTurn(vehiclePoint);
         }
         else if(startAngle == WEST){
-            checkOverlapWESTRightTurn(vehiclePoint);
+            return checkOverlapWESTRightTurn(vehiclePoint);
+        }
+        return false;
+    }
+
+    private boolean vehicleOverlapStraight(Point vehiclePoint){
+        if(startAngle == NORTH){
+            return checkOverlapNORTHStraight(vehiclePoint);
+        }
+        else if(startAngle == EAST){
+            return checkOverlapEASTStraight(vehiclePoint);
+        }
+        else if(startAngle == SOUTH){
+            return checkOverlapSOUTHStraight(vehiclePoint);
+        }
+        else if(startAngle == WEST){
+            return checkOverlapWESTStraight(vehiclePoint);
         }
         return false;
     }
 
     private boolean checkOverlapNORTHLeftTurn(Point vehiclePoint){
-        if(vehiclePoint.getY() == rotationPoint.getY() && vehiclePoint.getX() >= rotationPoint.getX() && vehiclePoint.getX() <= rotationPoint.getX() + radius){
+        if((int)vehiclePoint.getY() <= (int)rotationPoint.getY() && vehiclePoint.getX() >= rotationPoint.getX() && vehiclePoint.getX() <= rotationPoint.getX() + App.width * 0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapEASTLeftTurn(Point vehiclePoint){
-        if(vehiclePoint.getX() == rotationPoint.getX() && vehiclePoint.getY() >= rotationPoint.getY() && vehiclePoint.getY() <= rotationPoint.getY() + radius){
+        if((int)vehiclePoint.getX() >= (int)rotationPoint.getX() && vehiclePoint.getY() >= rotationPoint.getY() && vehiclePoint.getY() <= rotationPoint.getY() + App.width * 0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapSOUTHLeftTurn(Point vehiclePoint){
-        if(vehiclePoint.getY() == rotationPoint.getY() && vehiclePoint.getX() <= rotationPoint.getX() && vehiclePoint.getX() >= rotationPoint.getX() - radius){
+        if((int)vehiclePoint.getY() >= (int)rotationPoint.getY() && vehiclePoint.getX() <= rotationPoint.getX() && vehiclePoint.getX() >= rotationPoint.getX() - App.width * 0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapWESTLeftTurn(Point vehiclePoint){
-        if(vehiclePoint.getX() == rotationPoint.getX() && vehiclePoint.getY() <= rotationPoint.getY() && vehiclePoint.getY() >= rotationPoint.getY() - radius){
+        if((int)vehiclePoint.getX() <= (int)rotationPoint.getX() && vehiclePoint.getY() <= rotationPoint.getY() && vehiclePoint.getY() >= rotationPoint.getY() - App.width * 0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapNORTHRightTurn(Point vehiclePoint){
-        if(vehiclePoint.getY() == rotationPoint.getY() && vehiclePoint.getX() <= rotationPoint.getX() && vehiclePoint.getX() >= rotationPoint.getX() - radius){
+        if((int)vehiclePoint.getY() <= (int)rotationPoint.getY() && vehiclePoint.getX() <= rotationPoint.getX() && vehiclePoint.getX() >= rotationPoint.getX() - App.width*0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapEASTRightTurn(Point vehiclePoint){
-        if(vehiclePoint.getX() == rotationPoint.getX() && vehiclePoint.getY() <= rotationPoint.getY() && vehiclePoint.getY() >= rotationPoint.getY() - radius){
+        if((int)vehiclePoint.getX() >= (int)rotationPoint.getX() && vehiclePoint.getY() <= rotationPoint.getY() && vehiclePoint.getY() >= rotationPoint.getY() - App.width*0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapSOUTHRightTurn(Point vehiclePoint){
-        if(vehiclePoint.getY() == rotationPoint.getY() && vehiclePoint.getX() >= rotationPoint.getX() && vehiclePoint.getX() <= rotationPoint.getX() + radius){
+        if((int)vehiclePoint.getY() >= (int)rotationPoint.getY() && vehiclePoint.getX() >= rotationPoint.getX() && vehiclePoint.getX() <= rotationPoint.getX() + App.width*0.25){
             return true;
         }
         return false;
     }
 
     private boolean checkOverlapWESTRightTurn(Point vehiclePoint){
-        if(vehiclePoint.getX() == rotationPoint.getX() && vehiclePoint.getY() >= rotationPoint.getY() && vehiclePoint.getY() <= rotationPoint.getY() + radius){
+        if((int)vehiclePoint.getX() <= (int)rotationPoint.getX() && vehiclePoint.getY() >= rotationPoint.getY() && vehiclePoint.getY() <= rotationPoint.getY() + App.width*0.25){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOverlapNORTHStraight(Point vehiclePoint){
+        if((int)vehiclePoint.getY() <= (int)rotationPoint.getY() && vehiclePoint.getX() >= rotationPoint.getX() && vehiclePoint.getX() <= rotationPoint.getX() + App.width * 0.125){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOverlapEASTStraight(Point vehiclePoint){
+        if((int)vehiclePoint.getX() >= (int)rotationPoint.getX() && vehiclePoint.getY() >= rotationPoint.getY() && vehiclePoint.getY() <= rotationPoint.getY() + App.width * 0.125){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOverlapSOUTHStraight(Point vehiclePoint){
+        if((int)vehiclePoint.getY() >= (int)rotationPoint.getY() && vehiclePoint.getX() <= rotationPoint.getX() && vehiclePoint.getX() >= rotationPoint.getX() - App.width * 0.125){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOverlapWESTStraight(Point vehiclePoint){
+        if((int)vehiclePoint.getX() <= (int)rotationPoint.getX() && vehiclePoint.getY() <= rotationPoint.getY() && vehiclePoint.getY() >= rotationPoint.getY() - App.width * 0.125){
             return true;
         }
         return false;
@@ -158,7 +205,19 @@ public class Turn {
         return finishAngle;
     }
 
+    public float getStartAngle(){
+        return startAngle;
+    }
+
     public int getID(){
         return turnID;
+    }
+
+    public Point getRotationPoint(){
+        return rotationPoint;
+    }
+
+    public int getDirection(){
+        return direction;
     }
 }

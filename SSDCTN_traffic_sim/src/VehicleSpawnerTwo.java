@@ -73,17 +73,17 @@ public class VehicleSpawnerTwo {
 
     public void spawn(){
         if (rand.nextInt(100) < spawnChance) {
-            spawnHelper(NORTH_SP, SOUTH, 0);
+            //spawnHelper(NORTH_SP, SOUTH, 0);
         }if(rand.nextInt(100) < spawnChance){
-            spawnHelper(EAST_SP, WEST, 1);
+            //spawnHelper(EAST_SP, WEST, 1);
         }if(rand.nextInt(100) < spawnChance){
             spawnHelper(SOUTH_SP, NORTH, 2);
         }if(rand.nextInt(100) < spawnChance){
-            spawnHelper(WEST_SP, EAST, 3);
+            //spawnHelper(WEST_SP, EAST, 3);
         }if(rand.nextInt(100) < spawnChance){
-            spawnHelper(EASTTOO_SP, WEST, 4);
+            //spawnHelper(EASTTOO_SP, WEST, 4);
         }if(rand.nextInt(100) < spawnChance){
-            spawnHelper(WESTTOO_SP, EAST, 5);
+            //spawnHelper(WESTTOO_SP, EAST, 5);
         }
 
     }

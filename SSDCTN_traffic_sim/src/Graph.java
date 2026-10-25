@@ -89,7 +89,7 @@ public class Graph {
         int ID = Integer.parseInt(vertexDescStrings[0]);
         double x = Double.parseDouble(vertexDescStrings[2]);
         double y = Double.parseDouble(vertexDescStrings[3]);
-        float radius = Float.parseFloat(vertexDescStrings[4]);
+        float radius = Float.parseFloat(vertexDescStrings[4]) * App.width;
         String direction = vertexDescStrings[5];
         int turnDirection = 0;
         switch (direction){

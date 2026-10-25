@@ -39,12 +39,23 @@ public abstract class Vehicle extends JComponent {
         turnLeft = new TurnLeft(this);
         turnRight = new TurnRight(this);
         moveForward = new MoveForward(this);
-        setState(turnLeft);
+        setState(moveForward);
     }
 
     // creating the vehicles route
     public void createRoute(int startID, int finishID, Graph g){
         vehicleRoute = BreadthFirstSearch.breadthFirstSearch(startID, finishID, g);
+        vehicleRoute.remove(0);
+    }
+
+    //gets the route
+    public ArrayList<Vertex> getVehicleRoute(){
+        return vehicleRoute;
+    }
+
+    //remove used turn from route
+    public void removeTurn(){
+        vehicleRoute.remove(0);
     }
 
     // setting states
@@ -110,13 +121,10 @@ public abstract class Vehicle extends JComponent {
         //y = position.getY();
         //updatePosition();
         //System.out.println("Route length: " + vehicleRoute.size());
-        for(int i = 0; i < vehicleRoute.size(); i++){
-            //System.out.println("Vertex ID: " + vehicleRoute.get(i).getID());
-        }
-        state.move(vehicleRoute.get(1).getTurn());
+        state.move(vehicleRoute.get(0).getTurn(), movementVelocity);
     }
 
-    private void updatePosition() { // centring method
+    public void updatePosition() { // centring method
         setBounds(
             (int)(x-width/2),
             (int)(y- height/2),

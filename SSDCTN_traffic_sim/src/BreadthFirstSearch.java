@@ -8,8 +8,6 @@ public class BreadthFirstSearch {
 
     public static ArrayList<Vertex> breadthFirstSearch(Integer startID, Integer finishID, Graph g){
         // setting up the queue and the vertex arr
-        System.out.println(startID);
-        System.out.println(finishID);
         Queue<Integer> vertexQueue = new LinkedList<Integer>();
         ArrayList<Integer> adjList = new ArrayList<>();
         HashMap<Vertex, Vertex> mapOfPrevVisited = new HashMap<>();
@@ -38,8 +36,6 @@ public class BreadthFirstSearch {
             }
         }
         setAllUnmarked(g);
-        System.out.println("This route is null");
-        System.out.println("Start ID: " + startID + " Finish ID: " + finishID);
         return null;
     }
     
