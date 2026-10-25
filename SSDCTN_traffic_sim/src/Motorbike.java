@@ -12,13 +12,13 @@ public class Motorbike extends Vehicle {
         super.height = height;
         super.direction = direction;
 
-        super.hitBox = new HitBox(position, super.direction, width*2, height*2.1); // some magic numbers to extend hitbox over the wheels
+        super.hitBox = new HitBox(position, super.direction, width*2, super.height*2.1); // some magic numbers to extend hitbox over the wheels
     }
 
     @Override
     public void draw(Graphics2D g2d) { 
 
-        Graphics2D g = (Graphics2D) g2d.create();// same with this, I need a g2d copy to rotate the motorbike without breaking the sim
+        Graphics2D g = (Graphics2D) g2d.create(); // same with this, I need a g2d copy to rotate the motorbike without breaking the sim
 
         g.rotate(
             Math.toRadians(direction + 90),
