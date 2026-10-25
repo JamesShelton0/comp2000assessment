@@ -2,27 +2,21 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class Road extends Path { 
-    // only accepts vehicles in its bounds
-    int speedLimit;
-    // int laneCount;
-    // int laneMarkings;
     int mode;   // 0 = intersection, 1 = vertical road, 2 = horizontal road
+
     // control two longitudinal ends independently so window stop lines are hidden
     private boolean drawStartStopLine = true;
     private boolean drawEndStopLine = true;
+
     Color lineColor = new Color(200, 200, 200);
     Color asphaltColor = new Color(80, 80, 80);
 
     Road() {}
 
-    Road(double xMid, double yMid, double width, double height, int mode) {
-        super.x = xMid - (width/2);
-        super.y = yMid  - (height/2);
-        super.width = width;
-        super.height = height;
+    Road(int mode) {
         this.mode = mode;
     }
-
+    
     // allow outer road arms to follow edges of window 
     public void setBounds(double x, double y, double width, double height) {
         this.x = x;

@@ -3,7 +3,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 public class Car extends Vehicle {
-    private boolean hasSunRoof;
 
     public Car(Point p, double width, double height, double direction) {
         super.position = p;

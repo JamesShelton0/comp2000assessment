@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Truck extends Vehicle {        
-    private boolean hasSunroof;
 
     public Truck(Point p, double w, double h, double direction) {
         super.position = p;

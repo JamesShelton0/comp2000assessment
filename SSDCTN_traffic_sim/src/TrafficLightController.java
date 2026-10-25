@@ -10,6 +10,7 @@ public class TrafficLightController {
 
     private Timer timer;
     private int trafficPhase = 0;
+    
     // track active phase so resize doesn't reset it
     private int remainingDelay;
     private long timerStartedAt;

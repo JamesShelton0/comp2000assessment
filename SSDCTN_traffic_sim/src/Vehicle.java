@@ -69,8 +69,8 @@ public abstract class Vehicle extends JComponent {
         Color.DARK_GRAY,
         new Color(0, 70, 160),      // SUBARU WR blue :)
         new Color(153, 76, 0),      // Colour for Matthew
-        new Color(0, 153, 0),   // British Racing Green
-        new Color(229, 204,255),   // Porsche Frozenberrymetallic (Y08)
+        new Color(0, 153, 0),       // British Racing Green
+        new Color(229, 204,255),    // Porsche Frozenberrymetallic (Y08)
     };
     protected Color bodyColour = SELECT[RAND.nextInt(SELECT.length)];
 
@@ -162,7 +162,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void updateHitBox(){
-        hitBox.updateHitbox(position, direction, velocity);
+        hitBox.updateHitbox(position, direction);
     }
 
     public Point getPosition() {
