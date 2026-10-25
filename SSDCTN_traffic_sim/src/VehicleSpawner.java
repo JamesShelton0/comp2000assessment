@@ -92,11 +92,9 @@ public class VehicleSpawner {
         // prevents spawning when a vehicle is already in spawn zone
         int lastElement = activeVehicles.get(0).getEntities().size()-1;
         if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < viewportTop) {
-            // System.out.println("VehicleSpawner: North spawn full - aborting.");
             vehicleType = -1;   // uses default case (doesn't create vehicle)
         }
 
-        // System.out.println("north spawn succeeded. Vehicle type: "+vehicleType);
         switch (vehicleType) {
             case 0: // BUS
                 Bus bus = new Bus(spawnPoint, BUS_W, BUS_H, direction);
@@ -114,15 +112,12 @@ public class VehicleSpawner {
                 break;
             
             case 3: // MOTORBIKE
-                // construct at the north spawn so the initial hitbox matches its position
                 Motorbike motorbike = new Motorbike(spawnPoint, MOTORBIKE_W, MOTORBIKE_H, direction);
                 activeVehicles.get(sublistIndex).add(motorbike);
                 break;
 
             case 4: // TRUCK
                 Truck truck = new Truck(spawnPoint, TRUCK_W, TRUCK_H, direction);
-                //truck.setPosition(spawnPoint);
-                //truck.setDirection((float) direction);
                 activeVehicles.get(sublistIndex).add(truck);
                 break;
             default:

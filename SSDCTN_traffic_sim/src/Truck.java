@@ -27,7 +27,6 @@ public class Truck extends Vehicle {
         );
             
         double left = x - width / 2; // centers the truck
-        double top = y - height / 2;
 
         // Truck cabin
         Rectangle2D.Double truckCabin = new Rectangle2D.Double(

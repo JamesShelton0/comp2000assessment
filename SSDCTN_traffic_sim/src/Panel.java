@@ -17,8 +17,6 @@ class Panel extends JPanel implements KeyListener {
     private static final double INITIAL_POTHOLE_SIZE = 12;
     
     VehicleSpawner vehicleSpawner;
-    VehicleDespawner vehicleDespawner;
-    private List<EntityStore<Vehicle>> activeVehicles;
     Road roadN, roadE, roadMid, roadW, intersection, roadOnFarRight; // upper road
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
@@ -30,12 +28,10 @@ class Panel extends JPanel implements KeyListener {
     private final List<Explosion> explosions = new ArrayList<>();
     TrafficLightController trafficLightController;
     BusStop busStop;
-    Graph g;
     Statistics stats;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
-        g = new Graph();
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
@@ -51,19 +47,17 @@ class Panel extends JPanel implements KeyListener {
 
         // ---------------------- Vehicle Spawn Timers ----------------------
         vehicleSpawner = new VehicleSpawner(30); // % chance
-        vehicleDespawner = new VehicleDespawner();
         Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
             // pause spawner when paused for resize 
             if (!pausedForResize) {
                 vehicleSpawner.spawn();
-                activeVehicles = vehicleSpawner.getVehicles();
             }
         });
         vehicleSpawnTimer.start();
         Timer vehicleDespawnTimer = new Timer(10000, e -> {
             // pause spawner when paused for resize
             if (!pausedForResize) {
-                vehicleDespawner.despawnVehicle(activeVehicles);
+                vehicleSpawner.despawn();
             }
         });
         vehicleDespawnTimer.start();
@@ -78,12 +72,12 @@ class Panel extends JPanel implements KeyListener {
             for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
 
-                    //Do not accelerate the bus while it is stopped at the bus stop
+                    // Do not accelerate the bus while it is stopped at the bus stop
                     if (vehicle instanceof Bus && ((Bus) vehicle).isStoppedAtBusStop()){
                         continue;
                     }
                   
-                    // dont build up speed when movement is blocked
+                    // Dont build up speed when movement is blocked
                     if (!vehicle.isMovementBlocked() && vehicle.velocity < vehicle.topSpeed) {
                         vehicle.accelerate(vehicle.accelerationRate);
                     }

@@ -14,28 +14,19 @@ public class Car extends Vehicle {
         super.decelerationRate = -1;
         super.topSpeed = 8;
 
-        super.pollutionRate = 50;
         super.hitBox = new HitBox(p, super.direction, width, height);
     }
 
     @Override
     public void draw(Graphics2D g2d) {// this creates a copy so I can rotate the car without breaking the sim
-
         Graphics2D g = (Graphics2D) g2d.create();
-
-        g.rotate(
-            Math.toRadians(direction + 90),
-            x,
-            y
-        );
+        g.rotate(Math.toRadians(direction + 90), x, y);
 
         double left = x - width / 2;
         double top = y - height / 2;
 
-
         // ---------------- Car Body ----------------
-        RoundRectangle2D.Double carBody =
-            new RoundRectangle2D.Double(
+        RoundRectangle2D.Double carBody = new RoundRectangle2D.Double(
                 left,
                 top,
                 width,
@@ -46,10 +37,8 @@ public class Car extends Vehicle {
         g.setColor(bodyColour);   
         g.fill(carBody);
 
-
         // ---------------- Windows ----------------
-        Rectangle2D.Double frontWindow =
-            new Rectangle2D.Double(
+        Rectangle2D.Double frontWindow = new Rectangle2D.Double(
                 left + width / 5,
                 top + height / 5,
                 width / 5 * 3,
@@ -67,34 +56,29 @@ public class Car extends Vehicle {
             );
         g.fill(rearWindow);
 
-
         // ---------------- Wheels ----------------
-        Rectangle2D.Double frontLeftWheel =
-            new Rectangle2D.Double(
+        Rectangle2D.Double frontLeftWheel = new Rectangle2D.Double(
                 left - 2,
                 top + 8,
                 4,
                 10
             );
 
-        Rectangle2D.Double frontRightWheel =
-            new Rectangle2D.Double(
+        Rectangle2D.Double frontRightWheel = new Rectangle2D.Double(
                 left + width - 2,
                 top + 8,
                 4,
                 10
             );
 
-        Rectangle2D.Double rearLeftWheel =
-            new Rectangle2D.Double(
+        Rectangle2D.Double rearLeftWheel = new Rectangle2D.Double(
                 left - 2,
                 top + height - 18,
                 4,
                 10
             );
 
-        Rectangle2D.Double rearRightWheel =
-            new Rectangle2D.Double(
+        Rectangle2D.Double rearRightWheel = new Rectangle2D.Double(
                 left + width - 2,
                 top + height - 18,
                 4,
