@@ -96,6 +96,14 @@ public class HitBox {
         return false;
     }
 
+    public boolean overlaps(HitBox other) {
+        // compare two hitbox boundaries to find real overlap 
+        return getLeftMostPoint() < other.getRightMostPoint()
+            && getRightMostPoint() > other.getLeftMostPoint()
+            && getLowerMostPoint() < other.getUpperMostPoint()
+            && getUpperMostPoint() > other.getLowerMostPoint();
+    }
+
     public boolean pointInHitBox(Point p){
         if(direction % 90 != 0){
             for(int i = 0; i < 4; i++){

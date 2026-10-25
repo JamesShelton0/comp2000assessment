@@ -1,6 +1,5 @@
 // a bunch of tests, mostly for debugging and running controlled scenarios 
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,23 +7,24 @@ import java.util.Map;
 public class CollisionDetectionTest {
     public static void main(String[] args) {
         // run focused regression checks for the traffic deadlocks
-        testOnlyRearVehicleStops();
+        testFollowingVehicleStopsForStationaryLeader();
         testSeparatedVehiclesContinue();
-        testPerpendicularVehiclesDoNotBlockEachOther();
+        testTboneCollisionIsDetected();
+        testSameDirectionVehiclesDoNotExplode();
         testMotorbikeHitboxBufferIsRespected();
-        testNextMovementStepCannotCauseOverlap();
+        testMovementIsLimitedToSafeFollowingDistance();
         System.out.println("Collision detection tests passed.");
     }
 
-    private static void testOnlyRearVehicleStops() {
-        // two close vehicles in one lane should only block the rear vehicle
+    private static void testFollowingVehicleStopsForStationaryLeader() {
+        // a close follower must stop when the leading vehicle is stationary
         Car rear = createCar(100, 100, 90);
         Car front = createCar(100, 150, 90);
         EntityStore<Vehicle> lane = createLane(rear, front);
 
-        ArrayList<Vehicle> stopped = CollisionDetection.checkVehicleCollisions(List.of(lane));
-        require(stopped.size() == 1 && stopped.contains(rear),
-            "Only the rear vehicle should stop in same-direction traffic.");
+        Map<Vehicle, Double> allowed = calculateMovements(List.of(lane), rear, 8, front, 0);
+        require(allowed.get(rear) == 0,
+            "The rear vehicle should stop for a stationary leader.");
     }
 
     private static void testSeparatedVehiclesContinue() {
@@ -33,18 +33,33 @@ public class CollisionDetectionTest {
         Car front = createCar(100, 300, 90);
         EntityStore<Vehicle> lane = createLane(rear, front);
 
-        ArrayList<Vehicle> stopped = CollisionDetection.checkVehicleCollisions(List.of(lane));
-        require(stopped.isEmpty(), "Separated vehicles should continue moving.");
+        Map<Vehicle, Double> allowed = calculateMovements(List.of(lane), rear, 8, front, 8);
+        require(allowed.get(rear) == 8 && allowed.get(front) == 8,
+            "Separated vehicles should continue at their requested speed.");
     }
 
-    private static void testPerpendicularVehiclesDoNotBlockEachOther() {
-        // traffic lights control crossing directions
+    private static void testTboneCollisionIsDetected() {
+        // overlapping vehicles in perpendicular lanes cause a t-bone collision
         Car southbound = createCar(100, 100, 90);
         Car eastbound = createCar(100, 100, 0);
-        EntityStore<Vehicle> lane = createLane(southbound, eastbound);
+        EntityStore<Vehicle> southboundLane = createLane(southbound);
+        EntityStore<Vehicle> eastboundLane = createLane(eastbound);
 
-        ArrayList<Vehicle> stopped = CollisionDetection.checkVehicleCollisions(List.of(lane));
-        require(stopped.isEmpty(), "Perpendicular vehicles should not deadlock each other.");
+        Vehicle[] collision = CollisionDetection.findCollision(List.of(southboundLane, eastboundLane));
+        require(collision != null,
+            "Overlapping perpendicular vehicles should create a collision.");
+    }
+
+    private static void testSameDirectionVehiclesDoNotExplode() {
+        // rear-end handling is separate from the t-bone explosion feature
+        Car firstVehicle = createCar(100, 100, 90);
+        Car secondVehicle = createCar(100, 100, 90);
+
+        Vehicle[] collision = CollisionDetection.findCollision(
+            List.of(createLane(firstVehicle), createLane(secondVehicle))
+        );
+        require(collision == null,
+            "Same-direction vehicles should not create a T-bone collision.");
     }
 
     private static void testMotorbikeHitboxBufferIsRespected() {
@@ -56,22 +71,20 @@ public class CollisionDetectionTest {
         front.updateHitBox();
         EntityStore<Vehicle> lane = createLane(rear, front);
 
-        ArrayList<Vehicle> stopped = CollisionDetection.checkVehicleCollisions(List.of(lane));
-        require(stopped.size() == 1 && stopped.contains(rear),
+        Map<Vehicle, Double> allowed = calculateMovements(List.of(lane), rear, 8, front, 0);
+        require(allowed.get(rear) == 0,
             "The rear vehicle should stop before reaching the motorbike's enlarged hitbox.");
     }
 
-    private static void testNextMovementStepCannotCauseOverlap() {
-        // fast vehicle must stop before hitting something 
+    private static void testMovementIsLimitedToSafeFollowingDistance() {
+        // a fast vehicle may only move as far as the safe gap allows
         Car rear = createCar(100, 100, 90);
-        rear.setVelocity(10);
         Car stoppedFront = createCar(100, 160, 90);
-        stoppedFront.setVelocity(0);
         EntityStore<Vehicle> lane = createLane(rear, stoppedFront);
 
-        ArrayList<Vehicle> stopped = CollisionDetection.checkVehicleCollisions(List.of(lane));
-        require(stopped.size() == 1 && stopped.contains(rear),
-            "A vehicle should stop before its next movement step enters another hitbox.");
+        Map<Vehicle, Double> allowed = calculateMovements(List.of(lane), rear, 10, stoppedFront, 0);
+        require(allowed.get(rear) > 0 && allowed.get(rear) <= 3.0001,
+            "A vehicle should only move up to the safe following distance.");
     }
 
     private static Car createCar(double x, double y, float direction) {
@@ -91,6 +104,16 @@ public class CollisionDetectionTest {
             lane.add(vehicle);
         }
         return lane;
+    }
+
+    private static Map<Vehicle, Double> calculateMovements(
+            List<EntityStore<Vehicle>> lanes,
+            Vehicle firstVehicle, double firstMovement,
+            Vehicle secondVehicle, double secondMovement) {
+        Map<Vehicle, Double> desiredMovements = new IdentityHashMap<>();
+        desiredMovements.put(firstVehicle, firstMovement);
+        desiredMovements.put(secondVehicle, secondMovement);
+        return CollisionDetection.calculateAllowedMovements(lanes, desiredMovements);
     }
 
     private static void require(boolean condition, String message) {

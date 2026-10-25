@@ -21,7 +21,8 @@ class Panel extends JPanel {
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
-    //Explosion explosion;
+    // active explosions are temporary traffic-blocking
+    private final List<Explosion> explosions = new ArrayList<>();
     TrafficLightController trafficLightController;
     BusStop busStop;
     Graph g;
@@ -76,6 +77,12 @@ class Panel extends JPanel {
         // ---------------------- Movement Timer ----------------------
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
+            explosions.removeIf(Explosion::isFinished);
+            Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicles());
+            if (collision != null) {
+                createExplosion(collision[0], collision[1]);
+            }
+
             if (trafficLight1.getLightState() == 2) {
                 stopLine1.setActive();
                 /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
@@ -104,7 +111,8 @@ class Panel extends JPanel {
                     
                     // shouldStopAtRed handles lights until stop-line collision logic is implemented
                     boolean environmentBlocked = shouldStopAtRed(vehicle)
-                        || pothole.shouldBlock(vehicle);
+                        || pothole.shouldBlock(vehicle)
+                        || isBlockedByExplosion(vehicle);
                     environmentBlocks.put(vehicle, environmentBlocked);
                     desiredMovements.put(
                         vehicle,
@@ -275,6 +283,32 @@ class Panel extends JPanel {
         return false;
     }
 
+    private void createExplosion(Vehicle firstVehicle, Vehicle secondVehicle) {
+        // place explosion halfway between vehicles then remove them 
+        double x = (firstVehicle.getPosition().getX() + secondVehicle.getPosition().getX()) / 2;
+        double y = (firstVehicle.getPosition().getY() + secondVehicle.getPosition().getY()) / 2;
+        explosions.add(new Explosion((int) x, (int) y, this));
+        removeVehicle(firstVehicle);
+        removeVehicle(secondVehicle);
+    }
+
+    private void removeVehicle(Vehicle vehicle) {
+        for (EntityStore<Vehicle> lane : vehicleSpawner.getVehicles()) {
+            lane.remove(vehicle);
+        }
+    }
+
+    private boolean isBlockedByExplosion(Vehicle vehicle) {
+        // stop vehicles near explosion 
+        for (Explosion explosion : explosions) {
+            if (explosion.blocks(vehicle.getPosition())
+                    || explosion.blocks(vehicle.getHitBox().getPointAhead())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -311,6 +345,9 @@ class Panel extends JPanel {
             for (Vehicle vehicle : sublist.getEntities()) {
                 vehicle.draw(g2d);
             }
+        }
+        for (Explosion explosion : explosions) {
+            explosion.draw(g2d);
         }
 
         g2d.dispose();

@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class TrafficLight {
+public class TrafficLight implements TrafficLightObserver {
     // 0 = green, 1 = orange, 2 = red
     private int currentLight = 0;
     private double x, y;
@@ -16,6 +16,12 @@ public class TrafficLight {
 
     public void setLightState(int state) {
         this.currentLight = state;
+    }
+
+    @Override
+    public void updateLightState(int state) {
+        // receive state sent by TrafficLightController
+        setLightState(state);
     }
 
         // traffic light position is relative but scaling is still hard coded for now

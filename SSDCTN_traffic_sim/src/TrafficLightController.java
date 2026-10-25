@@ -1,15 +1,12 @@
 import javax.swing.Timer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrafficLightController {
 
-    private TrafficLight trafficLight1;
-    private TrafficLight trafficLight2;
-    private TrafficLight trafficLight3;
-    private TrafficLight trafficLight4;
-    private TrafficLight trafficLight5;
-    private TrafficLight trafficLight6;
-    private TrafficLight trafficLight7;
-    private TrafficLight trafficLight8;
+    // each group receives the same update when its traffic direction changes
+    private final List<TrafficLightObserver> northSouthLights = new ArrayList<>();
+    private final List<TrafficLightObserver> eastWestLights = new ArrayList<>();
 
     private Timer timer;
     private int trafficPhase = 0;
@@ -32,22 +29,21 @@ public class TrafficLightController {
         TrafficLight trafficLight8
     ) {
 
-        this.trafficLight1 = trafficLight1;
-        this.trafficLight2 = trafficLight2;
-        this.trafficLight3 = trafficLight3;
-        this.trafficLight4 = trafficLight4;
+        // register the active lights as observers for travel direction
+        northSouthLights.add(trafficLight2);
+        northSouthLights.add(trafficLight3);
+        eastWestLights.add(trafficLight1);
+        eastWestLights.add(trafficLight4);
 
         // Starting state
 
         // East / West RED
-        trafficLight1.setLightState(RED);
-        trafficLight4.setLightState(RED);
+        notifyObservers(eastWestLights, RED);
         trafficLight5.setLightState(RED); 
         trafficLight8.setLightState(RED);
 
         // North / South GREEN
-        trafficLight2.setLightState(GREEN);
-        trafficLight3.setLightState(GREEN);
+        notifyObservers(northSouthLights, GREEN);
         trafficLight6.setLightState(GREEN);
         trafficLight7.setLightState(GREEN);
 
@@ -70,15 +66,8 @@ public class TrafficLightController {
 
             // North/South GREEN -> YELLOW
             case 0:
-                trafficLight2.setLightState(YELLOW);
-                trafficLight3.setLightState(YELLOW);
-               //trafficLight6.setLightState(YELLOW);
-               // trafficLight7.setLightState(YELLOW);
-
-                trafficLight1.setLightState(RED);
-                trafficLight4.setLightState(RED);
-             //   trafficLight5.setLightState(RED);
-              //  trafficLight8.setLightState(RED);
+                notifyObservers(northSouthLights, YELLOW);
+                notifyObservers(eastWestLights, RED);
 
                 trafficPhase = 1;
 
@@ -89,15 +78,8 @@ public class TrafficLightController {
 
             // North/South RED -> East/West GREEN
             case 1:
-                trafficLight2.setLightState(RED);
-                trafficLight3.setLightState(RED);
-               // trafficLight6.setLightState(RED);
-               // trafficLight7.setLightState(RED);
-
-                trafficLight1.setLightState(GREEN);
-                trafficLight4.setLightState(GREEN);
-               // trafficLight5.setLightState(GREEN);
-               // trafficLight8.setLightState(GREEN);
+                notifyObservers(northSouthLights, RED);
+                notifyObservers(eastWestLights, GREEN);
 
                 trafficPhase = 2;
 
@@ -108,14 +90,8 @@ public class TrafficLightController {
 
             // East/West GREEN -> YELLOW
             case 2:
-                trafficLight1.setLightState(YELLOW);
-                trafficLight4.setLightState(YELLOW);
-                //trafficLight5.setLightState(YELLOW);
-                //trafficLight8.setLightState(YELLOW);
-                trafficLight2.setLightState(RED);
-                trafficLight3.setLightState(RED);
-               // trafficLight6.setLightState(RED);
-               // trafficLight7.setLightState(RED);
+                notifyObservers(eastWestLights, YELLOW);
+                notifyObservers(northSouthLights, RED);
 
                 trafficPhase = 3;
 
@@ -126,15 +102,8 @@ public class TrafficLightController {
 
             // East/West RED -> North/South GREEN
             case 3:
-                trafficLight1.setLightState(RED);
-                trafficLight4.setLightState(RED);
-               // trafficLight5.setLightState(RED);
-                //trafficLight8.setLightState(RED);
-
-                trafficLight2.setLightState(GREEN);
-                trafficLight3.setLightState(GREEN);
-                //trafficLight6.setLightState(GREEN);
-               // trafficLight7.setLightState(GREEN);
+                notifyObservers(eastWestLights, RED);
+                notifyObservers(northSouthLights, GREEN);
 
                 trafficPhase = 0;
 
@@ -149,5 +118,12 @@ public class TrafficLightController {
 
         timer.setInitialDelay(delay);
         timer.restart();
+    }
+
+    private void notifyObservers(List<TrafficLightObserver> lights, int state) {
+        // send one state change to every light in the selected direction
+        for (TrafficLightObserver light : lights) {
+            light.updateLightState(state);
+        }
     }
 }

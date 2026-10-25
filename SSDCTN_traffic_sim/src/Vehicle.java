@@ -104,16 +104,10 @@ public abstract class Vehicle extends JComponent {
     }
 
     public void move(double movementVelocity){
-        // allow smooth, temporary speed matching without overwriting desired velocity
-        //position = Velocity.calPosition(x, y, direction, movementVelocity);
-        //x = position.getX();
-        //y = position.getY();
-        //updatePosition();
-        //System.out.println("Route length: " + vehicleRoute.size());
-        for(int i = 0; i < vehicleRoute.size(); i++){
-            //System.out.println("Vertex ID: " + vehicleRoute.get(i).getID());
-        }
-        state.move(vehicleRoute.get(1).getTurn());
+        position = Velocity.calPosition(x, y, direction, movementVelocity);
+        x = position.getX();
+        y = position.getY();
+        updatePosition();
     }
 
     private void updatePosition() { // centring method
