@@ -10,10 +10,10 @@ public class VehicleSpawnerTwo {
     private final Start EASTTOO_SP;
     private final Start WESTTOO_SP;
 
-    private final double NORTH = 270;
-    private final double EAST = 0;
-    private final double SOUTH = 90;
-    private final double WEST = 180;
+    private final float NORTH = 270;
+    private final float EAST = 0;
+    private final float SOUTH = 90;
+    private final float WEST = 180;
 
     private final int VCL_TYPE_AMOUNT = 5;
     private double BUS_W, BUS_H;
@@ -31,11 +31,8 @@ public class VehicleSpawnerTwo {
     private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn, eastTooSpawn, westTooSpawn;
     private Graph localGraph;
 
-    VehicleSpawnerTwo(int w, int h, int spawnChance, Graph g)throws SimulationConfigurationException{
+    VehicleSpawnerTwo(int w, int h, int spawnChance, Graph g) throws SimulationConfigurationException {
         // validate at startup so bad settings create error
-        if (w <= 0 || h <= 0) {
-            throw new SimulationConfigurationException("Simulation dimensions must be positive.");
-        }
         if (spawnChance < 0 || spawnChance > 100) {
             throw new SimulationConfigurationException("Spawn chance must be between 0 and 100.");
         }
@@ -88,7 +85,7 @@ public class VehicleSpawnerTwo {
 
     }
 
-    private void spawnHelper(Start start, double direction, int entityStoreNum){
+    private void spawnHelper(Start start, float direction, int entityStoreNum){
         int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
         // prevents spawning when a vehicle is already in spawn zone
@@ -107,40 +104,30 @@ public class VehicleSpawnerTwo {
                 Bus bus = new Bus(start.getStartPoint(), BUS_W, BUS_H, direction);
                 bus.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(bus);
-                bus.setPosition(start.getStartPoint());
-                bus.setDirection((float) direction);
                 break;
             
             case 1: // CAR
                 Car car = new Car(start.getStartPoint(), CAR_W, CAR_H, direction);
                 car.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(car);
-                car.setPosition(start.getStartPoint());
-                car.setDirection((float) direction);
                 break;
 
             case 2:  //CYCLIST
                 Cyclist cyclist = new Cyclist(start.getStartPoint(), CYCLIST_W, CYCLIST_H, direction);  // arbitrary arguments
                 cyclist.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(cyclist);
-                cyclist.setPosition(start.getStartPoint());
-                cyclist.setDirection((float) direction);
                 break;
             
             case 3: // MOTORBIKE  // construct at the north spawn so the initial hitbox matches its position
                 Motorbike motorbike = new Motorbike(start.getStartPoint(), MOTORBIKE_W, MOTORBIKE_H, direction);
                 motorbike.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(motorbike);
-                motorbike.setPosition(start.getStartPoint());
-                motorbike.setDirection((float) direction);
                 break;
 
             case 4: // TRUCK
                 Truck truck = new Truck(start.getStartPoint(), TRUCK_W, TRUCK_H, direction);
                 truck.createRoute(start.getID(), finish.getID(), localGraph);
                 activeVehicles.get(entityStoreNum).add(truck);
-                truck.setPosition(start.getStartPoint());
-                truck.setDirection((float) direction);
                 break;
             default:
         }

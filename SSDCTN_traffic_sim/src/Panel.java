@@ -16,7 +16,7 @@ class Panel extends JPanel implements KeyListener {
     private static final double POTHOLE_GROWTH_CHANCE = 0.005;
     private static final double INITIAL_POTHOLE_SIZE = 12;
     
-    VehicleSpawner vehicleSpawner;
+    VehicleSpawnerTwo vehicleSpawner;
     VehicleDespawner vehicleDespawner;
     private List<EntityStore<Vehicle>> activeVehicles;
     Road roadN, roadE, roadMid, roadW, intersection, roadOnFarRight; // upper road
@@ -50,7 +50,7 @@ class Panel extends JPanel implements KeyListener {
         stats = new Statistics();
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(30); // % chance
+        vehicleSpawner = new VehicleSpawnerTwo(w, h, 30, g); // % chance
         vehicleDespawner = new VehicleDespawner();
         Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
             // pause spawner when paused for resize 
@@ -356,7 +356,7 @@ class Panel extends JPanel implements KeyListener {
         roadE2.setBounds(intersectionRight2, intersectionTop2, right - intersectionRight2, roadHeight);
 
         // spawning and despawning
-        vehicleSpawner.updateViewportBounds(left, top, right, bottom);
+        //vehicleSpawner.updateViewportBounds(left, top, right, bottom);
         stats.updateViewportBounds(width, height);
     }
 
