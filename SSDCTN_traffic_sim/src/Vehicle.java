@@ -49,6 +49,7 @@ public abstract class Vehicle extends JComponent {
     // it contains the actual shapes and fills used to draw the object
     public void draw(Graphics2D g2d) {}
 
+    // ----------------- Position -----------------
     public void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
@@ -67,13 +68,6 @@ public abstract class Vehicle extends JComponent {
         if (hitBox != null) hitBox.updateHitbox(position, direction);
     }
 
-    public void move(double movementVelocity){
-        position = Velocity.calPosition(x, y, direction, movementVelocity);
-        x = position.getX();
-        y = position.getY();
-        updatePosition();
-    }
-
     private void updatePosition() { // centring method
         setBounds(
             (int)(x-width/2),
@@ -83,8 +77,20 @@ public abstract class Vehicle extends JComponent {
         );
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
+    // ----------------- Movement -----------------
+    public void move(double movementVelocity){
+        position = Velocity.calPosition(x, y, direction, movementVelocity);
+        x = position.getX();
+        y = position.getY();
+        updatePosition();
+    }
+
     // For acceleration pass positive number, for deceleration pass negative number
-    void accelerate(double change) {
+    public void accelerate(double change) {
         velocity += change;
         if (velocity < 0) velocity = 0;
         // clamp acceleration at top speed so fractional rates cant go above it
@@ -92,40 +98,41 @@ public abstract class Vehicle extends JComponent {
     }
 
 
-    void setVelocity(double velocity){
+    public void setVelocity(double velocity){
         this.velocity = velocity;
     }
 
+    public double getVelocity() {
+        return velocity;
+    }
+
     // record whether traffic light or obstacle is preventing movement
-    void setMovementBlocked(boolean movementBlocked) {
+    public void setMovementBlocked(boolean movementBlocked) {
         this.movementBlocked = movementBlocked;
     }
 
     // let acceleration pause whilst vehicle is waiting in traffic
-    boolean isMovementBlocked() {
+    public boolean isMovementBlocked() {
         return movementBlocked;
     }
 
-
-    void setDirection(float direction){
+    // ----------------- Direction -----------------
+    public void setDirection(float direction){
         this.direction = direction;
         // rotate hitbox immediately so collision checks use vehicles new travel direction
         if (hitBox != null && position != null) hitBox.updateHitbox(position, direction);
     }
 
-    double getDirection(){
+    public double getDirection(){
         return direction;
     }
 
-    public HitBox getHitBox(){
-        return hitBox;
-    }
-
+    // ----------------- Hitbox -----------------
     public void updateHitBox(){
         hitBox.updateHitbox(position, direction);
     }
 
-    public Point getPosition() {
-        return position;
+    public HitBox getHitBox(){
+        return hitBox;
     }
 }

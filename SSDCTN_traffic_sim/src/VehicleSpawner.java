@@ -31,6 +31,8 @@ public class VehicleSpawner {
     private double MOTORBIKE_W, MOTORBIKE_H;
     private double TRUCK_W, TRUCK_H;
 
+    private long totalVehiclesSpawned;
+
     // a buffer for spawning/despawning vehicles to ensure they are entirely off screen
     private final int SPAWN_BUFFER;
 
@@ -78,7 +80,7 @@ public class VehicleSpawner {
         activeVehicles.add(westTooSpawn);
     }
 
-    
+
     public void spawn() {
         if (rand.nextInt(100) < spawnChance) spawnHelper(NORTH_SP, SOUTH, 0);
         if (rand.nextInt(100) < spawnChance) spawnHelper(EAST_SP, WEST, 1);
@@ -95,6 +97,8 @@ public class VehicleSpawner {
         int lastElement = activeVehicles.get(0).getEntities().size()-1;
         if (lastElement >= 0 && activeVehicles.get(0).get(lastElement).getPosition().getY() < viewportTop) {
             vehicleType = -1;   // uses default case (doesn't create vehicle)
+        } else {
+            totalVehiclesSpawned++;
         }
 
         switch (vehicleType) {
@@ -192,5 +196,9 @@ public class VehicleSpawner {
     public Stream<Vehicle> getVehicleStream() {
         return activeVehicles.stream()
                              .flatMap(sublist -> sublist.stream());
+    }
+
+    public long getTotalVehicleCount() {
+        return totalVehiclesSpawned;
     }
 }

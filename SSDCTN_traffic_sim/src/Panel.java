@@ -163,6 +163,11 @@ class Panel extends JPanel implements KeyListener {
                     sublist.remove(swallowedVehicle);
                 }
             }
+
+            stats.inputTotalCount(vehicleSpawner.getTotalVehicleCount());
+            stats.updateCurVehicleCount(vehicleSpawner.getVehicleStream());
+            stats.calculateAvgVelocity(vehicleSpawner.getVehicleStream());
+
             this.repaint();
         });
         moveTimer.start();
