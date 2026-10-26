@@ -31,8 +31,12 @@ class Panel extends JPanel implements KeyListener {
     Statistics stats;
     long explosionCounter = 0;
 
+    Graph g;
+
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
+
+        
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
@@ -46,8 +50,10 @@ class Panel extends JPanel implements KeyListener {
 
         stats = new Statistics();
 
+        g = new Graph();
+
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(30); // % chance
+        vehicleSpawner = new VehicleSpawner(30, g); // % chance
         Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
             // pause spawner when paused for resize 
             if (!pausedForResize) {

@@ -117,7 +117,7 @@ public abstract class Vehicle extends JComponent {
         //state.move(vehicleRoute.get(1).getTurn());
     }
 
-    /*public void move(double movementVelocity){
+    public void move(double movementVelocity){
         // allow smooth, temporary speed matching without overwriting desired velocity
         //position = Velocity.calPosition(x, y, direction, movementVelocity);
         //x = position.getX();
@@ -127,7 +127,7 @@ public abstract class Vehicle extends JComponent {
         state.move(vehicleRoute.get(0).getTurn(), movementVelocity);
         // keep collision geometry synced when vehicle is repositioned 
         if (hitBox != null) hitBox.updateHitbox(position, direction);
-    }*/
+    }
 
     public void updatePosition() { // centring method
         setBounds(
@@ -143,12 +143,12 @@ public abstract class Vehicle extends JComponent {
     }
 
     // ----------------- Movement -----------------
-    public void move(double movementVelocity){
+    /*public void move(double movementVelocity){
         position = Velocity.calPosition(x, y, direction, movementVelocity);
         x = position.getX();
         y = position.getY();
         updatePosition();
-    }
+    }*/
 
     // For acceleration pass positive number, for deceleration pass negative number
     public void accelerate(double change) {
