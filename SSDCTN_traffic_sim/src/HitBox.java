@@ -38,7 +38,7 @@ public class HitBox {
         edgeArr.add(e4);        
     }
 
-    public void updateHitbox(Point p, double direction, double velocity){
+    public void updateHitbox(Point p, double direction){
         this.direction = direction;
         centrePoint = p;
         pointArr.set(0, Velocity.calPositionWithRadius(p, direction, radius, -1, 1, xAddon, yAddon));
@@ -94,6 +94,14 @@ public class HitBox {
             }
         }
         return false;
+    }
+
+    public boolean overlaps(HitBox other) {
+        // compare two hitbox boundaries to find real overlap 
+        return getLeftMostPoint() < other.getRightMostPoint()
+            && getRightMostPoint() > other.getLeftMostPoint()
+            && getLowerMostPoint() < other.getUpperMostPoint()
+            && getUpperMostPoint() > other.getLowerMostPoint();
     }
 
     public boolean pointInHitBox(Point p){

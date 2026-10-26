@@ -1,17 +1,10 @@
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.Random;
+import java.util.ArrayList;
 
 public abstract class Vehicle extends JComponent {
-    // states
-    VehicleState turnLeft;
-    VehicleState turnRight;
-    VehicleState moveForward;
-
-    VehicleState state;
- 
     // size and position
     protected double width, height;
     protected double x, y;
@@ -33,6 +26,12 @@ public abstract class Vehicle extends JComponent {
 
     // arraylist of turns to dictate the path of the vehicle
     private ArrayList<Vertex> vehicleRoute;
+
+    //
+    VehicleState turnLeft;
+    VehicleState turnRight;
+    VehicleState moveForward;
+    VehicleState state;
 
     // constructor
     public Vehicle(){
@@ -64,9 +63,7 @@ public abstract class Vehicle extends JComponent {
     }
 
     // vehicle colours
-    
     private static final Random RAND = new Random();
-
     private static final Color[] SELECT = {
         Color.RED, 
         Color.YELLOW, 
@@ -80,10 +77,13 @@ public abstract class Vehicle extends JComponent {
         Color.DARK_GRAY,
         new Color(0, 70, 160),      // SUBARU WR blue :)
         new Color(153, 76, 0),      // Colour for Matthew
-        new Color(0, 153, 0),   // British Racing Green
-        new Color(229, 204,255),   // Porsche Frozenberrymetallic (Y08)
+        new Color(0, 153, 0),       // British Racing Green
+        new Color(229, 204,255),    // Porsche Frozenberrymetallic (Y08)
     };
     protected Color bodyColour = SELECT[RAND.nextInt(SELECT.length)];
+
+    // constructor
+    //public Vehicle() {}
 
     public Color getBodyColour() {
         return bodyColour;
@@ -94,11 +94,14 @@ public abstract class Vehicle extends JComponent {
     // it contains the actual shapes and fills used to draw the object
     public void draw(Graphics2D g2d) {}
 
-    public void setPosition(double x, double y){
+    // ----------------- Position -----------------
+    public void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
         this.position = new Point(x, y);
         updatePosition();
+        // keep collision geometry synced when vehicle is repositioned 
+        if (hitBox != null) hitBox.updateHitbox(position, direction);
     }
 
     public void setPosition(Point point) {
@@ -114,7 +117,7 @@ public abstract class Vehicle extends JComponent {
         //state.move(vehicleRoute.get(1).getTurn());
     }
 
-    public void move(double movementVelocity){
+    /*public void move(double movementVelocity){
         // allow smooth, temporary speed matching without overwriting desired velocity
         //position = Velocity.calPosition(x, y, direction, movementVelocity);
         //x = position.getX();
@@ -122,7 +125,9 @@ public abstract class Vehicle extends JComponent {
         //updatePosition();
         //System.out.println("Route length: " + vehicleRoute.size());
         state.move(vehicleRoute.get(0).getTurn(), movementVelocity);
-    }
+        // keep collision geometry synced when vehicle is repositioned 
+        if (hitBox != null) hitBox.updateHitbox(position, direction);
+    }*/
 
     public void updatePosition() { // centring method
         setBounds(
@@ -133,49 +138,67 @@ public abstract class Vehicle extends JComponent {
         );
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
+    // ----------------- Movement -----------------
+    public void move(double movementVelocity){
+        position = Velocity.calPosition(x, y, direction, movementVelocity);
+        x = position.getX();
+        y = position.getY();
+        updatePosition();
+    }
+
     // For acceleration pass positive number, for deceleration pass negative number
-    void accelerate(double change) {
+    public void accelerate(double change) {
         velocity += change;
         if (velocity < 0) velocity = 0;
+        // clamp acceleration at top speed so fractional rates cant go above it
+        if (change > 0 && velocity > topSpeed) velocity = topSpeed;
     }
 
 
-    void setVelocity(double velocity){
+    public void setVelocity(double velocity){
         this.velocity = velocity;
     }
 
+    public double getVelocity() {
+        return velocity;
+    }
+
     // record whether traffic light or obstacle is preventing movement
-    void setMovementBlocked(boolean movementBlocked) {
+    public void setMovementBlocked(boolean movementBlocked) {
         this.movementBlocked = movementBlocked;
     }
 
     // let acceleration pause whilst vehicle is waiting in traffic
-    boolean isMovementBlocked() {
+    public boolean isMovementBlocked() {
         return movementBlocked;
     }
 
-
-    void setDirection(float direction){
+    // ----------------- Direction -----------------
+    public void setDirection(float direction){
         this.direction = direction;
+        // rotate hitbox immediately so collision checks use vehicles new travel direction
+        if (hitBox != null && position != null) hitBox.updateHitbox(position, direction);
     }
 
-    double getDirection(){
+    public double getDirection(){
         return direction;
+    }
+
+    // ----------------- Hitbox -----------------
+    public void updateHitBox(){
+        hitBox.updateHitbox(position, direction);
     }
 
     public HitBox getHitBox(){
         return hitBox;
     }
 
-    public void updateHitBox(){
-        hitBox.updateHitbox(position, direction, velocity);
-    }
-
-    public Point getPosition() {
-        return position;
-    }
-
-    public VehicleState getMoveForwadState(){
+    // state methods
+    public VehicleState getMoveForwardState(){
         return moveForward;
     }
 

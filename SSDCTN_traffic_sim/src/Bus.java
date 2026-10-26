@@ -13,11 +13,11 @@ public class Bus extends Vehicle {
     private int maxWaitTime = 100; //how long it will wait
 
 
-    Bus(Point p, double width, double height, double direction) {
-        super.position = p;
+    Bus(Point p, double width, double height, float direction) {
+        super.setPosition(p);
         super.width = width;
         super.height = height;
-        super.direction = direction;
+        super.setDirection(direction);
         super.hitBox = new HitBox(p, direction, width, height);
 
         super.accelerationRate = 0.5;

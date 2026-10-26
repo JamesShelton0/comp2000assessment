@@ -1,35 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-class Panel extends JPanel {
+class Panel extends JPanel implements KeyListener {
+    private int width, height;
+    private boolean pausedForResize;
+
     // pothole values
     private static final int VEHICLES_BEFORE_POTHOLE = 20;
     private static final double POTHOLE_GROWTH_CHANCE = 0.005;
     private static final double INITIAL_POTHOLE_SIZE = 12;
-
-    private int width, height;
-    VehicleSpawnerTwo vehicleSpawner;
-    VehicleDespawner vehicleDespawner;
-    Road roadN, roadE, roadS, roadW, intersection, roadOnFarRight; // upper road
+    
+    VehicleSpawner vehicleSpawner;
+    Road roadN, roadE, roadMid, roadW, intersection, roadOnFarRight; // upper road
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
     SpeedCamera speedCamera;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
-    //Explosion explosion;
+    // active explosions are temporary traffic-blocking
+    private final List<Explosion> explosions = new ArrayList<>();
     TrafficLightController trafficLightController;
     BusStop busStop;
-    Graph g;
-    private List<EntityStore<Vehicle>> activeVehicles;
+    Statistics stats;
+    long explosionCounter = 0;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
-        g = new Graph();
         this.width = w;
         this.height = h;
         this.setPreferredSize(new Dimension(width, height));
@@ -38,32 +41,44 @@ class Panel extends JPanel {
         this.setOpaque(true);
         this.setDoubleBuffered(true);
 
+        this.addKeyListener(this);
+        this.setFocusable(true);
+
+        stats = new Statistics();
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawnerTwo(width, height, 30,g); // % chance
-        vehicleDespawner = new VehicleDespawner();
-        Timer vehicleSpawnTimer = new Timer(1390, e -> {           // attempt freq
-            vehicleSpawner.spawn();
-            activeVehicles = vehicleSpawner.getVehicles();
+        vehicleSpawner = new VehicleSpawner(30); // % chance
+        Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
+            // pause spawner when paused for resize 
+            if (!pausedForResize) {
+                vehicleSpawner.spawn();
+            }
         });
         vehicleSpawnTimer.start();
-        Timer vehicleDespawnTimer = new Timer(1390, e -> {
-            vehicleDespawner.despawnVehicle(activeVehicles);
+        Timer vehicleDespawnTimer = new Timer(10000, e -> {
+            // pause spawner when paused for resize
+            if (!pausedForResize) {
+                vehicleSpawner.despawn();
+            }
         });
         vehicleDespawnTimer.start();
 
         
         // ---------------------- Vehicle Acceleration Timers ----------------------
         Timer vehicleAccelTimer = new Timer(1000, e -> {
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            // pause acceleration when paused for resize
+            if (pausedForResize) {
+                return;
+            }
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
 
-                    //Do not accelerate the bus while it is stopped at the bus stop
+                    // Do not accelerate the bus while it is stopped at the bus stop
                     if (vehicle instanceof Bus && ((Bus) vehicle).isStoppedAtBusStop()){
                         continue;
                     }
                   
-                    // dont build up speed when movement is blocked
+                    // Dont build up speed when movement is blocked
                     if (!vehicle.isMovementBlocked() && vehicle.velocity < vehicle.topSpeed) {
                         vehicle.accelerate(vehicle.accelerationRate);
                     }
@@ -76,22 +91,22 @@ class Panel extends JPanel {
         // ---------------------- Movement Timer ----------------------
         // Vehicle movement & repaint timer (~60fps)
         Timer moveTimer = new Timer(16, e -> {
-            if (trafficLight1.getLightState() == 2) {
-                stopLine1.setActive();
-                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-                    vehicle.setVelocity(0);
-                }*/
-            } else {
-                stopLine1.setInactive();
-                /*for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-                    vehicle.move();
-                }*/
+            if (pausedForResize) {
+                this.repaint();
+                return;
+            }
+
+            explosions.removeIf(Explosion::isFinished);
+            Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicleList());
+            if (collision != null) {
+                createExplosion(collision[0], collision[1]);
+                explosionCounter++;
             }
             
             // build each vehicles movement before applying distances
             Map<Vehicle, Double> desiredMovements = new IdentityHashMap<>();
             Map<Vehicle, Boolean> environmentBlocks = new IdentityHashMap<>();
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     //Bus stop behaviour
                     if (vehicle instanceof Bus){
@@ -104,7 +119,8 @@ class Panel extends JPanel {
                     
                     // shouldStopAtRed handles lights until stop-line collision logic is implemented
                     boolean environmentBlocked = shouldStopAtRed(vehicle)
-                        || pothole.shouldBlock(vehicle);
+                        || pothole.shouldBlock(vehicle)
+                        || isBlockedByExplosion(vehicle);
                     environmentBlocks.put(vehicle, environmentBlocked);
                     desiredMovements.put(
                         vehicle,
@@ -116,13 +132,13 @@ class Panel extends JPanel {
 
             // let queues match movement ahead instead of switching between stopping and full speed
             Map<Vehicle, Double> allowedMovements = CollisionDetection.calculateAllowedMovements(
-                vehicleSpawner.getVehicles(),
+                vehicleSpawner.getVehicleList(),
                 desiredMovements
             );
 
             // only one vehicle can be swallowed so a temporary list is not needed
             Vehicle swallowedVehicle = null;
-            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+            for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                 for (Vehicle vehicle : sublist.getEntities()) {
                     double allowedMovement = allowedMovements.getOrDefault(vehicle, 0.0);
                     // pause acceleration whenever an obstacle limits the desired movement
@@ -145,45 +161,41 @@ class Panel extends JPanel {
 
             // remove the swallowed vehicle after movement iteration finishes
             if (swallowedVehicle != null) {
-                for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+                for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
                     sublist.remove(swallowedVehicle);
                 }
             }
+
+            stats.inputTotalCount(vehicleSpawner.getTotalVehicleCount());
+            stats.updateCurVehicleCount(vehicleSpawner.getVehicleStream());
+            stats.calculateAvgVelocity(vehicleSpawner.getVehicleStream());
+            stats.inputExplosionCount(explosionCounter);
+
             this.repaint();
         });
         moveTimer.start();
 
-        // Timer moveTimer2 = new Timer(16, e -> {
-        //     for (Vehicle vehicle : vehicleSpawner.getVehicles()) {
-        //         if (!shouldStopAtRed(vehicle)) {
-        //             vehicle.move();
-        //         }
-        //     }
-        //     this.repaint();
-        // });
-        //moveTimer2.start();
-
         
         // ---------------------- Static objects ----------------------
-        roadN = new Road(width*0.5, height*0.0375, width*0.25, height*0.175, 1);  
-        roadE = new Road(width*0.82, height*0.25, width*0.4, height*0.25, 2);
-        roadS = new Road(width*0.5, height*0.6975, width*0.25, height*0.645, 1);  
-        roadW = new Road(width*0.18, height*0.25, width*0.4, height*0.25, 2);
-        intersection = new Road(width*0.5, height*0.25, width*0.25, height*0.25, 0);
+        // road positions and dimensions are specified in updateViewport()
+        roadN = new Road(1);
+        roadE = new Road(2);
+        roadMid = new Road(1);
+        roadW = new Road(2);
+        roadE2 = new Road(2);
+        roadS2 = new Road(1);
+        roadW2 = new Road(2);
+        intersection = new Road(0);
+        intersection2 = new Road(0);
 
-        roadE2 = new Road(width*0.82, height*0.75, width*0.4, height*0.25, 2);
-        roadS2 = new Road(width*0.5, height*0.9625, width*0.25, height*0.175, 1); 
-        roadW2 = new Road(width*0.18, height*0.75, width*0.4, height*0.25, 2);
-        intersection2 = new Road(width*0.5, height*0.75, width*0.25, height*0.25, 0);
-
-        this.stopLine1 = new StopLine(new Point(100, 100), new Point(100, 200), 0.0);
-        this.stopLine2 = new StopLine(null, null, 90.0);
-        this.stopLine3 = new StopLine(null, null, 180.0);
-        this.stopLine4 = new StopLine(null, null, 270.0);
-        stopLineArr.add(stopLine1);
-        stopLineArr.add(stopLine2);
-        stopLineArr.add(stopLine3);
-        stopLineArr.add(stopLine4);
+        // draw stop line only at end facing intersection.. idk man 
+        roadN.setStopLines(false, true);
+        roadE.setStopLines(true, false);
+        roadE2.setStopLines(true, false);
+        roadMid.setStopLines(true, true);
+        roadW.setStopLines(false, true);
+        roadW2.setStopLines(false, true);
+        roadS2.setStopLines(true, false);
 
         this.trafficLight1 = new TrafficLight(250, 10);  // top left
         this.trafficLight2 = new TrafficLight(500, 10);  // top right
@@ -219,10 +231,24 @@ class Panel extends JPanel {
         speedCamera = new SpeedCamera(610, 320);
         //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
-        
 
     }
 
+    public void beginResizePause() {
+        if (!pausedForResize) {
+            pausedForResize = true;
+            trafficLightController.pause();
+        }
+        repaint();
+    }
+
+    public void endResizePause() {
+        if (pausedForResize) {
+            pausedForResize = false;
+            trafficLightController.resume();
+            repaint();
+        }
+    }
 
     private boolean shouldStopAtRed(Vehicle vehicle) {
 
@@ -275,24 +301,112 @@ class Panel extends JPanel {
         return false;
     }
 
+    private void createExplosion(Vehicle firstVehicle, Vehicle secondVehicle) {
+        // place explosion halfway between vehicles then remove them 
+        double x = (firstVehicle.getPosition().getX() + secondVehicle.getPosition().getX()) / 2;
+        double y = (firstVehicle.getPosition().getY() + secondVehicle.getPosition().getY()) / 2;
+        explosions.add(new Explosion((int) x, (int) y, this));
+        removeVehicle(firstVehicle);
+        removeVehicle(secondVehicle);
+    }
+
+    private void removeVehicle(Vehicle vehicle) {
+        for (EntityStore<Vehicle> lane : vehicleSpawner.getVehicleList()) {
+            lane.remove(vehicle);
+        }
+    }
+
+    private boolean isBlockedByExplosion(Vehicle vehicle) {
+        // stop vehicles near explosion 
+        for (Explosion explosion : explosions) {
+            if (explosion.blocks(vehicle.getPosition())
+                    || explosion.blocks(vehicle.getHitBox().getPointAhead())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // extend road and intersection to resized window 
+    private void updateViewport(double left, double top, double right, double bottom) {
+        double intersectionLeft1 = width * 0.375;
+        double intersectionRight1 = width * 0.625;
+        double intersectionTop1 = height * (0.25-0.125);
+        double intersectionBottom1 = height * (0.25+0.125);
+
+        double intersectionLeft2 = width * 0.375;
+        double intersectionRight2 = width * 0.625;
+        double intersectionTop2 = height * (0.75-0.125);
+        double intersectionBottom2 = height * (0.75+0.125);
+
+        double roadWidth = width * 0.25;
+        double roadHeight = height * 0.25;
+
+        // intersections
+        intersection.setBounds(intersectionLeft1, intersectionTop1, roadWidth, roadHeight);
+        intersection2.setBounds(intersectionLeft2, intersectionTop2, roadWidth, roadHeight);
+
+        // vertical roads
+        roadN.setBounds(intersectionLeft1, top, roadWidth, intersectionTop1 - top);
+        roadMid.setBounds(intersectionLeft1, intersectionBottom1, roadWidth, intersectionTop2 - intersectionBottom1);
+        roadS2.setBounds(intersectionLeft2, intersectionBottom2, roadWidth, bottom - intersectionBottom2);
+
+        // horizontal roads
+        roadW.setBounds(left, intersectionTop1, intersectionLeft1 - left, roadHeight);
+        roadW2.setBounds(left, intersectionTop2, intersectionLeft2 - left, roadHeight);
+        roadE.setBounds(intersectionRight1, intersectionTop1, right - intersectionRight1, roadHeight);
+        roadE2.setBounds(intersectionRight2, intersectionTop2, right - intersectionRight2, roadHeight);
+
+        // spawning and despawning
+        vehicleSpawner.updateViewportBounds(left, top, right, bottom);
+        stats.updateViewportBounds(width, height);
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);            // paints JPanel stuff like the background
+        // draw disposable graphics copy so swing one is not changed
         Graphics2D g2d = (Graphics2D) g.create();
+        // preserve curves and images when assets are enlarged etc 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        // use one uniform scale so all assets keep proportions
+        double scale = Math.min(getWidth() / (double) width, getHeight() / (double) height);
+
+        // centre simulation when window and simulation have different aspect ratios
+        double xOffset = (getWidth() - width * scale) / 2.0;
+        double yOffset = (getHeight() - height * scale) / 2.0;
+
+        // convert panel edges into coords 
+        double viewportLeft = -xOffset / scale;
+        double viewportTop = -yOffset / scale;
+        double viewportRight = (getWidth() - xOffset) / scale;
+        double viewportBottom = (getHeight() - yOffset) / scale;
+
+        // synchronise all size dependent simulation bounds before resizing
+        updateViewport(viewportLeft, viewportTop, viewportRight, viewportBottom);
+
+        Graphics2D g2dUncentred = (Graphics2D) g2d.create();    // for components that should be placed relative to 0,0
+
+        // view transform only; physics are in logical units
+        g2d.translate(xOffset, yOffset);
+        g2d.scale(scale, scale);
+        g2dUncentred.scale(scale, scale);
 
         // draw components
         roadW.draw(g2d);
-        roadS.draw(g2d);
+        roadMid.draw(g2d);
         roadE.draw(g2d);
         roadN.draw(g2d);
         intersection.draw(g2d);
+        intersection2.draw(g2d);
         roadW2.draw(g2d);
         roadS2.draw(g2d);
         roadE2.draw(g2d);
-        intersection2.draw(g2d);
+
         pothole.draw(g2d);
         speedCamera.draw(g2d);
         trafficLight1.draw(g2d);
@@ -303,26 +417,81 @@ class Panel extends JPanel {
         trafficLight6.draw(g2d);
         trafficLight7.draw(g2d);
         trafficLight8.draw(g2d);
-       //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         busStop.draw(g2d);
+        //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         
 
-        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicles()) {
+        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
             for (Vehicle vehicle : sublist.getEntities()) {
                 vehicle.draw(g2d);
             }
         }
 
+        for (Explosion explosion : explosions) {
+            explosion.draw(g2d);
+        }
+
+        stats.draw(g2dUncentred);
+
+        // release graphics copy
         g2d.dispose();
         Toolkit.getDefaultToolkit().sync();
+
+        // prevent pause notice from looking weird 
+        if (pausedForResize) {
+            drawPauseOverlay((Graphics2D) g);
+        }
     }
 
-    public int getWidth(){
-        return width;
+    // draw pause overlay
+    private void drawPauseOverlay(Graphics2D g) {
+        Graphics2D overlay = (Graphics2D) g.create();
+        overlay.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // dim background
+        overlay.setColor(new Color(0, 0, 0, 105));
+        overlay.fillRect(0, 0, getWidth(), getHeight());
+
+        int cardWidth = Math.min(330, Math.max(230, getWidth() - 40));
+        int cardHeight = 116;
+        int cardX = (getWidth() - cardWidth) / 2;
+        int cardY = (getHeight() - cardHeight) / 2;
+
+        // draw pause card
+        overlay.setColor(new Color(24, 29, 36, 235));
+        overlay.fillRoundRect(cardX, cardY, cardWidth, cardHeight, 22, 22);
+        overlay.setColor(new Color(255, 255, 255, 210));
+        overlay.setStroke(new BasicStroke(2f));
+        overlay.drawRoundRect(cardX, cardY, cardWidth, cardHeight, 22, 22);
+
+        // draw pause symbol
+        int pauseX = cardX + 28;
+        int pauseY = cardY + 28;
+        overlay.setColor(Color.WHITE);
+        overlay.fillRoundRect(pauseX, pauseY, 12, 38, 4, 4);
+        overlay.fillRoundRect(pauseX + 22, pauseY, 12, 38, 4, 4);
+
+        overlay.setFont(getFont().deriveFont(Font.BOLD, 17f));
+        overlay.drawString("SIMULATION PAUSED", cardX + 80, cardY + 48);
+        overlay.setFont(getFont().deriveFont(Font.PLAIN, 13f));
+        overlay.setColor(new Color(220, 225, 230));
+        overlay.drawString("Window is being resized.", cardX + 80, cardY + 73);
+        overlay.dispose();
     }
 
-    public int getHeight(){
-        return height;
+    // Key stroke listeners
+    @Override public void keyPressed(KeyEvent e) {
+        // System.out.println("Key pressed: " + e.getKeyChar());
+        if (e.getKeyCode() == KeyEvent.VK_S) stats.keyPressed();
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+            explosionCounter = 0;
+            vehicleSpawner.resetVehicleCount();
+        }
     }
 
+    // Not used rn but KeyListener interface requires implementations
+    @Override
+    public void keyReleased(KeyEvent e) {}
+    @Override
+    public void keyTyped(KeyEvent e) {}
 }

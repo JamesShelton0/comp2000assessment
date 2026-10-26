@@ -2,23 +2,23 @@ import java.awt.*;
 
 public class Motorbike extends Vehicle {
 
-    Motorbike(Point p, double width, double height, double direction) {
+    Motorbike(Point p, double width, double height, float direction) {
         super.accelerationRate = 0.8;
         super.decelerationRate = -5;
         super.topSpeed = 10;
 
-        super.position = p;
+        super.setPosition(p);
         super.width = width;
         super.height = height;
-        super.direction = direction;
+        super.setDirection(direction);
 
-        super.hitBox = new HitBox(position, super.direction, width*2, height*2.1); // some magic numbers to extend hitbox over the wheels
+        super.hitBox = new HitBox(position, super.direction, width*2, super.height*2.1); // some magic numbers to extend hitbox over the wheels
     }
 
     @Override
     public void draw(Graphics2D g2d) { 
 
-        Graphics2D g = (Graphics2D) g2d.create();// same with this, I need a g2d copy to rotate the motorbike without breaking the sim
+        Graphics2D g = (Graphics2D) g2d.create(); // same with this, I need a g2d copy to rotate the motorbike without breaking the sim
 
         g.rotate(
             Math.toRadians(direction + 90),

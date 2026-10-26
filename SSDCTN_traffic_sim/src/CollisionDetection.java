@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,16 +6,30 @@ import java.util.stream.*;
 
 public class CollisionDetection {
 
-    // checks if one object is infront of the other and could face a collision 
-    static boolean checkWithinRadius(Vehicle a, Vehicle b){
-        try {
-            if (a.getHitBox().detectHitboxOverlap(b.getHitBox())) {
-                return true;
+    public static Vehicle[] findCollision(List<EntityStore<Vehicle>> vehicleArr) {
+        // t-bone collision requires vehicles from diff lanes travelling at right angles
+        for (int firstLane = 0; firstLane < vehicleArr.size() - 1; firstLane++) {
+            for (int secondLane = firstLane + 1; secondLane < vehicleArr.size(); secondLane++) {
+                for (Vehicle firstVehicle : vehicleArr.get(firstLane).getEntities()) {
+                    for (Vehicle secondVehicle : vehicleArr.get(secondLane).getEntities()) {
+                        if (isPerpendicular(firstVehicle, secondVehicle)
+                                && firstVehicle.getHitBox().overlaps(secondVehicle.getHitBox())) {
+                            // return first crash pair so Panel can create explosion YAY!!!
+                            return new Vehicle[] { firstVehicle, secondVehicle };
+                        }
+                    }
+                }
             }
-        } catch(NullPointerException e){
-            System.out.println("EXCEPTION: One of the vehicle objects has a null hitbox");
         }
-        return false;
+        return null;
+    }
+
+    private static boolean isPerpendicular(Vehicle firstVehicle, Vehicle secondVehicle) {
+        // perpendicular cardinal directions differ by 90 or 270 degrees #math
+        int directionDifference = Math.abs(
+            (int) Math.round(firstVehicle.getDirection() - secondVehicle.getDirection())
+        );
+        return directionDifference == 90 || directionDifference == 270;
     }
 
     public static Map<Vehicle, Double> calculateAllowedMovements(
@@ -55,38 +68,6 @@ public class CollisionDetection {
                 allowedMovements.put(follower, Math.min(currentAllowance, followingLimit));
             }
         }
-
-        // restore collision checks between vehicles from different spawn-points.
-        for (int firstStoreIndex = 0; firstStoreIndex < vehicleArr.size() - 1; firstStoreIndex++) {
-            EntityStore<Vehicle> firstStore = vehicleArr.get(firstStoreIndex);
-            for (int secondStoreIndex = firstStoreIndex + 1;
-                    secondStoreIndex < vehicleArr.size(); secondStoreIndex++) {
-                EntityStore<Vehicle> secondStore = vehicleArr.get(secondStoreIndex);
-                for (Vehicle first : firstStore.getEntities()) {
-                    for (Vehicle second : secondStore.getEntities()) {
-                        // stop both vehicles once either directional hitbox check detects impact
-                        if (checkWithinRadius(first, second) || checkWithinRadius(second, first)) {
-                            allowedMovements.put(first, 0.0);
-                            allowedMovements.put(second, 0.0);
-                        }
-                    }
-                }
-            }
-        }
-
-        // ---------- Testing new implementation ----------
-        // flat maps 2D vehicle array into a single list for easy comparison
-        // List<Vehicle> allVehicles = vehicleArr.stream()
-        //                                       .flatMap(sublist -> sublist.stream())
-        //                                       .collect(Collectors.toList());
-        // for (Vehicle first : allVehicles) {
-        //     for (Vehicle second : allVehicles) {
-        //         if ((first != second) && (checkWithinRadius(first, second))) {
-        //             // allowedMovements.put(second, second.velocity);
-        //             allowedMovements.put(first, 0.0);   // only vehicle doing the t-boning stops rather than both.
-        //         }
-        //     }
-        // }
 
         return allowedMovements;
     }

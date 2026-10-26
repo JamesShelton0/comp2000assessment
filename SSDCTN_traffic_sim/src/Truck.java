@@ -2,13 +2,12 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Truck extends Vehicle {        
-    private boolean hasSunroof;
 
-    public Truck(Point p, double w, double h, double direction) {
-        super.position = p;
+    public Truck(Point p, double w, double h, float direction) {
+        super.setPosition(p);
         super.width = w;
         super.height = h;
-        super.direction = direction;
+        super.setDirection(direction);
         super.accelerationRate = 0.4;
         super.decelerationRate = -1;
         super.topSpeed = 7;
@@ -28,7 +27,6 @@ public class Truck extends Vehicle {
         );
             
         double left = x - width / 2; // centers the truck
-        double top = y - height / 2;
 
         // Truck cabin
         Rectangle2D.Double truckCabin = new Rectangle2D.Double(

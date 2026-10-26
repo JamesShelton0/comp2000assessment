@@ -26,7 +26,7 @@ public class TurnRight implements VehicleState{
         counter = counter + 1;
         if((int)vehicle.direction == (int)turn.getFinishAngle()){
             vehicle.setDirection(turn.getFinishAngle());
-            vehicle.setState(vehicle.getMoveForwadState());
+            vehicle.setState(vehicle.getMoveForwardState());
             vehicle.removeTurn();
             counter = 0;
         }
