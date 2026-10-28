@@ -15,7 +15,6 @@ public class VehicleSpawner {
     private Start WEST_SP;
     private Start EASTTOO_SP;
     private Start WESTTOO_SP;
-    private final Point TEST_SP;
 
     // directions of travel
     private final float NORTH = 270;
@@ -69,9 +68,6 @@ public class VehicleSpawner {
         
         // initialise viewport and spawn points to original panel bounds 
         updateViewportBounds(0, 0, width, height);
-
-        TEST_SP = new Point(0,0);    // test spawn point
-
         assignDimensions();
         rand = new Random();
 

@@ -1,13 +1,10 @@
 import java.util.*;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.*;
 import java.util.stream.Collector;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
 import java.util.function.Function;
-import java.util.stream.Collector.Characteristics.*;
 
 public class TurningVehicleCollector<T> implements Collector<Vehicle, Map<Integer, EntityStore<Vehicle>>, Map<Integer, EntityStore<Vehicle>>>{
     @Override 

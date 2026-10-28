@@ -3,7 +3,6 @@ import java.util.Collections;
 import java.util.List;
 // adding generics yippee (to store only vehicles safely)
 import java.util.stream.Stream;
-import java.util.stream.Collectors;
 
 // type-safe collection for movable simulation entities
 // bound means T must be Vehicle or one of Vehicle's subclasses
