@@ -3,6 +3,7 @@ import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashMap;
 
 public class VehicleSpawner {
     // Frame dimensions
@@ -45,6 +46,7 @@ public class VehicleSpawner {
     // List active vehicles with sublists based on spawn point (now uses EntityStore to reject unrelated object types at compile time (generics yay!))
     private List<EntityStore<Vehicle>> activeVehicles;
     private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn, eastTooSpawn, westTooSpawn;
+    private HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>> mapLanes;
 
     //graphing
     private Graph localGraph;
@@ -86,6 +88,19 @@ public class VehicleSpawner {
         activeVehicles.add(eastTooSpawn);
         activeVehicles.add(westTooSpawn);
 
+        mapLanes = new HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>>();
+        ArrayList<EntityStore<Vehicle>> northArr = new ArrayList<>(List.of(westSpawn, eastSpawn, westTooSpawn, eastTooSpawn));
+        ArrayList<EntityStore<Vehicle>> eastArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        ArrayList<EntityStore<Vehicle>> southArr = new ArrayList<>(List.of(eastSpawn, westSpawn, eastTooSpawn, westTooSpawn));
+        ArrayList<EntityStore<Vehicle>> westArr = new ArrayList<>(List.of(southSpawn, northSpawn));
+        ArrayList<EntityStore<Vehicle>> eastTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        ArrayList<EntityStore<Vehicle>> westTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        mapLanes.put(northSpawn, northArr);
+        mapLanes.put(eastSpawn, eastArr);
+        mapLanes.put(southSpawn, southArr);
+        mapLanes.put(westSpawn, westArr);
+        mapLanes.put(eastTooSpawn, eastTooArr);
+        mapLanes.put(westTooSpawn, westTooArr);
 
         localGraph = g;
     }
@@ -221,5 +236,9 @@ public class VehicleSpawner {
 
     public long getTotalVehicleCount() {
         return totalVehiclesSpawned;
+    }
+
+    public HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>> getMapLanes(){
+        return mapLanes;
     }
 }

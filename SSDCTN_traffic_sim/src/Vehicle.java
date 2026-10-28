@@ -33,6 +33,9 @@ public abstract class Vehicle extends JComponent {
     VehicleState moveForward;
     VehicleState state;
 
+    //flag to say that is has changed arr
+    private boolean flag = false;
+
     // constructor
     public Vehicle(){
         turnLeft = new TurnLeft(this);
@@ -212,5 +215,13 @@ public abstract class Vehicle extends JComponent {
 
     public VehicleState getState(){
         return state;
+    }
+
+    public boolean getFlag(){
+        return flag;
+    }
+
+    public void setFlag(boolean flag){
+        this.flag = flag;
     }
 }

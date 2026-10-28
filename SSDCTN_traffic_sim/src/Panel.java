@@ -102,6 +102,8 @@ class Panel extends JPanel implements KeyListener {
                 return;
             }
 
+            CollisionDetection.changeTurningVehicleToDiffEntityStore(vehicleSpawner.getVehicleList(), vehicleSpawner.getMapLanes());
+
             explosions.removeIf(Explosion::isFinished);
             Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicleList());
             if (collision != null) {

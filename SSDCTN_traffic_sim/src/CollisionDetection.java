@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.*;
 
 public class CollisionDetection {
@@ -32,9 +33,38 @@ public class CollisionDetection {
         return directionDifference == 90 || directionDifference == 270;
     }
 
-    public static void changeTurningVehicleToDiffEntityStore(List<EntityStore<Vehicle>> vehicleArr){
+    public static void changeTurningVehicleToDiffEntityStore(List<EntityStore<Vehicle>> vehicleArr, HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>> mapLanes){
         for(int i = 0; i < vehicleArr.size(); i++){
             Map<Integer, EntityStore<Vehicle>> turningVehicles = vehicleArr.get(i).stream().collect(new TurningVehicleCollector<Vehicle>());
+            for(int j = 0; j < turningVehicles.get(0).size(); j++){
+                boolean flag = turningVehicles.get(0).get(j).getFlag();
+                if(!flag){
+                    turningVehicles.get(0).get(j).setFlag(true);
+                    moveToCorrectEntityStore(vehicleArr.get(i), turningVehicles.get(0).get(j), mapLanes,0);
+                }
+            }
+            for(int j = 0; j < turningVehicles.get(1).size(); j++){
+                boolean flag = turningVehicles.get(1).get(j).getFlag();
+                if(!flag){
+                    turningVehicles.get(1).get(j).setFlag(true);
+                    moveToCorrectEntityStore(vehicleArr.get(i), turningVehicles.get(1).get(j), mapLanes,1);
+                }
+            }
+        }
+    }
+
+    public static void moveToCorrectEntityStore(EntityStore<Vehicle> arr, Vehicle v, HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>> mapLanes, int dir){
+        ArrayList<EntityStore<Vehicle>> potentialNewLanes = mapLanes.get(arr);
+        if(dir == 0 && potentialNewLanes.size() == 2){
+            potentialNewLanes.get(0).add(v);
+            arr.remove(v);
+        }else if(dir == 1 && potentialNewLanes.size() == 2){
+            potentialNewLanes.get(1).add(v);
+            arr.remove(v);
+        }else if(dir == 0 && potentialNewLanes.size() == 4){
+            System.out.println("hello");
+        }else if(dir == 1 && potentialNewLanes.size() == 4){
+            System.out.println("hello1");
         }
     }
 

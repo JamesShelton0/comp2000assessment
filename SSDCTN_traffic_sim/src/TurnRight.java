@@ -7,6 +7,7 @@ public class TurnRight implements VehicleState{
     }
 
     public void move(Turn turn, double movementVelocity){
+        if (movementVelocity == 0) return;
         vehicle.direction = vehicle.direction + ((10/(Math.PI*turn.getRadius())) * 180/Math.PI);
         vehicle.direction = (vehicle.direction < 0) ? (vehicle.direction + 360) : vehicle.direction;
         vehicle.direction = (vehicle.direction > 359) ? (vehicle.direction - 360) : vehicle.direction;
@@ -21,6 +22,7 @@ public class TurnRight implements VehicleState{
             vehicle.setState(vehicle.getMoveForwardState());
             vehicle.removeTurn();
             counter = 0;
+            vehicle.setFlag(true);
         }
     }
 }
