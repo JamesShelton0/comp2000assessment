@@ -209,4 +209,8 @@ public abstract class Vehicle extends JComponent {
     public VehicleState getTurnRightState(){
         return turnRight;
     }
+
+    public VehicleState getState(){
+        return state;
+    }
 }

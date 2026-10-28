@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.List;
 // adding generics yippee (to store only vehicles safely)
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 // type-safe collection for movable simulation entities
 // bound means T must be Vehicle or one of Vehicle's subclasses
@@ -16,6 +17,16 @@ public class EntityStore<T extends Vehicle> {
             throw new IllegalArgumentException("A simulation entity cannot be null.");
         }
         entities.add(entity);
+    }
+
+    public static void addAll(EntityStore<Vehicle> arr1, EntityStore<Vehicle> arr2){
+        for(int i = 0; i < arr2.size(); i++){
+            arr1.add(arr2.get(i));
+        }
+    }
+
+    public int size(){
+        return entities.size();
     }
 
     public void remove(T entity) {

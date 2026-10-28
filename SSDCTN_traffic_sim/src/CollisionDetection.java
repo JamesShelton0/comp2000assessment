@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.*;
 
 public class CollisionDetection {
@@ -30,6 +31,12 @@ public class CollisionDetection {
             (int) Math.round(firstVehicle.getDirection() - secondVehicle.getDirection())
         );
         return directionDifference == 90 || directionDifference == 270;
+    }
+
+    public static void changeTurningVehicleToDiffEntityStore(List<EntityStore<Vehicle>> vehicleArr){
+        for(int i = 0; i < vehicleArr.size(); i++){
+            Map<Integer, EntityStore<Vehicle>> turningVehicles = vehicleArr.get(i).stream().collect(new TurningVehicleCollector<Vehicle>());
+        }
     }
 
     public static Map<Vehicle, Double> calculateAllowedMovements(

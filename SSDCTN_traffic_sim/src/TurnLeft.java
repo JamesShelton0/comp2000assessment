@@ -6,21 +6,12 @@ public class TurnLeft implements VehicleState{
         this.vehicle = vehicle;
     }
 
-    public void detectStraight(){
-
-        return;
-    }
-
-    public void detectTurn(){
-        return;
-    }
-
     public void move(Turn turn, double movementVelocity){
         vehicle.direction = vehicle.direction - ((5/(Math.PI*turn.getRadius())) * 180/Math.PI);
         vehicle.direction = (vehicle.direction < 0) ? (vehicle.direction + 360) : vehicle.direction;
         vehicle.direction = (vehicle.direction > 359) ? (vehicle.direction - 360) : vehicle.direction;
         vehicle.direction = (vehicle.direction < turn.getFinishAngle()) ? turn.getFinishAngle() : vehicle.direction;
-        vehicle.position = Velocity.calPositionTurningLeft(turn, vehicle.direction, vehicle.x, vehicle.y, counter);
+        vehicle.position = Velocity.calPositionTurningLeft(turn, vehicle.direction, vehicle.x, vehicle.y, counter, (int)movementVelocity);
         vehicle.x = vehicle.position.getX();
         vehicle.y = vehicle.position.getY();
         vehicle.updatePosition();
