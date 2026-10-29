@@ -34,7 +34,8 @@ public class Statistics {
 
     // ------------ Active Vehicle Count ------------
     public void updateCurVehicleCount(Stream<?> stream) {
-        curVehicleCount = stream.count();
+        curVehicleCount = stream.parallel()
+                                .count();
     }
 
     public long getCurVehicleCount() {
