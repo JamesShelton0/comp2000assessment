@@ -11,7 +11,7 @@ public class PoliceCar extends Vehicle {
     private static final int FLASH_MS = 250;   // how often the lights swap
 
   
-    
+
     private static final ScheduledExecutorService LIGHT_TIMER =
         Executors.newSingleThreadScheduledExecutor(task -> {
             Thread thread = new Thread(task, "police-lights");
@@ -57,6 +57,10 @@ public class PoliceCar extends Vehicle {
         super.pollutionRate = 50;
         super.bodyColour = Color.WHITE;
         super.hitBox = new HitBox(p, super.direction, width, height);
+    }
+
+    public PoliceCar(int i, int j, int k, int l, int m) {
+        //TODO Auto-generated constructor stub
     }
 
     @Override

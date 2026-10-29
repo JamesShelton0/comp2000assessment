@@ -30,6 +30,7 @@ class Panel extends JPanel implements KeyListener {
     BusStop busStop;
     Statistics stats;
     long explosionCounter = 0;
+    PoliceCar policeCar;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
     Panel(int w, int h) throws SimulationConfigurationException, Exception {
@@ -229,6 +230,7 @@ class Panel extends JPanel implements KeyListener {
             POTHOLE_GROWTH_CHANCE
         );
         speedCamera = new SpeedCamera(610, 320);
+        policeCar = new PoliceCar(200, 550, 40, 20, 0);
         //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
 
@@ -418,6 +420,7 @@ class Panel extends JPanel implements KeyListener {
         trafficLight7.draw(g2d);
         trafficLight8.draw(g2d);
         busStop.draw(g2d);
+        policeCar.draw(g2d);
         //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         
 
