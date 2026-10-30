@@ -24,7 +24,7 @@ public class VehicleSpawner {
     private final float WEST = 180;
 
     // number of vehicle types and declarations for their dimensions
-    private final int VCL_TYPE_AMOUNT = 5;
+    private final int VCL_TYPE_AMOUNT = 6;
     private double BUS_W, BUS_H;
     private double CAR_W, CAR_H;
     private double CYCLIST_W, CYCLIST_H;
@@ -126,7 +126,20 @@ public class VehicleSpawner {
                 Truck truck = new Truck(spawnPoint, TRUCK_W, TRUCK_H, direction);
                 activeVehicles.get(sublistIndex).add(truck);
                 break;
-            default:
+          
+            
+            case 5: // SPEEDDING CAR
+            // Randomly choose whether the speeding car follows traffic lights.
+                TrafficLightStrategy strategy = rand.nextBoolean()
+                ? new FollowTrafficLight()
+                : new IgnoreTrafficLight();
+            // Create a speeding car with the selected strategy.
+                SpeedingCar speedingCar = new SpeedingCar(
+                spawnPoint, CAR_W, CAR_H, direction, strategy
+            );
+                activeVehicles.get(sublistIndex).add(speedingCar);
+                break;
+                default:
         }
     }
 
