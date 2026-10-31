@@ -62,9 +62,7 @@ public class CollisionDetection {
             potentialNewLanes.get(1).add(v);
             arr.remove(v);
         }else if(dir == 0 && potentialNewLanes.size() == 4){
-            System.out.println("hello");
         }else if(dir == 1 && potentialNewLanes.size() == 4){
-            System.out.println("hello1");
         }
     }
 
