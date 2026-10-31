@@ -118,10 +118,21 @@ class Panel extends JPanel implements KeyListener {
                         bus.leaveBusStop();
                     }
                     
-                    // shouldStopAtRed handles lights until stop-line collision logic is implemented
-                    boolean environmentBlocked = shouldStopAtRed(vehicle)
+                    // Check whether the vehicle should stop at a traffic light.
+                    boolean stopAtLight = shouldStopAtRed(vehicle);
+
+                    // Speeding cars use their own traffic light strategy.
+                    if (vehicle instanceof SpeedingCar) {
+                        SpeedingCar speedingCar = (SpeedingCar) vehicle;
+                        stopAtLight = speedingCar.shouldStopAtTrafficLight(stopAtLight);
+                       
+                    }
+
+                    // Keep the existing pothole and explosion blocking rules.
+                    boolean environmentBlocked = stopAtLight
                         || pothole.shouldBlock(vehicle)
                         || isBlockedByExplosion(vehicle);
+
                     environmentBlocks.put(vehicle, environmentBlocked);
                     desiredMovements.put(
                         vehicle,
@@ -136,6 +147,14 @@ class Panel extends JPanel implements KeyListener {
                 vehicleSpawner.getVehicleList(),
                 desiredMovements
             );
+
+            // handle rear-end collisions cased by speeding cars
+            Vehicle[] rearEndCollision = CollisionDetection.getRearEndCollision();
+            
+            if (rearEndCollision != null){
+                createExplosion(rearEndCollision[0], rearEndCollision[1]);
+                explosionCounter++;
+            }
 
             // only one vehicle can be swallowed so a temporary list is not needed
             Vehicle swallowedVehicle = null;

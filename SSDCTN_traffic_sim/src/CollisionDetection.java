@@ -6,6 +6,9 @@ import java.util.stream.*;
 
 public class CollisionDetection {
 
+    // stores a rear-end collision detected during movement calculation
+    private static Vehicle[] rearEndCollision = null;
+
     public static Vehicle[] findCollision(List<EntityStore<Vehicle>> vehicleArr) {
         // t-bone collision requires vehicles from diff lanes travelling at right angles
         for (int firstLane = 0; firstLane < vehicleArr.size() - 1; firstLane++) {
@@ -17,6 +20,27 @@ public class CollisionDetection {
                             // return first crash pair so Panel can create explosion YAY!!!
                             return new Vehicle[] { firstVehicle, secondVehicle };
                         }
+                    }
+                }
+            }
+        }
+        // detect rear-end collisions caused by speeding cars
+        for (EntityStore<Vehicle> sublist : vehicleArr) {
+            ArrayList<Vehicle> lane = new ArrayList<>(sublist.getEntities());
+
+            for(Vehicle follower : lane) {
+                if (!(follower instanceof SpeedingCar)){
+                    continue;
+                }
+                for (Vehicle leader : lane) {
+                    if (follower == leader) {
+                        continue;
+                    }
+                    double forwardGap = getForwardGapInSameLane(follower, leader);
+
+                    if (!Double.isNaN(forwardGap)
+                           && follower.getHitBox().overlaps(leader.getHitBox())) {
+                        return new Vehicle[] {follower, leader};
                     }
                 }
             }
@@ -61,10 +85,25 @@ public class CollisionDetection {
                     continue;
                 }
 
-                double availableGap = forwardGap - getSafeFollowingDistance(follower, leader);
+                // speeding cars do not keep the normal safe following distance
+                double requiredDistance;
+
+               if(follower instanceof SpeedingCar) {
+                    requiredDistance = getCollisionDistance(follower, leader);
+                }else{
+                    requiredDistance = getSafeFollowingDistance(follower, leader);
+                }
+                double availableGap = forwardGap - requiredDistance;
                 double leaderMovement = allowedMovements.getOrDefault(leader, 0.0);
                 double followingLimit = Math.max(0, availableGap + leaderMovement);
                 double currentAllowance = allowedMovements.get(follower);
+
+                // detect when a speeding car would hit the vehicle ahead
+                if (follower instanceof SpeedingCar
+                    && currentAllowance > followingLimit
+                    && rearEndCollision == null) {
+                        rearEndCollision = new Vehicle[] {follower,leader};
+                    }
                 allowedMovements.put(follower, Math.min(currentAllowance, followingLimit));
             }
         }
@@ -103,11 +142,21 @@ public class CollisionDetection {
             + leader.getHitBox().getLateralExtent();
         return lateralGap <= laneOverlapDistance ? forwardGap : Double.NaN;
     }
-
+    // calculate the distance at which two vehicless touch
+    private static double getCollisionDistance(Vehicle follower, Vehicle leader){
+        return follower.getHitBox().getForwardExtent()
+        + leader.getHitBox().getForwardExtent();
+    }
     private static double getSafeFollowingDistance(Vehicle follower, Vehicle leader) {
         // combine buffered front and rear extends with a gap
         return follower.getHitBox().getForwardExtent()
             + leader.getHitBox().getForwardExtent()
             + 2;
+    }
+    // returns the rear-end collision and clears it for the next frame
+    public static Vehicle[] getRearEndCollision(){
+        Vehicle[] collision = rearEndCollision;
+        rearEndCollision = null;
+        return collision;
     }
 }
