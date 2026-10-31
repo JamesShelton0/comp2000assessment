@@ -126,20 +126,19 @@ public class VehicleSpawner {
                 Truck truck = new Truck(spawnPoint, TRUCK_W, TRUCK_H, direction);
                 activeVehicles.get(sublistIndex).add(truck);
                 break;
-          
             
-            case 5: // SPEEDDING CAR
-            // Randomly choose whether the speeding car follows traffic lights.
+            case 5: // SPEEDING CAR
+                // Randomly choose whether the speeding car follows traffic lights.
                 TrafficLightStrategy strategy = rand.nextBoolean()
                 ? new FollowTrafficLight()
                 : new IgnoreTrafficLight();
-            // Create a speeding car with the selected strategy.
-                SpeedingCar speedingCar = new SpeedingCar(
-                spawnPoint, CAR_W, CAR_H, direction, strategy
-            );
+                
+                // Create a speeding car with the selected strategy.
+                SpeedingCar speedingCar = new SpeedingCar(spawnPoint, CAR_W, CAR_H, direction, strategy);
                 activeVehicles.get(sublistIndex).add(speedingCar);
                 break;
-                default:
+
+            default:
         }
     }
 

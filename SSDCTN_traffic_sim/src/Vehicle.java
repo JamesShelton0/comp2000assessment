@@ -65,7 +65,7 @@ public abstract class Vehicle extends JComponent {
     // vehicle colours
     private static final Random RAND = new Random();
     private static final Color[] SELECT = {
-        Color.RED, 
+        // Color.RED,   // reserve red for speeding cars
         Color.YELLOW, 
         Color.BLUE,
         Color.BLACK,
