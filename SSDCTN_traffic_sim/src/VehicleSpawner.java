@@ -48,6 +48,13 @@ public class VehicleSpawner {
     private EntityStore<Vehicle> northSpawn, eastSpawn, southSpawn, westSpawn, eastTooSpawn, westTooSpawn;
     private HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>> mapLanes;
 
+    ArrayList<EntityStore<Vehicle>> northArr;
+    ArrayList<EntityStore<Vehicle>> eastArr;
+    ArrayList<EntityStore<Vehicle>> southArr;
+    ArrayList<EntityStore<Vehicle>> westArr;
+    ArrayList<EntityStore<Vehicle>> eastTooArr;
+    ArrayList<EntityStore<Vehicle>> westTooArr;
+
     //graphing
     private Graph localGraph;
 
@@ -89,12 +96,12 @@ public class VehicleSpawner {
         activeVehicles.add(westTooSpawn);
 
         mapLanes = new HashMap<EntityStore<Vehicle>, ArrayList<EntityStore<Vehicle>>>();
-        ArrayList<EntityStore<Vehicle>> northArr = new ArrayList<>(List.of(westSpawn, eastSpawn, westTooSpawn, eastTooSpawn));
-        ArrayList<EntityStore<Vehicle>> eastArr = new ArrayList<>(List.of(northSpawn, southSpawn));
-        ArrayList<EntityStore<Vehicle>> southArr = new ArrayList<>(List.of(eastSpawn, westSpawn, eastTooSpawn, westTooSpawn));
-        ArrayList<EntityStore<Vehicle>> westArr = new ArrayList<>(List.of(southSpawn, northSpawn));
-        ArrayList<EntityStore<Vehicle>> eastTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
-        ArrayList<EntityStore<Vehicle>> westTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        northArr = new ArrayList<>(List.of(westSpawn, eastSpawn, westTooSpawn, eastTooSpawn));
+        eastArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        southArr = new ArrayList<>(List.of(eastSpawn, westSpawn, eastTooSpawn, westTooSpawn));
+        westArr = new ArrayList<>(List.of(southSpawn, northSpawn));
+        eastTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        westTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
         mapLanes.put(northSpawn, northArr);
         mapLanes.put(eastSpawn, eastArr);
         mapLanes.put(southSpawn, southArr);
@@ -107,12 +114,12 @@ public class VehicleSpawner {
 
 
     public void spawn() {
-        if (rand.nextInt(100) < spawnChance) spawnHelper(NORTH_SP, SOUTH, 0);
-        if (rand.nextInt(100) < spawnChance) spawnHelper(EAST_SP, WEST, 1);
-        if (rand.nextInt(100) < spawnChance) spawnHelper(SOUTH_SP, NORTH, 2);
-        if (rand.nextInt(100) < spawnChance) spawnHelper(WEST_SP, EAST, 3);
-        if (rand.nextInt(100) < spawnChance) spawnHelper(EASTTOO_SP, WEST, 4);
-        if (rand.nextInt(100) < spawnChance) spawnHelper(WESTTOO_SP, EAST, 5);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(0).size() < 2) spawnHelper(NORTH_SP, SOUTH, 0);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(1).size() < 2) spawnHelper(EAST_SP, WEST, 1);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(2).size() < 2) spawnHelper(SOUTH_SP, NORTH, 2);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(3).size() < 2) spawnHelper(WEST_SP, EAST, 3);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(4).size() < 2) spawnHelper(EASTTOO_SP, WEST, 4);
+        if (rand.nextInt(100) < spawnChance && activeVehicles.get(5).size() < 2) spawnHelper(WESTTOO_SP, EAST, 5);
     }
 
     private void spawnHelper(Start spawnPoint, float direction, int sublistIndex) {

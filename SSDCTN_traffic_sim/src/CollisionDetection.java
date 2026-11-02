@@ -130,6 +130,36 @@ public class CollisionDetection {
         }
     }
 
+    public static Map<Vehicle, Double> calculateAllowedMovementsTwo(List<EntityStore<Vehicle>> vehicleArr, Map<Vehicle, Double> desiredMovements){
+
+        Map<Vehicle,Double> allowedMovements = vehicleArr.stream()
+                                                         .flatMap(sublist -> sublist.stream())
+                                                         .collect(Collectors.toMap(
+                                                                v -> v,
+                                                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)),
+                                                                (a, b) -> a,
+                                                                IdentityHashMap::new)
+                                                         );
+
+        for(int i = 0; i < vehicleArr.size(); i++){
+            for(int j = 0; j < vehicleArr.get(i).size(); j++){
+                for(int k = 0; k < vehicleArr.size(); k++){
+                    for(int l = 0; l < vehicleArr.get(k).size(); l++){
+                        if(vehicleArr.get(i).get(j).getHitBox().detectHitboxOverlap(vehicleArr.get(k).get(l).getHitBox())){
+                            allowedMovements.put(vehicleArr.get(i).get(j), 0.0);
+                        }
+                        else{
+                            allowedMovements.put(vehicleArr.get(i).get(j), vehicleArr.get(i).get(j).getVelocity());
+                        }
+                    }
+                }
+            }
+        }
+
+        return allowedMovements;
+    }
+
+
     public static Map<Vehicle, Double> calculateAllowedMovements(
             List<EntityStore<Vehicle>> vehicleArr,
             Map<Vehicle, Double> desiredMovements) {
