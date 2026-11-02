@@ -9,7 +9,8 @@ public class Statistics {
     boolean keyToggled;
 
     double avgVehicleVelocity;
-    long totalVehicleCount, curVehicleCount, explosionCount;
+    long totalVehicleCount, curVehicleCount, explosionCount, speedcameraFlashes;
+    ;
 
     Statistics() {
         keyToggled = false;
@@ -60,6 +61,10 @@ public class Statistics {
         return explosionCount;
     }
 
+    // Speed camera flashes count for revenue raising stats
+    public void RevenueRaising(long value) {
+        this.speedcameraFlashes = value;
+    }
 
     // ------------ Drawing Related ------------
     public void keyPressed() {

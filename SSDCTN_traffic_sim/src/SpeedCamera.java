@@ -2,34 +2,45 @@ import java.awt.*;
 
 public class SpeedCamera {
     private double x, y;
-    private long flashUntil = 0;           // time the cone should disappear
+    private double laneY;                    // y of the lane this camera watches
+    private long flashUntil = 0;             // time the cone should disappear
     private static final int FLASH_MS = 500; // how long the cone shows for
 
-    SpeedCamera(double x, double y) {
+    SpeedCamera(double x, double y, double laneY) {
         this.x = x;
         this.y = y;
+        this.laneY = laneY;
     }
 
-    // flash if a speeding car goes past the camera
+    // flash if a speeding car goes past the camera in its lane
     boolean checkSpeed(Vehicle vehicle) {
         boolean besideCamera = vehicle.x >= x && vehicle.x <= x + 36;   
-        boolean onRoadAbove = vehicle.y < y && vehicle.y > y - 100;     
+        boolean inLane = Math.abs(vehicle.y - laneY) < 20;              
 
-        if (vehicle instanceof SpeedingCar && besideCamera && onRoadAbove) {
+        if (vehicle instanceof SpeedingCar && besideCamera && inLane) {
             flashUntil = System.currentTimeMillis() + FLASH_MS;
             return true;
         }
         return false;
     }
 
+
+    public static int speedcameraFlashes(){
+        int count = 0;
+        if(System.currentTimeMillis() < flashUntil){
+            count++;
+        }
+        return count;
+    }
+
     // draw speed camera ^_^
     public void draw(Graphics2D g2d) {
-        // flash cone from the camera up towards the road
+        // flash cone from the camera centre to the lane 
         if (System.currentTimeMillis() < flashUntil) {
             int lensX = (int) x + 24;
             int lensY = (int) y + 18;
             int[] coneX = {lensX, lensX - 40, lensX + 40};
-            int[] coneY = {lensY, lensY - 90, lensY - 90};
+            int[] coneY = {lensY, (int) laneY, (int) laneY};
             g2d.setColor(new Color(255, 255, 255, 128)); // white, 50% opacity
             g2d.fillPolygon(coneX, coneY, 3);
         }

@@ -20,7 +20,7 @@ class Panel extends JPanel implements KeyListener {
     Road roadN, roadE, roadMid, roadW, intersection, roadOnFarRight; // upper road
     Road roadE2, roadS2, roadW2, intersection2;   // lower road
     Pothole pothole;
-    SpeedCamera speedCamera;
+    List<SpeedCamera> speedCameras;
     TrafficLight trafficLight1, trafficLight2, trafficLight3, trafficLight4, trafficLight5, trafficLight6, trafficLight7, trafficLight8;
     StopLine stopLine1, stopLine2, stopLine3, stopLine4;
     ArrayList<StopLine> stopLineArr = new ArrayList<>();
@@ -173,7 +173,7 @@ class Panel extends JPanel implements KeyListener {
                     vehicle.updateHitBox();
 
                     // flash the speed camera if a speeding car goes past
-                    speedCamera.checkSpeed(vehicle);
+                    speedCameras.forEach(camera -> camera.checkSpeed(vehicle));
 
                     // let pothole count pass and flag swallowing events
                     if (pothole.update(vehicle)) {
@@ -251,7 +251,13 @@ class Panel extends JPanel implements KeyListener {
             VEHICLES_BEFORE_POTHOLE,
             POTHOLE_GROWTH_CHANCE
         );
-        speedCamera = new SpeedCamera(610, 320);
+        // one camera per horizontal lane, all lined up at the same x
+        speedCameras = List.of(
+            new SpeedCamera(610, 40, 144),    // top road very top
+            new SpeedCamera(610, 320, 256),   // top road next to the police car ( the orignal one)
+            new SpeedCamera(610, 430, 544),   // bottom road
+            new SpeedCamera(610, 720, 656)    // very bottom road ... hope this makes sense
+        );
         policeCar = new PoliceCar(new Point(700, 340), 30, 50, 180);
         policeCar.setPosition(700, 340);
         //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
@@ -433,7 +439,7 @@ class Panel extends JPanel implements KeyListener {
         roadE2.draw(g2d);
 
         pothole.draw(g2d);
-        speedCamera.draw(g2d);
+        speedCameras.forEach(camera -> camera.draw(g2d));
         trafficLight1.draw(g2d);
         trafficLight2.draw(g2d);
         trafficLight3.draw(g2d);
