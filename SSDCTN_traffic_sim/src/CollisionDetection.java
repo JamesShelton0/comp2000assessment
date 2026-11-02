@@ -10,29 +10,23 @@ public class CollisionDetection {
     private static List<Map<Integer, EntityStore<Vehicle>>> turningVehiclesList;
 
     public static Vehicle[] findCollision(List<EntityStore<Vehicle>> vehicleArr) {
-        // t-bone collision requires vehicles from diff lanes travelling at right angles
-        for (int firstLane = 0; firstLane < vehicleArr.size() - 1; firstLane++) {
-            for (int secondLane = firstLane + 1; secondLane < vehicleArr.size(); secondLane++) {
-                for (Vehicle firstVehicle : vehicleArr.get(firstLane).getEntities()) {
-                    for (Vehicle secondVehicle : vehicleArr.get(secondLane).getEntities()) {
-                        if (isPerpendicular(firstVehicle, secondVehicle)
-                                && firstVehicle.getHitBox().overlaps(secondVehicle.getHitBox())) {
-                            // return first crash pair so Panel can create explosion YAY!!!
-                            return new Vehicle[] { firstVehicle, secondVehicle };
-                        }
-                    }
+        // rear-end collisions within one lane are checked
+        List<Vehicle> vehicles = vehicleArr.stream()
+            .flatMap(EntityStore::stream)
+            .collect(Collectors.toList());
+
+        // compare each unique pair
+        for (int firstIndex = 0; firstIndex < vehicles.size() - 1; firstIndex++) {
+            for (int secondIndex = firstIndex + 1; secondIndex < vehicles.size(); secondIndex++) {
+                Vehicle firstVehicle = vehicles.get(firstIndex);
+                Vehicle secondVehicle = vehicles.get(secondIndex);
+                if (firstVehicle.getHitBox().overlaps(secondVehicle.getHitBox())) {
+                    // return first crash pair for explosion
+                    return new Vehicle[] { firstVehicle, secondVehicle };
                 }
             }
         }
         return null;
-    }
-
-    private static boolean isPerpendicular(Vehicle firstVehicle, Vehicle secondVehicle) {
-        // perpendicular cardinal directions differ by 90 or 270 degrees #math
-        int directionDifference = Math.abs(
-            (int) Math.round(firstVehicle.getDirection() - secondVehicle.getDirection())
-        );
-        return directionDifference == 90 || directionDifference == 270;
     }
 
     public static void detectHitboxCollision(List<EntityStore<Vehicle>> vehicleArr){
