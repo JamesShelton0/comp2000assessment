@@ -12,10 +12,10 @@ public class SpeedCamera {
 
     // flash if a speeding car goes past the camera
     boolean checkSpeed(Vehicle vehicle) {
-        boolean besideCamera = vehicle.x >= x && vehicle.x <= x + 36;   // in line with the camera
-        
+        boolean besideCamera = vehicle.x >= x && vehicle.x <= x + 36;   
+        boolean onRoadAbove = vehicle.y < y && vehicle.y > y - 100;     
 
-        if (vehicle instanceof SpeedingCar && besideCamera) { // assuming it will be called speeding car
+        if (vehicle instanceof SpeedingCar && besideCamera && onRoadAbove) {
             flashUntil = System.currentTimeMillis() + FLASH_MS;
             return true;
         }

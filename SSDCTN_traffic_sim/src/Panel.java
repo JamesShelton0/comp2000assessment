@@ -172,6 +172,9 @@ class Panel extends JPanel implements KeyListener {
                     }
                     vehicle.updateHitBox();
 
+                    // flash the speed camera if a speeding car goes past
+                    speedCamera.checkSpeed(vehicle);
+
                     // let pothole count pass and flag swallowing events
                     if (pothole.update(vehicle)) {
                         swallowedVehicle = vehicle;
