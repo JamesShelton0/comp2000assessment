@@ -7,7 +7,9 @@ public class TurnLeft implements VehicleState{
     }
 
     public void move(Turn turn, double movementVelocity){
-        if (movementVelocity == 0) return;
+        if (movementVelocity == 0) {
+            return;
+        }
         vehicle.direction = vehicle.direction - ((5/(Math.PI*turn.getRadius())) * 180/Math.PI);
         vehicle.direction = (vehicle.direction < 0) ? (vehicle.direction + 360) : vehicle.direction;
         vehicle.direction = (vehicle.direction > 359) ? (vehicle.direction - 360) : vehicle.direction;

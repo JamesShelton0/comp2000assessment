@@ -103,6 +103,7 @@ class Panel extends JPanel implements KeyListener {
             }
 
             CollisionDetection.changeTurningVehicleToDiffEntityStore(vehicleSpawner.getVehicleList(), vehicleSpawner.getMapLanes());
+            //CollisionDetection.detectTurningHitboxOverLap();
 
             explosions.removeIf(Explosion::isFinished);
             Vehicle[] collision = CollisionDetection.findCollision(vehicleSpawner.getVehicleList());
@@ -154,8 +155,9 @@ class Panel extends JPanel implements KeyListener {
                     boolean movementBlocked = environmentBlocks.getOrDefault(vehicle, false)
                         || allowedMovement + 0.0001 < desiredMovement;
                     vehicle.setMovementBlocked(movementBlocked);
+                    //CollisionDetection.detectHitboxCollision(vehicleSpawner.getVehicleList());
 
-                    if (allowedMovement > 0) {
+                    if (allowedMovement > 0 && !vehicle.isMovementBlocked()) {
                         vehicle.move(allowedMovement);
                     }
                     vehicle.updateHitBox();
@@ -166,6 +168,19 @@ class Panel extends JPanel implements KeyListener {
                     }
                 }
             }
+
+
+            /*CollisionDetection.detectHitboxCollision(vehicleSpawner.getVehicleList());
+            for(int i = 0; i < vehicleSpawner.getVehicleList().size(); i++){
+                for(int j = 0; j < vehicleSpawner.getVehicleList().get(i).size(); j++){
+                    if(!vehicleSpawner.getVehicleList().get(i).get(j).isMovementBlocked()){
+                        vehicleSpawner.getVehicleList().get(i).get(j).move(3);
+                    }
+                    else{
+                        vehicleSpawner.getVehicleList().get(i).get(j).move(0);
+                    }
+                }
+            }*/
 
             // remove the swallowed vehicle after movement iteration finishes
             if (swallowedVehicle != null) {

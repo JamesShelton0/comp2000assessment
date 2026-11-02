@@ -85,7 +85,7 @@ public class HitBox {
             }
         }
 
-        for(int i  = 0; i < other.getPointArr().size(); i ++){
+        for(int i = 0; i < other.getPointArr().size(); i ++){
             if(pointInHitBox(other.getPointArr().get(i))){
                 return true;
             }
@@ -103,10 +103,8 @@ public class HitBox {
 
     public boolean pointInHitBox(Point p){
         if(direction % 90 != 0){
-            for(int i = 0; i < 4; i++){
-                if(edgeArr.get(i).pointHasPassedEdge(p)){
-                    return true;
-                }
+            if(this.getLeftMostPoint() <= p.getX() && this.getRightMostPoint() >= p.getX() && this.getUpperMostPoint() >= p.getY() && this.getLowerMostPoint() <= p.getY()){
+                return true;
             }
         }
         return false;
