@@ -101,7 +101,7 @@ public class VehicleSpawner {
         southArr = new ArrayList<>(List.of(eastSpawn, westSpawn, eastTooSpawn, westTooSpawn));
         westArr = new ArrayList<>(List.of(southSpawn, northSpawn));
         eastTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
-        westTooArr = new ArrayList<>(List.of(northSpawn, southSpawn));
+        westTooArr = new ArrayList<>(List.of(southSpawn, northSpawn));
         mapLanes.put(northSpawn, northArr);
         mapLanes.put(eastSpawn, eastArr);
         mapLanes.put(southSpawn, southArr);
