@@ -21,7 +21,7 @@ public class TrafficLightController {
     private final int YELLOW = 1;
     private final int RED = 2;
 
-    private final int GREEN_TIME = 20000; // 20 seconds I think these times work best, other times glitch out
+    private final int GREEN_TIME = 10000; // 20 seconds I think these times work best, other times glitch out
     private final int YELLOW_TIME = 4500; // 4 seconds
 
     public TrafficLightController(

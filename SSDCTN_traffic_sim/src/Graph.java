@@ -22,7 +22,7 @@ public class Graph {
     ArrayList<Integer> preferedFinish2 = new ArrayList<Integer>(Arrays.asList(30,30,30,30,30,30,30,35,35,35,35,35,35,34,33,31));
     ArrayList<Integer> preferedFinish3 = new ArrayList<Integer>(Arrays.asList(31,31,31,31,31,31,31,30,30,30,30,30,30,32,34,35));
     ArrayList<Integer> preferedFinish4 = new ArrayList<Integer>(Arrays.asList(35,35,35,35,35,35,35,32,32,32,32,32,32,30,31,33));
-    ArrayList<Integer> preferedFinish5 = new ArrayList<Integer>(Arrays.asList(34,34,34,34,34,34,34,30,30,30,30,30,30,32,33,31));
+    ArrayList<Integer> preferedFinish5 = new ArrayList<Integer>(Arrays.asList(34,34,34,34,34,34,34,32,32,32,32,32,32,30,33,31));
     HashMap<Vertex, ArrayList<Integer>> mapStartToFinishPref = new HashMap<>();
 
     // constructor
