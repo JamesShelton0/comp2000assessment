@@ -159,10 +159,7 @@ public class Graph {
         Vertex finish = getVertex(random);*/
 
         int random = rand.nextInt(0, mapStartToFinishPref.get(start).size());
-        //System.out.println(random);
         Vertex finish = getVertex(mapStartToFinishPref.get(start).get(random));
-        System.out.println(start.getID());
-        System.out.println(finish.getID());
         return finish;
     }
 
