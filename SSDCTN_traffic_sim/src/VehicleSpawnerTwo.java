@@ -10,10 +10,10 @@ public class VehicleSpawnerTwo {
     private final Start EASTTOO_SP;
     private final Start WESTTOO_SP;
 
-    private final double NORTH = 270;
-    private final double EAST = 0;
-    private final double SOUTH = 90;
-    private final double WEST = 180;
+    private final float NORTH = 270;
+    private final float EAST = 0;
+    private final float SOUTH = 90;
+    private final float WEST = 180;
 
     private final int VCL_TYPE_AMOUNT = 5;
     private double BUS_W, BUS_H;
@@ -88,7 +88,7 @@ public class VehicleSpawnerTwo {
 
     }
 
-    private void spawnHelper(Start start, double direction, int entityStoreNum){
+    private void spawnHelper(Start start, float direction, int entityStoreNum){
         int vehicleType = rand.nextInt(VCL_TYPE_AMOUNT);
             
         // prevents spawning when a vehicle is already in spawn zone

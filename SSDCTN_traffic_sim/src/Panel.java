@@ -249,7 +249,8 @@ class Panel extends JPanel implements KeyListener {
             POTHOLE_GROWTH_CHANCE
         );
         speedCamera = new SpeedCamera(610, 320);
-        policeCar = new PoliceCar(200, 550, 40, 20, 0);
+        policeCar = new PoliceCar(new Point(700, 340), 30, 50, 180);
+        policeCar.setPosition(700, 340);
         //explosion = new Explosion(200, 550, this);  // pass panel for callbacks/repaint
         
 

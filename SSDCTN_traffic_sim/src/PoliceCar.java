@@ -59,10 +59,6 @@ public class PoliceCar extends Vehicle {
         super.hitBox = new HitBox(p, super.direction, width, height);
     }
 
-    public PoliceCar(int i, int j, int k, int l, int m) {
-        //TODO Auto-generated constructor stub
-    }
-
     @Override
     public void draw(Graphics2D g2d) {
         Graphics2D g = (Graphics2D) g2d.create();
