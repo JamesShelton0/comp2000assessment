@@ -14,10 +14,6 @@ public class TrafficLight implements TrafficLightObserver {
         return currentLight;
     }
 
-    public void setLightState(int state) {
-        this.currentLight = state;
-    }
-
     @Override
     public void updateLightState(int state) {
         // receive state sent by TrafficLightController
