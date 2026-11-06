@@ -37,20 +37,16 @@ public class TrafficLightController {
         // register the active lights as observers for travel direction
         registerObserver(northSouthLights, trafficLight2);
         registerObserver(northSouthLights, trafficLight3);
+        registerObserver(northSouthLights, trafficLight6);
+        registerObserver(northSouthLights, trafficLight7);
         registerObserver(eastWestLights, trafficLight1);
         registerObserver(eastWestLights, trafficLight4);
+        registerObserver(eastWestLights, trafficLight5);
+        registerObserver(eastWestLights, trafficLight8);
 
-        // Starting state
-
-        // East / West RED
+        // Initial states – starts with vertical traffic flow
         notifyObservers(eastWestLights, RED);
-        trafficLight5.setLightState(RED); 
-        trafficLight8.setLightState(RED);
-
-        // North / South GREEN
         notifyObservers(northSouthLights, GREEN);
-        trafficLight6.setLightState(GREEN);
-        trafficLight7.setLightState(GREEN);
 
         timer = new Timer(GREEN_TIME, e -> changePhase());
 

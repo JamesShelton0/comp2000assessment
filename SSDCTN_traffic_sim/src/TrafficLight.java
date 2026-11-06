@@ -21,7 +21,7 @@ public class TrafficLight implements TrafficLightObserver {
     @Override
     public void updateLightState(int state) {
         // receive state sent by TrafficLightController
-        setLightState(state);
+        this.currentLight = state;
     }
 
         // traffic light position is relative but scaling is still hard coded for now
