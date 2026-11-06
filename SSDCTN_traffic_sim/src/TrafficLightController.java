@@ -35,10 +35,10 @@ public class TrafficLightController {
     ) {
 
         // register the active lights as observers for travel direction
-        northSouthLights.add(trafficLight2);
-        northSouthLights.add(trafficLight3);
-        eastWestLights.add(trafficLight1);
-        eastWestLights.add(trafficLight4);
+        registerObserver(northSouthLights, trafficLight2);
+        registerObserver(northSouthLights, trafficLight3);
+        registerObserver(eastWestLights, trafficLight1);
+        registerObserver(eastWestLights, trafficLight4);
 
         // Starting state
 
@@ -143,6 +143,16 @@ public class TrafficLightController {
         timerStartedAt = System.nanoTime();
         timer.setInitialDelay(delay);
         timer.restart();
+    }
+
+    
+    // ----- Observer Pattern -----
+    private void registerObserver(List<TrafficLightObserver> list, TrafficLight light) {
+        list.add(light);
+    }
+
+    private void unregisterObserver(List<TrafficLightObserver> list, TrafficLight light) {
+        list.remove(light);
     }
 
     private void notifyObservers(List<TrafficLightObserver> lights, int state) {

@@ -25,7 +25,7 @@ public class SpeedCamera {
     }
 
 
-    public static int speedcameraFlashes(){
+    public int speedcameraFlashes(){
         int count = 0;
         if(System.currentTimeMillis() < flashUntil){
             count++;
