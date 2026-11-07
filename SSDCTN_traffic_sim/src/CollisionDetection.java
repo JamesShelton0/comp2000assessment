@@ -65,10 +65,8 @@ public class CollisionDetection {
                             .flatMap(sublist -> sublist.stream())
                             .collect(Collectors.toMap(                                      // Using four parameter toMap()
                                 v -> v,                                                         // 1. key
-                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)), // 2. value
-                                (a, b) -> a,                                                    // 3. keep existing value if duplicate key
-                                IdentityHashMap::new)                                           // 4. specify map type
-                            );
+                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)) // 2. value
+                            ));
 
         // each store is one directional lane, so only the nearest leader limits a follower
         for (EntityStore<Vehicle> sublist : vehicleArr) {
