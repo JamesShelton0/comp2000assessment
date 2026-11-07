@@ -63,9 +63,9 @@ public class CollisionDetection {
         // start with relevant limits
         Map<Vehicle, Double> allowedMovements = vehicleArr.stream()
                             .flatMap(sublist -> sublist.stream())
-                            .collect(Collectors.toMap(                                      // Using four parameter toMap()
+                            .collect(Collectors.toMap(                                      // Using two parameter toMap()
                                 v -> v,                                                         // 1. key
-                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity)) // 2. value
+                                v -> Math.max(0, desiredMovements.getOrDefault(v, v.velocity))  // 2. value
                             ));
 
         // each store is one directional lane, so only the nearest leader limits a follower
