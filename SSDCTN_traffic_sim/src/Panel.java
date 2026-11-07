@@ -293,7 +293,17 @@ class Panel extends JPanel implements KeyListener {
     }
 
     private boolean shouldStopAtRed(Vehicle vehicle) {
+        // check each intersection against its own lights + stop-line positions
+        return shouldStopAtIntersection(vehicle, 0.25,
+                    trafficLight1, trafficLight2, trafficLight3, trafficLight4)
+                || shouldStopAtIntersection(vehicle, 0.75,
+                    trafficLight5, trafficLight6, trafficLight7, trafficLight8);
+    }
 
+    // share rules with lower intersection lol
+    private boolean shouldStopAtIntersection(Vehicle vehicle, double centreY,
+            TrafficLight eastLight, TrafficLight southLight,
+            TrafficLight northLight, TrafficLight westLight) {
         Point p = vehicle.hitBox.getPointAhead();
 
         double x = p.getX();
@@ -301,40 +311,41 @@ class Panel extends JPanel implements KeyListener {
 
         int direction = (int) Math.round(vehicle.getDirection());
 
-        double topIntersection = height * 0.125;
-        double bottomIntersection = height * 0.375;
+        // offset stop lines
+        double topIntersection = height * (centreY - 0.125);
+        double bottomIntersection = height * (centreY + 0.125);
         double leftIntersection = width * 0.375;
         double rightIntersection = width * 0.625;
 
         double detectionDistance = 15;
 
-        // Vehicle travelling SOUTH
-        if (direction == 90) {
-            if (trafficLight2.getLightState() == 2 || trafficLight2.getLightState() == 1) {
+        // vehicle travelling SOUTH
+        if (direction == 90 && x >= leftIntersection && x <= rightIntersection) {
+            if (southLight.getLightState() == 2 || southLight.getLightState() == 1) {
                 return y >= topIntersection - detectionDistance
                         && y < topIntersection;
             }
         }
 
-        // Vehicle travelling NORTH
-        if (direction == 270) {
-            if (trafficLight3.getLightState() == 2 || trafficLight3.getLightState() == 1) {
+        // vehicle travelling NORTH including the lower bottom-left signal
+        if (direction == 270 && x >= leftIntersection && x <= rightIntersection) {
+            if (northLight.getLightState() == 2 || northLight.getLightState() == 1) {
                 return y <= bottomIntersection + detectionDistance
                         && y > bottomIntersection;
             }
         }
 
-        // Vehicle travelling WEST
-        if (direction == 180) {
-            if (trafficLight4.getLightState() == 2 || trafficLight4.getLightState() == 1) {
+        // limit WEST checks to this road so the other intersection light cannot stop it
+        if (direction == 180 && y >= topIntersection && y <= bottomIntersection) {
+            if (westLight.getLightState() == 2 || westLight.getLightState() == 1) {
                 return x <= rightIntersection + detectionDistance
                         && x > rightIntersection;
             }
         }
 
-        // Vehicle travelling EAST
-        if (direction == 0) {
-            if (trafficLight1.getLightState() == 2 || trafficLight1.getLightState() == 1) {
+        // limit EAST checks to this road and use its own approach signal
+        if (direction == 0 && y >= topIntersection && y <= bottomIntersection) {
+            if (eastLight.getLightState() == 2 || eastLight.getLightState() == 1) {
                 return x >= leftIntersection - detectionDistance
                         && x < leftIntersection;
             }
