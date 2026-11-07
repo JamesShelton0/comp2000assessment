@@ -1,10 +1,16 @@
 import java.awt.*;
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 public class SpeedCamera {
     private double x, y;
     private double laneY;                    // y of the lane this camera watches
     private long flashUntil = 0;             // time the cone should disappear
     private static final int FLASH_MS = 500; // how long the cone shows for
+    // vehicle can be beside camera for several frames, but recieves one fine
+    private final Set<Vehicle> finedVehicles =
+        Collections.newSetFromMap(new WeakHashMap<Vehicle, Boolean>());
 
     SpeedCamera(double x, double y, double laneY) {
         this.x = x;
@@ -17,7 +23,8 @@ public class SpeedCamera {
         boolean besideCamera = vehicle.x >= x && vehicle.x <= x + 36;   
         boolean inLane = Math.abs(vehicle.y - laneY) < 20;              
 
-        if (vehicle instanceof SpeedingCar && besideCamera && inLane) {
+        if (vehicle instanceof SpeedingCar && besideCamera && inLane
+                && finedVehicles.add(vehicle)) {
             flashUntil = System.currentTimeMillis() + FLASH_MS;
             return true;
         }

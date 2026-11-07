@@ -29,6 +29,7 @@ public class Pothole {
         Collections.newSetFromMap(new WeakHashMap<Vehicle, Boolean>());
 
     private boolean active;
+    private boolean removed;
     private boolean swallowed;
     private int vehiclePassCount;
     // track vehicle victim so that approaching vehicles stop
@@ -60,6 +61,10 @@ public class Pothole {
 
     // records traffic, form pothole and reports swallowing
     public boolean update(Vehicle vehicle) {
+        if (removed) {
+            return false;
+        }
+
         // remove victim only after swallow is complete
         if (vehicle == vehicleBeingSwallowed
                 && System.currentTimeMillis() >= swallowingEndsAt) {
@@ -125,6 +130,17 @@ public class Pothole {
             + vehicle.velocity
             + 2;
         return forwardGap <= blockingDistance;
+    }
+
+    // repair pothole
+    public void remove() {
+        removed = true;
+        active = false;
+        vehicleBeingSwallowed = null;
+    }
+
+    public boolean isRemoved() {
+        return removed;
     }
 
     public boolean isSwallowing() {

@@ -32,6 +32,10 @@ public class PotholeTest {
         require(Math.abs(pothole.getDisplayWidth() - 20) < 0.0001,
             "The pothole should return to its small resting size.");
 
+        pothole.remove();
+        require(pothole.isRemoved(), "The pothole should be removable after repairs.");
+        require(!pothole.shouldBlock(follower), "A removed pothole should not block traffic.");
+
         System.out.println("Pothole tests passed.");
     }
 

@@ -12,9 +12,11 @@ class Panel extends JPanel implements KeyListener {
     private boolean pausedForResize;
 
     // pothole values
-    private static final int VEHICLES_BEFORE_POTHOLE = 20;
+    private static final int VEHICLES_BEFORE_POTHOLE = 6;
     private static final double POTHOLE_GROWTH_CHANCE = 0.005;
     private static final double INITIAL_POTHOLE_SIZE = 12;
+    private static final long SPEED_CAMERA_FINE = 100;
+    private static final long POTHOLE_REPAIR_REVENUE = 300;
     
     VehicleSpawner vehicleSpawner;
     Road roadN, roadE, roadMid, roadW, intersection, roadOnFarRight; // upper road
@@ -30,6 +32,7 @@ class Panel extends JPanel implements KeyListener {
     BusStop busStop;
     Statistics stats;
     long explosionCounter = 0;
+    private long speedCameraRevenue = 0;
     PoliceCar policeCar;
 
     // panel creates VehicleSpawner, so also passes any invalid config up
@@ -172,8 +175,15 @@ class Panel extends JPanel implements KeyListener {
                     }
                     vehicle.updateHitBox();
 
-                    // flash the speed camera if a speeding car goes past
-                    speedCameras.forEach(camera -> camera.checkSpeed(vehicle));
+                    // speeding vehicles are fined
+                    for (SpeedCamera camera : speedCameras) {
+                        if (camera.checkSpeed(vehicle)) {
+                            speedCameraRevenue += SPEED_CAMERA_FINE;
+                            if (speedCameraRevenue >= POTHOLE_REPAIR_REVENUE) {
+                                pothole.remove();
+                            }
+                        }
+                    }
 
                     // let pothole count pass and flag swallowing events
                     if (pothole.update(vehicle)) {
@@ -193,6 +203,7 @@ class Panel extends JPanel implements KeyListener {
             stats.updateCurVehicleCount(vehicleSpawner.getVehicleStream());
             stats.calculateAvgVelocity(vehicleSpawner.getVehicleStream());
             stats.inputExplosionCount(explosionCounter);
+            stats.inputSpeedCameraRevenue(speedCameraRevenue);
 
             this.repaint();
         });
@@ -517,7 +528,9 @@ class Panel extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_S) stats.keyPressed();
         if (e.getKeyCode() == KeyEvent.VK_R) {
             explosionCounter = 0;
+            speedCameraRevenue = 0;
             vehicleSpawner.resetVehicleCount();
+            stats.reset();
         }
     }
 

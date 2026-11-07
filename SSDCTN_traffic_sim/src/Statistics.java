@@ -9,8 +9,7 @@ public class Statistics {
     boolean keyToggled;
 
     double avgVehicleVelocity;
-    long totalVehicleCount, curVehicleCount, explosionCount, speedcameraFlashes;
-    ;
+    long totalVehicleCount, curVehicleCount, explosionCount, speedCameraRevenue;
 
     Statistics() {
         keyToggled = false;
@@ -19,6 +18,7 @@ public class Statistics {
     public void reset() {
         totalVehicleCount = 0;
         explosionCount = 0;
+        speedCameraRevenue = 0;
     }
 
     // ------------ Average Speed ------------
@@ -61,9 +61,13 @@ public class Statistics {
         return explosionCount;
     }
 
-    // Speed camera flashes count for revenue raising stats
-    public void RevenueRaising(long value) {
-        this.speedcameraFlashes = value;
+    // ------------ Speed Camera Revenue ------------
+    public void inputSpeedCameraRevenue(long value) {
+        this.speedCameraRevenue = value;
+    }
+
+    public long getSpeedCameraRevenue() {
+        return speedCameraRevenue;
     }
 
     // ------------ Drawing Related ------------
@@ -83,7 +87,7 @@ public class Statistics {
 
         // scales dimensions with frame size but not beyond specified minimum 
         int cardWidth = Math.min(550, Math.max(230, statWindowWidth - 40));
-        int cardHeight = 130;
+        int cardHeight = 165;
         int cardX = -8;
         int cardY = -8;
 
@@ -115,10 +119,11 @@ public class Statistics {
             g2d.drawString("Active vehicle count: " + getCurVehicleCount(), cardX + 32, cardY + row1+rowOffset);
             g2d.drawString("Total vehicles seen: " + getTotalVehicleCount(), cardX + 39, cardY + row1+rowOffset*2);
             g2d.drawString("Number of explosions: " + getExplosionCount(), cardX + 19, cardY + row1+rowOffset*3);
+            g2d.drawString("Speed camera revenue: $" + getSpeedCameraRevenue(), cardX + 19, cardY + row1+rowOffset*4);
             
             g2d.setColor(new Color(200, 200, 200));
             g2d.setFont(g2d.getFont().deriveFont(Font.PLAIN, 14f));
-            g2d.drawString("Press 'r' to reset stats", cardX + (int)(cardWidth*0.16), cardY + 150);
+            g2d.drawString("Press 'r' to reset stats", cardX + (int)(cardWidth*0.16), cardY + 155);
 
             g2d.dispose();
         }
