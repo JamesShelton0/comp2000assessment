@@ -51,7 +51,7 @@ class Panel extends JPanel implements KeyListener {
         stats = new Statistics();
 
         // ---------------------- Vehicle Spawn Timers ----------------------
-        vehicleSpawner = new VehicleSpawner(30); // % chance
+        vehicleSpawner = new VehicleSpawner(40); // % chance
         Timer vehicleSpawnTimer = new Timer(1390, e -> {        // attempt freq
             // pause spawner when paused for resize 
             if (!pausedForResize) {
@@ -475,11 +475,7 @@ class Panel extends JPanel implements KeyListener {
         //explosion.draw(g2d);    // test explosion !!!!! remove this to not show explosion :(
         
 
-        for (EntityStore<Vehicle> sublist : vehicleSpawner.getVehicleList()) {
-            for (Vehicle vehicle : sublist.getEntities()) {
-                vehicle.draw(g2d);
-            }
-        }
+        vehicleSpawner.getVehicleStream().forEach(v -> v.draw(g2d));
 
         for (Explosion explosion : explosions) {
             explosion.draw(g2d);
