@@ -12,8 +12,8 @@ class Panel extends JPanel implements KeyListener {
     private boolean pausedForResize;
 
     // pothole values
-    private static final int VEHICLES_BEFORE_POTHOLE = 6;
-    private static final double POTHOLE_GROWTH_CHANCE = 0.005;
+    private static final int VEHICLES_BEFORE_POTHOLE = 8;
+    private static final double POTHOLE_GROWTH_CHANCE = 0.20;
     private static final double INITIAL_POTHOLE_SIZE = 12;
     private static final long SPEED_CAMERA_FINE = 100;
     private static final long POTHOLE_REPAIR_REVENUE = 300;
